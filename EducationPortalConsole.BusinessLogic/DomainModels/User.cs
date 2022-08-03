@@ -4,6 +4,8 @@ namespace EducationPortalConsole.BusinessLogic.DomainModels;
 
 public class User
 {
+    public int Id { get; set; }
+    
     public string Name { get; set; }
         
     public IEnumerable<CourseProgress> CoursesProgress { get; set; }

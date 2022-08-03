@@ -1,6 +1,6 @@
 ﻿namespace EducationPortalConsole.BusinessLogic.DomainModels.Materials;
 
-public class BookMaterial
+public class BookMaterial : Material
 {
     public IEnumerable<string> Authors { get; set; }
         
