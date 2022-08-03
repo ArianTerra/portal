@@ -1,6 +1,8 @@
-﻿namespace EducationPortalConsole.DataAccess.Repository;
+﻿using EducationPortalConsole.Core;
 
-public class GenericRepository<TEntity> where TEntity : class
+namespace EducationPortalConsole.DataAccess.Repository;
+
+public class GenericRepository<TEntity> where TEntity : BaseEntity
 {
     //TODO
 }

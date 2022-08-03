@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.DomainModels;
+﻿using EducationPortalConsole.Core.Entities;
 
 namespace EducationPortalConsole.BusinessLogic.Managers;
 

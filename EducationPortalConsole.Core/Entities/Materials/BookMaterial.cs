@@ -1,4 +1,4 @@
-﻿namespace EducationPortalConsole.BusinessLogic.DomainModels.Materials;
+﻿namespace EducationPortalConsole.Core.Entities.Materials;
 
 public class BookMaterial : Material
 {

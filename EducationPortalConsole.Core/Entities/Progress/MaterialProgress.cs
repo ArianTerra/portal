@@ -1,4 +1,4 @@
-﻿namespace EducationPortalConsole.BusinessLogic.DomainModels.Progress
+﻿namespace EducationPortalConsole.Core.Entities.Progress
 {
     public class MaterialProgress
     {
