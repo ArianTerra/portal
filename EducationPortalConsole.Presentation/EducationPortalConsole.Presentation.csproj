@@ -7,4 +7,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\EducationPortalConsole.Core\EducationPortalConsole.Core.csproj" />
+      <ProjectReference Include="..\EducationPortalConsole.DataAccess\EducationPortalConsole.DataAccess.csproj" />
+    </ItemGroup>
+
 </Project>
