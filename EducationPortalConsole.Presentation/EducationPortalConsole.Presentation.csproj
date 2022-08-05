@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EducationPortalConsole.BusinessLogic\EducationPortalConsole.BusinessLogic.csproj" />
       <ProjectReference Include="..\EducationPortalConsole.Core\EducationPortalConsole.Core.csproj" />
       <ProjectReference Include="..\EducationPortalConsole.DataAccess\EducationPortalConsole.DataAccess.csproj" />
     </ItemGroup>
