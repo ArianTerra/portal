@@ -1,61 +1,64 @@
-﻿using System.Linq.Expressions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace EducationPortalConsole.DataAccess.Serializers
+namespace EducationPortalConsole.DataAccess.Serializers;
+
+public class JsonSerializer<T> : IFileSerializer<T>
 {
-    public class JsonSerializer<T> : IFileSerializer<T>
+    private List<T> _objects = new List<T>();
+    private readonly string _filename;
+    private readonly string _path = Environment.CurrentDirectory;
+        
+    public JsonSerializer()
     {
-        private List<T> _objects = new List<T>();
-        private readonly string _filename;
-        private readonly string _path = Environment.CurrentDirectory;
+        //_filename = nameof() + ".json";
+        throw new NotImplementedException();
+    }
+
+    public JsonSerializer(string filename)
+    {
+        _filename = filename + ".json";
+    }
+
+    public void Add(T entity)
+    {
+        _objects.Add(entity);
+    }
+
+    public T? GetFirst(Func<T, bool> predicate)
+    {
+        return _objects.Where(predicate).FirstOrDefault();
+    }
+
+    public IEnumerable<T> FindAll(Func<T, bool> predicate)
+    {
+        return _objects.Where(predicate);
+    }
+
+    public IEnumerable<T> GetAll()
+    {
+        return _objects.AsReadOnly(); //TODO should it be readonly???
+    }
+
+    public bool Delete(T entity)
+    {
+        return _objects.Remove(entity);
+    }
         
-        public JsonSerializer()
-        {
-            //_filename = nameof() + ".json";
-            throw new NotImplementedException();
-        }
-
-        public JsonSerializer(string filename)
-        {
-            _filename = filename + ".json";
-        }
-
-        public void Add(T entity)
-        {
-            _objects.Add(entity);
-        }
-
-        public T? GetFirst(Func<T, bool> predicate)
-        {
-            return _objects.Where(predicate).FirstOrDefault();
-        }
-
-        public IEnumerable<T> GetAll(Func<T, bool> predicate)
-        {
-            return _objects.Where(predicate);
-        }
-
-        public bool Delete(T entity)
-        {
-            return _objects.Remove(entity);
-        }
+    public void Save()
+    {
+        var json = JsonConvert.SerializeObject(_objects);
+        File.WriteAllText(_path + "/" + _filename, json);
+    }
         
-        public void Save()
+    public void Load()
+    {
+        if (!File.Exists(_path + "/" + _filename))
         {
-            var json = JsonConvert.SerializeObject(_objects);
-            File.WriteAllText(_path + "/" + _filename, json);
+            //throw new FileNotFoundException($"File {_filename} not found");
+            return;
         }
-        
-        public void Load()
-        {
-            if (!File.Exists(_path + "/" + _filename))
-            {
-                //throw new FileNotFoundException($"File {_filename} not found");
-                return;
-            }
 
-            var json = File.ReadAllText(_path + "/" + _filename);
-            _objects = JsonConvert.DeserializeObject<List<T>>(json);
-        }
+        var json = File.ReadAllText(_path + "/" + _filename);
+        _objects = JsonConvert.DeserializeObject<List<T>>(json);
     }
 }

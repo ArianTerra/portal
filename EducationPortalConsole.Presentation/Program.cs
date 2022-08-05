@@ -1,7 +1,7 @@
 ﻿using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
 
-IGenericRepository<User> repository = new GenericRepository<User>("Users");
+IUserRepository repository = new UserRepository("Users");
 
 User user0 = new User()
 {
@@ -27,7 +27,7 @@ User user2 = new User()
 
 repository.Add(user2);
 
-foreach (var user in repository.GetAll(_ => true))
+foreach (var user in repository.FindAll(_ => true))
 {
     Console.WriteLine(user.Name);
 }
