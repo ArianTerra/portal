@@ -4,15 +4,13 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface ICourseService
 {
-    Course? GetFirst(Func<Course, bool> predicate);
-
-    IEnumerable<Course> FindAll(Func<Course, bool> predicate);
+    Course? GetById(int id);
 
     IEnumerable<Course> GetAll();
 
-    void Add(Course entity);
+    void Add(Course course);
 
-    void Update(Course entity);
+    void Update(Course course);
 
-    bool Delete(Course entity);
+    bool Delete(Course course);
 }

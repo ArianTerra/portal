@@ -4,15 +4,13 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IMaterialService
 {
-    Material? GetFirst(Func<Material, bool> predicate);
-
-    IEnumerable<Material> FindAll(Func<Material, bool> predicate);
+    Material? GetById(int id);
 
     IEnumerable<Material> GetAll();
 
-    void Add(Material entity);
+    void Add(Material material);
 
-    void Update(Material entity);
+    void Update(Material material);
 
-    bool Delete(Material entity);
+    bool Delete(Material material);
 }

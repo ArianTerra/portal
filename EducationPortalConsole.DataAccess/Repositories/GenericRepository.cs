@@ -14,7 +14,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _fileSerializer.Load();
     }
         
-    public TEntity? GetFirst(Func<TEntity, bool> predicate)
+    public TEntity? FindFirst(Func<TEntity, bool> predicate)
     {
         return _fileSerializer.GetFirst(predicate);
     }

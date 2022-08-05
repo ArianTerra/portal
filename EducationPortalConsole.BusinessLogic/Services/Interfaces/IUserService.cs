@@ -4,15 +4,13 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IUserService
 {
-    User? GetFirst(Func<User, bool> predicate);
-
-    IEnumerable<User> FindAll(Func<User, bool> predicate);
+    User? GetById(int id);
 
     IEnumerable<User> GetAll();
 
-    void Add(User entity);
+    void Add(User user);
 
-    void Update(User entity);
+    void Update(User user);
 
-    bool Delete(User entity);
+    bool Delete(User user);
 }

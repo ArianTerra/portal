@@ -4,7 +4,7 @@ namespace EducationPortalConsole.DataAccess.Repositories;
 
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    TEntity? GetFirst(Func<TEntity, bool> predicate);
+    TEntity? FindFirst(Func<TEntity, bool> predicate);
     IEnumerable<TEntity> FindAll(Func<TEntity, bool> predicate);
     IEnumerable<TEntity> GetAll();
     void Add(TEntity entity);
