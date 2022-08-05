@@ -1,6 +1,6 @@
 ﻿using EducationPortalConsole.Core.Entities;
 
-namespace EducationPortalConsole.BusinessLogic.Managers;
+namespace EducationPortalConsole.BusinessLogic.Services;
 
 internal class UserManager
 {
