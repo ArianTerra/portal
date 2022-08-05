@@ -2,7 +2,7 @@
 
 namespace EducationPortalConsole.BusinessLogic.Managers;
 
-internal class UserManager: BaseManager<User>
+internal class UserManager
 {
     internal IEnumerable<User> GetAllUsers()
     {
