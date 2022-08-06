@@ -13,4 +13,13 @@
       <ProjectReference Include="..\EducationPortalConsole.DataAccess\EducationPortalConsole.DataAccess.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Spectre.Console" Version="0.44.1-preview.0.29" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Actions\Courses" />
+      <Folder Include="Actions\Materials" />
+    </ItemGroup>
+
 </Project>

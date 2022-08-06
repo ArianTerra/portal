@@ -1,9 +1,13 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.DataAccess.Repositories;
+using EducationPortalConsole.Presentation.Actions;
+using EducationPortalConsole.Presentation.Actions.Users;
 
 IUserService userService = new UserService(new UserRepository("Users"));
 
-foreach (var user in userService.GetAll())
+MenuAction mainMenu = new MenuAction("Menu")
 {
-    Console.WriteLine(user.Name);
-}
+    Actions = {new UserLoginAction("Login"), new UserRegisterAction("Registration")}
+};
+
+mainMenu.Run();
