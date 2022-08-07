@@ -6,6 +6,11 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 public class CourseService : ICourseService
 {
     private readonly ICourseRepository _repository;
+
+    public CourseService()
+    {
+        _repository = new CourseRepository("Courses");
+    }
     
     public CourseService(ICourseRepository repository)
     {

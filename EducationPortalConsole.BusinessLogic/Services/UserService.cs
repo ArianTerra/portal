@@ -7,6 +7,11 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _repository;
 
+    public UserService()
+    {
+        _repository = new UserRepository("Users");
+    }
+    
     public UserService(IUserRepository repository)
     {
         _repository = repository;
@@ -15,6 +20,11 @@ public class UserService : IUserService
     public User? GetById(int id)
     {
         return _repository.FindFirst(x => x.Id == id);
+    }
+
+    public User? GetByName(string name)
+    {
+        return _repository.FindFirst(x => x.Name == name);
     }
 
     public IEnumerable<User> GetAll()

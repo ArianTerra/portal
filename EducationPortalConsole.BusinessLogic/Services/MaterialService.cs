@@ -7,6 +7,11 @@ public class MaterialService : IMaterialService
 {
     private readonly IMaterialRepository _repository;
 
+    public MaterialService()
+    {
+        _repository = new MaterialRepository("Materials");
+    }
+    
     public MaterialService(IMaterialRepository repository)
     {
         _repository = repository;
