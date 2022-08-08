@@ -31,7 +31,7 @@ public class AddArticleAction : Action
 
         var material = new ArticleMaterial()
         {
-            Id = materialService.GetAll().Count(), //TODO maybe change this ID handling?
+            Id = Guid.NewGuid(),
             Name = name,
             Date = date,
             Source = source,

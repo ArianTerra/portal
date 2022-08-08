@@ -4,8 +4,8 @@ namespace EducationPortalConsole.Core;
 
 public interface IAuditedEntity
 {
-    int? CreatedByUserId { get; set; }
+    Guid? CreatedByUserId { get; set; }
     DateTime? CreatedOn { get; set; }
-    int? UpdatedByUserId { get; set; }
+    Guid? UpdatedByUserId { get; set; }
     DateTime? UpdatedOn { get; set; }
 }

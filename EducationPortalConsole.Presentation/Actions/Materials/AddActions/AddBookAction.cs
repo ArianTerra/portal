@@ -29,7 +29,7 @@ public class AddBookAction : Action
         
         var material = new BookMaterial()
         {
-            Id = materialService.GetAll().Count(),
+            Id = Guid.NewGuid(),
             Name = name,
             Authors = authors.Split(','),
             Pages = pages,

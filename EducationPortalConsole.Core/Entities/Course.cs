@@ -8,11 +8,11 @@ public class Course : BaseEntity, IAuditedEntity
         
     public IEnumerable<Skill> Skills { get; set; }
     
-    public int? CreatedByUserId { get; set; }
+    public Guid? CreatedByUserId { get; set; }
     
     public DateTime? CreatedOn { get; set; }
     
-    public int? UpdatedByUserId { get; set; }
+    public Guid? UpdatedByUserId { get; set; }
     
     public DateTime? UpdatedOn { get; set; }
 }
