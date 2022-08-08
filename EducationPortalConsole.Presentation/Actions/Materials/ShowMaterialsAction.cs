@@ -24,7 +24,7 @@ public class ShowMaterialsAction : Action
         {
             table.AddRow(
                 material.Id.ToString(),
-                "TODO", //TODO
+                material.GetType().Name, //TODO
                 material.Name,
                 UserHelper.GetUsernameById(material.CreatedByUserId),
                 material.CreatedOn?.ToString() ?? string.Empty,

@@ -15,7 +15,7 @@ public abstract class Action
 
         if (!string.IsNullOrEmpty(Description))
         {
-            AnsiConsole.WriteLine(Description);
+            AnsiConsole.Write(new Markup(Description + "\n"));
         }
         
         ActionNavigationProvider.AddAction(this);
