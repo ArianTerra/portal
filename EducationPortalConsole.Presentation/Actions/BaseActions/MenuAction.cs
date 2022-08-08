@@ -16,8 +16,7 @@ public class MenuAction : Action
     public override void Run()
     {
         base.Run();
-        
-        
+
         var action = AnsiConsole.Prompt(
             new SelectionPrompt<Action>()
                 .PageSize(PageSize)
