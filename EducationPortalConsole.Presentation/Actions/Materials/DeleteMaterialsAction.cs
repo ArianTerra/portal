@@ -31,7 +31,7 @@ public class DeleteMaterialsAction : Action
                 .UseConverter(x => x.Name)
         );
 
-        bool anyDeleted = false;
+        int deleted = 0;
         foreach (var material in materials)
         {
             var skip = false;
@@ -48,13 +48,11 @@ public class DeleteMaterialsAction : Action
                 
             if(skip) continue;
 
-            anyDeleted = materialService.Delete(material);
+            materialService.Delete(material);
+            deleted++;
         }
 
-        if (anyDeleted)
-        {
-            AnsiConsole.Write(new Markup($"Materials deleted\n"));
-        }
+        AnsiConsole.Write(new Markup($"[yellow]{deleted}[/] [green]Materials[/] were deleted\n"));
         
         WaitForUserInput();
         Back();
