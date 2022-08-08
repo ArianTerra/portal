@@ -1,4 +1,6 @@
-﻿using EducationPortalConsole.Presentation.Actions;
+﻿using EducationPortalConsole.Core.Entities.Materials;
+using EducationPortalConsole.Presentation;
+using EducationPortalConsole.Presentation.Actions;
 using EducationPortalConsole.Presentation.Actions.Users;
 using EducationPortalConsole.Presentation.Session;
 
@@ -9,3 +11,7 @@ while (!UserSession.Instance.IsLoggedIn)
 
 var menu = new MainMenuAction();
 menu.Run();
+
+// ArticleMaterial material = (ArticleMaterial)Configuration.Instance.MaterialService.GetById(0);
+//
+// Console.WriteLine();
