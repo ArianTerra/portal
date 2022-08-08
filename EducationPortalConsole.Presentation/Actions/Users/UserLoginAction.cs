@@ -31,13 +31,17 @@ public class UserLoginAction : Action
         var user = userService.GetByName(name);
         if (user == null)
         {
-            AnsiConsole.Write(new Markup($"User with name [bold yellow]{name}[/] does not exist"));
+            AnsiConsole.Write(new Markup($"User with name [bold yellow]{name}[/] does not exist\n"));
+            WaitForUserInput();
+            
             return;
         }
 
         if (!PasswordHasher.VerifyPassword(password, user.PasswordHash, user.PasswordHashSalt))
         {
             AnsiConsole.Write(new Markup($"Password is not correct"));
+            WaitForUserInput();
+            
             return;
         }
 

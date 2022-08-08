@@ -17,8 +17,4 @@
       <PackageReference Include="Spectre.Console" Version="0.44.1-preview.0.29" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Actions\Courses" />
-    </ItemGroup>
-
 </Project>

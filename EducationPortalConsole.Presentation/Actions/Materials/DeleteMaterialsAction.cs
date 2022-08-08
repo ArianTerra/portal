@@ -1,5 +1,6 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Core.Entities;
+using EducationPortalConsole.DataAccess.Repositories;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials
@@ -15,7 +16,8 @@ namespace EducationPortalConsole.Presentation.Actions.Materials
         {
             base.Run();
 
-            IMaterialService service = Configuration.Instance.MaterialService;
+            IMaterialService materialService = Configuration.Instance.MaterialService;
+            ICourseService courseService = Configuration.Instance.CourseService;
             
             var materials = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<Material>()
@@ -26,13 +28,27 @@ namespace EducationPortalConsole.Presentation.Actions.Materials
                     .InstructionsText(
                         "[grey](Press [blue]<space>[/] to toggle a material, " + 
                         "[green]<enter>[/] to accept)[/]")
-                    .AddChoices(service.GetAll())
+                    .AddChoices(materialService.GetAll())
                     .UseConverter(x => x.Name)
                 );
 
             foreach (var material in materials)
             {
-                service.Delete(material);
+                var skip = false;
+                foreach (var course in courseService.GetAll())
+                {
+                    if (course.Materials.Contains(material))
+                    {
+                        AnsiConsole.Write(
+                            new Markup($"Cannot delete material with ID {material.Id} because it used in " +
+                                       $"course with ID {course.Id}\n"));
+                        skip = true;
+                    }
+                }
+                
+                if(skip) continue;
+
+                materialService.Delete(material);
             }
             
             AnsiConsole.Write(new Markup($"Materials deleted\n"));
