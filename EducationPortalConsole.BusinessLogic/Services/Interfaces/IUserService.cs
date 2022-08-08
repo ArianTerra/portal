@@ -6,6 +6,8 @@ public interface IUserService
 {
     User? GetById(int id);
 
+    User? GetByName(string name);
+    
     IEnumerable<User> GetAll();
 
     void Add(User user);

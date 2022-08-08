@@ -1,9 +1,17 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.DataAccess.Repositories;
+﻿using EducationPortalConsole.Core.Entities.Materials;
+using EducationPortalConsole.Presentation;
+using EducationPortalConsole.Presentation.Actions;
+using EducationPortalConsole.Presentation.Actions.Users;
+using EducationPortalConsole.Presentation.Session;
 
-IUserService userService = new UserService(new UserRepository("Users"));
-
-foreach (var user in userService.GetAll())
+while (!UserSession.Instance.IsLoggedIn)
 {
-    Console.WriteLine(user.Name);
+    new UsersAction().Run();
 }
+
+var menu = new MainMenuAction();
+menu.Run();
+
+// ArticleMaterial material = (ArticleMaterial)Configuration.Instance.MaterialService.GetById(0);
+//
+// Console.WriteLine();

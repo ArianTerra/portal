@@ -7,7 +7,12 @@ public class JsonSerializer<T> : IFileSerializer<T>
     private List<T> _objects = new List<T>();
     private readonly string _filename;
     private readonly string _path = Environment.CurrentDirectory;
-        
+
+    private readonly JsonSerializerSettings _settings = new JsonSerializerSettings()
+    {
+        TypeNameHandling = TypeNameHandling.All
+    };
+    
     public JsonSerializer()
     {
         //_filename = nameof() + ".json";
@@ -46,7 +51,7 @@ public class JsonSerializer<T> : IFileSerializer<T>
         
     public void Save()
     {
-        var json = JsonConvert.SerializeObject(_objects);
+        var json = JsonConvert.SerializeObject(_objects, _settings);
         File.WriteAllText(_path + "/" + _filename, json);
     }
         
@@ -59,6 +64,6 @@ public class JsonSerializer<T> : IFileSerializer<T>
         }
 
         var json = File.ReadAllText(_path + "/" + _filename);
-        _objects = JsonConvert.DeserializeObject<List<T>>(json);
+        _objects = JsonConvert.DeserializeObject<List<T>>(json, _settings);
     }
 }

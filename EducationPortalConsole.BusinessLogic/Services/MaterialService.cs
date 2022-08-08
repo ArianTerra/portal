@@ -1,4 +1,5 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
@@ -7,6 +8,11 @@ public class MaterialService : IMaterialService
 {
     private readonly IMaterialRepository _repository;
 
+    public MaterialService()
+    {
+        _repository = new MaterialRepository("Materials");
+    }
+    
     public MaterialService(IMaterialRepository repository)
     {
         _repository = repository;
@@ -22,7 +28,7 @@ public class MaterialService : IMaterialService
         return _repository.GetAll();
     }
 
-    public void Add(Material material)
+    public void Add([NotNull] Material material)
     {
         _repository.Add(material);
     }
