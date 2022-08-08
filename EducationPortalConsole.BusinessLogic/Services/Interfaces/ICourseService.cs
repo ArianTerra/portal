@@ -4,7 +4,7 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface ICourseService
 {
-    Course? GetById(int id);
+    Course? GetById(Guid id);
 
     IEnumerable<Course> GetAll();
 

@@ -17,7 +17,7 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public User? GetById(int id)
+    public User? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id);
     }

@@ -18,7 +18,7 @@ public class CourseService : ICourseService
         _repository = repository;
     }
 
-    public Course? GetById(int id)
+    public Course? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id);
     }

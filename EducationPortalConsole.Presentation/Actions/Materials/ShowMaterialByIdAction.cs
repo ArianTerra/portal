@@ -17,9 +17,23 @@ public class ShowMaterialByIdAction : Action
         base.Run();
 
         IMaterialService service = Configuration.Instance.MaterialService;
-            
-        var id = AnsiConsole.Ask<int>("Enter material [green]ID[/]:");
+        
+        var idString = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter [green]ID[/]:"));
 
+        Guid id = Guid.Empty;
+
+        try
+        {
+            id = Guid.Parse(idString);
+        }
+        catch
+        {
+            AnsiConsole.Write($"Inputted [greed]ID[/] is in wrong format");
+            WaitForUserInput();
+            return;
+        }
+        
         Material material = service.GetById(id);
 
         if (material == null)

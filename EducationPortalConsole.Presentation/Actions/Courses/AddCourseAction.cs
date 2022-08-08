@@ -36,7 +36,7 @@ public class AddCourseAction : Action
 
         var course = new Course()
         {
-            Id = courseService.GetAll().Count(),
+            Id = Guid.NewGuid(),
             Name = name,
             Materials = materials,
             CreatedByUserId = UserSession.Instance.CurrentUser.Id,

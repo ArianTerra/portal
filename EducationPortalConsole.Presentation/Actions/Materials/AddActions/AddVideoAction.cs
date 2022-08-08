@@ -31,7 +31,7 @@ public class AddVideoAction : Action
         
         var material = new VideoMaterial()
         {
-            Id = materialService.GetAll().Count(),
+            Id = Guid.NewGuid(),
             Name = name,
             Duration = time,
             Quality = quality,

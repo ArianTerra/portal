@@ -36,15 +36,9 @@ public class UserRegisterAction : Action
 
         var hashSalt = PasswordHasher.GenerateSaltedHash(64, password);
 
-        int id; // this id generation looks kinda cringe :P
-        do
-        {
-            id = new Random().Next(0, Int32.MaxValue);
-        } while (userService.GetById(id) != null);
-
         var user = new User()
         {
-            Id = id,
+            Id = Guid.NewGuid(),
             Name = name,
             PasswordHash = hashSalt.Hash,
             PasswordHashSalt = hashSalt.Salt
@@ -52,7 +46,7 @@ public class UserRegisterAction : Action
 
         userService.Add(user);
         
-        AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{id}[/]\n"));
+        AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
         WaitForUserInput();
         //ActionProvider.GetAction().Run();
     }

@@ -4,7 +4,7 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IMaterialService
 {
-    Material? GetById(int id);
+    Material? GetById(Guid id);
 
     IEnumerable<Material> GetAll();
 

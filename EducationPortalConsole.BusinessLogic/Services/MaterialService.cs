@@ -18,7 +18,7 @@ public class MaterialService : IMaterialService
         _repository = repository;
     }
         
-    public Material? GetById(int id)
+    public Material? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id);
     }

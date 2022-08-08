@@ -4,7 +4,7 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IUserService
 {
-    User? GetById(int id);
+    User? GetById(Guid id);
 
     User? GetByName(string name);
     
