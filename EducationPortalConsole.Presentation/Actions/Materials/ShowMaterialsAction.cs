@@ -1,5 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+using EducationPortalConsole.Presentation.Helpers;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials;
@@ -18,7 +18,7 @@ public class ShowMaterialsAction : Action
         var table = new Table();
         table.AddColumns("ID", "Type", "Name", "Created by", "Created", "Updated by", "Updated");
 
-        IMaterialService service = new MaterialService();
+        IMaterialService service = Configuration.Instance.MaterialService;
 
         foreach (var material in service.GetAll())
         {
@@ -26,15 +26,15 @@ public class ShowMaterialsAction : Action
                 material.Id.ToString(),
                 "TODO", //TODO
                 material.Name,
-                material.CreatedBy?.Name ?? string.Empty,
+                UserHelper.GetUsernameById(material.CreatedByUserId),
                 material.CreatedOn?.ToString() ?? string.Empty,
-                material.UpdatedBy?.Name ?? string.Empty,
+                UserHelper.GetUsernameById(material.UpdatedByUserId),
                 material.UpdatedOn?.ToString() ?? string.Empty
             );
         }
             
         AnsiConsole.Write(table);
-            
+
         WaitForUserInput();
         Back();
     }

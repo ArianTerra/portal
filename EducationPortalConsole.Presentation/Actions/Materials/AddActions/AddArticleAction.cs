@@ -15,7 +15,7 @@ public class AddArticleAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = new MaterialService();
+        IMaterialService materialService = Configuration.Instance.MaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
@@ -31,15 +31,18 @@ public class AddArticleAction : Action
 
         var material = new ArticleMaterial()
         {
+            Id = materialService.GetAll().Count(), //TODO maybe change this ID handling?
             Name = name,
             Date = date,
             Source = source,
-            CreatedBy = UserSession.Instance.CurrentUser,
+            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
             
         materialService.Add(material);
-            
+        
+        AnsiConsole.Write(new Markup($"Successfully added new Article with ID [bold yellow]{material.Id}[/]\n"));
+        
         WaitForUserInput();
         Back();
     }

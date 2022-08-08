@@ -1,4 +1,5 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
@@ -27,7 +28,7 @@ public class CourseService : ICourseService
         return _repository.GetAll();
     }
 
-    public void Add(Course course)
+    public void Add([NotNull] Course course)
     {
         _repository.Add(course);
     }

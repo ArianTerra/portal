@@ -13,31 +13,36 @@ public class AddBookAction : Action
     }
     public override void Run()
     {
-        IMaterialService materialService = new MaterialService();
+        base.Run();
+        
+        IMaterialService materialService = Configuration.Instance.MaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
-        DateOnly date;
-        AnsiConsole.Prompt(
-            new TextPrompt<string>("Enter [green]Date[/]:")
-                .Validate(x => 
-                    DateOnly.TryParse(x, out date)
-                        ? ValidationResult.Success()
-                        : ValidationResult.Error("Input is not date")));
-            
-        var source = AnsiConsole.Ask<string>("Enter material [green]Source[/]:");
-
-        var material = new ArticleMaterial()
+        var authors = AnsiConsole.Ask<string>("Enter [green]Authors[/] using comma (example: Author1,Author2):");
+        
+        var pages = AnsiConsole.Ask<int>("Enter number of [green]Pages[/]:"); //TODO add validation
+        
+        var year = AnsiConsole.Ask<int>("Enter [green]Year[/]:"); //TODO add validation
+        
+        var format = AnsiConsole.Ask<string>("Enter [green]Format[/]:"); //TODO add validation
+        
+        var material = new BookMaterial()
         {
+            Id = materialService.GetAll().Count(),
             Name = name,
-            Date = date,
-            Source = source,
-            CreatedBy = UserSession.Instance.CurrentUser,
+            Authors = authors.Split(','),
+            Pages = pages,
+            Year = year,
+            Format = format,
+            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
-            
+
         materialService.Add(material);
-            
+        
+        AnsiConsole.Write(new Markup($"Successfully added new Book with ID [bold yellow]{material.Id}[/]\n"));
+        
         WaitForUserInput();
         Back();
     }
