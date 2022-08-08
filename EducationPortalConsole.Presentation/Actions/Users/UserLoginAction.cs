@@ -5,20 +5,18 @@ using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Users;
 
-public class UserLoginAction : IAction
+public class UserLoginAction : Action
 {
-    public UserLoginAction(string name)
+    public UserLoginAction()
     {
-        Name = name;
+        Name = "User Login";
     }
-    public string Name { get; }
-
-    public void Run()
+    public override void Run()
     {
+        base.Run();
+        
         IUserService userService = new UserService();
         
-        AnsiConsole.Clear();
-        AnsiConsole.Write(new Rule($"[red]{Name}[/]") {Alignment = Justify.Left});
         var name = AnsiConsole.Ask<string>("Enter your [green]name[/]:");
 
         var password = AnsiConsole.Prompt(
@@ -45,6 +43,7 @@ public class UserLoginAction : IAction
 
         UserSession.Instance.CurrentUser = user;
         
-        AnsiConsole.Write(new Markup($"Successfully logged in as [bold yellow]{name}[/]"));
+        AnsiConsole.Write(new Markup($"Successfully logged in as [bold yellow]{name}[/]\n"));
+        WaitForUserInput();
     }
 }

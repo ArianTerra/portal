@@ -19,7 +19,8 @@
 
     <ItemGroup>
       <Folder Include="Actions\Courses" />
-      <Folder Include="Actions\Materials" />
+      <Folder Include="Actions\Materials\EditActions" />
+      <Folder Include="Actions\Materials\ShowActions" />
     </ItemGroup>
 
 </Project>

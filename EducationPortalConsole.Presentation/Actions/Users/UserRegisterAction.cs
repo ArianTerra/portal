@@ -5,21 +5,18 @@ using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Users;
 
-public class UserRegisterAction : IAction
+public class UserRegisterAction : Action
 {
-    public UserRegisterAction(string name)
+    public UserRegisterAction()
     {
-        Name = name;
+        Name = "User Registration";
     }
 
-    public string Name { get; }
-
-    public void Run()
+    public override void Run()
     {
+        base.Run();
+
         IUserService userService = new UserService();
-        
-        AnsiConsole.Clear();
-        AnsiConsole.Write(new Rule($"[red]{Name}[/]") {Alignment = Justify.Left});
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]name[/]:")
@@ -55,6 +52,8 @@ public class UserRegisterAction : IAction
 
         userService.Add(user);
         
-        AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{id}[/]"));
+        AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{id}[/]\n"));
+        WaitForUserInput();
+        //ActionProvider.GetAction().Run();
     }
 }

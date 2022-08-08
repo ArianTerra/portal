@@ -1,13 +1,11 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.DataAccess.Repositories;
-using EducationPortalConsole.Presentation.Actions;
+﻿using EducationPortalConsole.Presentation.Actions;
 using EducationPortalConsole.Presentation.Actions.Users;
+using EducationPortalConsole.Presentation.Session;
 
-IUserService userService = new UserService(new UserRepository("Users"));
-
-MenuAction mainMenu = new MenuAction("Menu")
+while (!UserSession.Instance.IsLoggedIn)
 {
-    Actions = {new UserLoginAction("Login"), new UserRegisterAction("Registration")}
-};
+    new UsersAction().Run();
+}
 
-mainMenu.Run();
+var menu = new MainMenuAction();
+menu.Run();
