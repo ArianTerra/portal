@@ -54,6 +54,8 @@ public class EditVideoAction : Action
         _videoMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
         materialService.Update(_videoMaterial);
         
+        AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
+        
         WaitForUserInput();
         Back(2);
     }

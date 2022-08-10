@@ -63,6 +63,8 @@ public class EditArticleAction : Action
 
         materialService.Update(_articleMaterial);
         
+        AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
+        
         WaitForUserInput();
         Back(2);
     }

@@ -65,6 +65,8 @@ public class EditBookAction : Action
         _bookMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
         materialService.Update(_bookMaterial);
         
+        AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
+        
         WaitForUserInput();
         Back(2);
     }

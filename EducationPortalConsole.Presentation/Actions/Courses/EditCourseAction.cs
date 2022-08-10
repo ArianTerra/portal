@@ -36,7 +36,9 @@ public class EditCourseAction : Action
         {
             course.Name = name;
         }
-
+        
+        // TODO fix bug when after loading data from 'DB' course's material isn't marked as selected
+        // it seems like .Select() method checks for equality of objects
         var prompt = new MultiSelectionPrompt<Material>()
             .Title("Add selected [green]materials[/] to course")
             .NotRequired()
@@ -58,6 +60,10 @@ public class EditCourseAction : Action
         course.Materials = materials;
         course.UpdatedOn = DateTime.Now;
         course.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
+        
+        courseService.Update(course);
+        
+        AnsiConsole.Write(new Markup($"[green]Course[/] updated\n"));
         
         WaitForUserInput();
         Back();
