@@ -24,7 +24,8 @@ public class ShowCoursesAction : Action
         foreach (var course in courseService.GetAll())
         {
             var materialNames = course.Materials.Select(x => x.Name);
-            table.AddRow(course.Id.ToString(), course.Name, string.Concat(materialNames, ", "));
+            var materials = string.Join(", ", materialNames);
+            table.AddRow(course.Id.ToString(), course.Name, materials);
         }
         
         AnsiConsole.Write(table);

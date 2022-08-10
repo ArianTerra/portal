@@ -15,7 +15,7 @@ public class MainMenuAction : MenuAction
         Actions = new List<Action>()
         {
             new MaterialsAction(),
-            new CoursesAction(),
+            new CoursesActions(),
             new ExitAction()
         };
     }
