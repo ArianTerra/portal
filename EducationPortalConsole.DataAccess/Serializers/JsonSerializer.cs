@@ -12,7 +12,7 @@ public class JsonSerializer<T> : IFileSerializer<T>
     {
         TypeNameHandling = TypeNameHandling.All
     };
-    
+
     public JsonSerializer()
     {
         //_filename = nameof() + ".json";
@@ -48,13 +48,13 @@ public class JsonSerializer<T> : IFileSerializer<T>
     {
         return _objects.Remove(entity);
     }
-        
+
     public void Save()
     {
         var json = JsonConvert.SerializeObject(_objects, _settings);
         File.WriteAllText(_path + "/" + _filename, json);
     }
-        
+
     public void Load()
     {
         if (!File.Exists(_path + "/" + _filename))

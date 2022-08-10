@@ -15,12 +15,12 @@ public static class ActionNavigationProvider
     public static Action? GetLastAction(int steps = 1)
     {
         Action result = null;
-        
+
         if (_actionsQueue.Count == 0)
         {
             return result;
         }
-        
+
         for (int i = 0; i <= steps; i++)
         {
             result = _actionsQueue.Pop();

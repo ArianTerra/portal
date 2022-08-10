@@ -17,7 +17,7 @@ public class DeleteMaterialsAction : Action
 
         IMaterialService materialService = Configuration.Instance.MaterialService;
         ICourseService courseService = Configuration.Instance.CourseService;
-            
+
         var materials = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Material>()
                 .Title("Delete selected [green]materials[/]")
@@ -25,7 +25,7 @@ public class DeleteMaterialsAction : Action
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more materials)[/]")
                 .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle a material, " + 
+                    "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
                 .AddChoices(materialService.GetAll())
                 .UseConverter(x => x.Name)
@@ -45,15 +45,18 @@ public class DeleteMaterialsAction : Action
                     skip = true;
                 }
             }
-                
-            if(skip) continue;
+
+            if (skip)
+            {
+                continue;
+            }
 
             materialService.Delete(material);
             deleted++;
         }
 
         AnsiConsole.Write(new Markup($"[yellow]{deleted}[/] [green]Materials[/] were deleted\n"));
-        
+
         WaitForUserInput();
         Back();
     }

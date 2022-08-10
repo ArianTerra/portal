@@ -11,7 +11,7 @@ public class ExitAction : Action
     public override void Run()
     {
         base.Run();
-        
+
         WaitForUserInput();
         Environment.Exit(0);
     }

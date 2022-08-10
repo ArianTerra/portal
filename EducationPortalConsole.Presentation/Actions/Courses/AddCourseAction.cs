@@ -18,9 +18,9 @@ public class AddCourseAction : Action
 
         ICourseService courseService = Configuration.Instance.CourseService;
         IMaterialService materialService = Configuration.Instance.MaterialService;
-        
+
         var name = AnsiConsole.Ask<string>("Enter course [green]Name[/]:");
-        
+
         var materials = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Material>()
                 .Title("Add selected [green]materials[/] to course")
@@ -28,7 +28,7 @@ public class AddCourseAction : Action
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more materials)[/]")
                 .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle a material, " + 
+                    "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
                 .AddChoices(materialService.GetAll())
                 .UseConverter(x => x.Name)
@@ -42,11 +42,11 @@ public class AddCourseAction : Action
             CreatedByUserId = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
-        
+
         courseService.Add(course);
-        
+
         AnsiConsole.Write(new Markup($"Successfully added new Course with ID [bold yellow]{course.Id}[/]\n"));
-        
+
         WaitForUserInput();
         Back();
     }

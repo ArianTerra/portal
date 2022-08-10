@@ -18,11 +18,11 @@ public static class BookInfoPrinter
         table.AddRow("Created", bookMaterial.CreatedOn.ToString() ?? String.Empty);
         table.AddRow("UpdatedBy", UserHelper.GetUsernameById(bookMaterial.UpdatedByUserId));
         table.AddRow("Updated", bookMaterial.UpdatedOn.ToString() ?? String.Empty);
-        table.AddRow("Authors", string.Concat(bookMaterial.Authors, ", "));
+        table.AddRow("Authors", string.Join(", ", bookMaterial.Authors));
         table.AddRow("Pages", bookMaterial.Pages.ToString());
         table.AddRow("Year", bookMaterial.Year.ToString());
         table.AddRow("Format", bookMaterial.Format);
-        
+
         AnsiConsole.Write(table);
     }
 }

@@ -20,7 +20,7 @@ public class UserRegisterAction : Action
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]name[/]:")
-                .Validate(x => 
+                .Validate(x =>
                     userService.GetByName(x) == null
                         ? ValidationResult.Success()
                         : ValidationResult.Error("This name is taken!")));
@@ -29,7 +29,7 @@ public class UserRegisterAction : Action
             new TextPrompt<string>("Enter [green]password[/]:")
                 .PromptStyle("gray")
                 .Secret()
-                .Validate(pass => 
+                .Validate(pass =>
                     pass.Length is >= 8 and <= 12
                         ? ValidationResult.Success()
                         : ValidationResult.Error("Password must be from 8 to 12 characters long")));
@@ -45,7 +45,7 @@ public class UserRegisterAction : Action
         };
 
         userService.Add(user);
-        
+
         AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
         WaitForUserInput();
         //ActionProvider.GetAction().Run();

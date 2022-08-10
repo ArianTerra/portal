@@ -11,7 +11,7 @@ public class UserService : IUserService
     {
         _repository = new UserRepository("Users");
     }
-    
+
     public UserService(IUserRepository repository)
     {
         _repository = repository;

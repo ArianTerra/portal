@@ -4,5 +4,4 @@ namespace EducationPortalConsole.DataAccess.Repositories;
 
 public interface ICourseRepository : IGenericRepository<Course>
 {
-    
 }

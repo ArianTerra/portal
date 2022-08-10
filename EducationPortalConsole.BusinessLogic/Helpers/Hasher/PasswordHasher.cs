@@ -17,7 +17,7 @@ public static class PasswordHasher
         HashSalt hashSalt = new HashSalt { Hash = hashPassword, Salt = salt };
         return hashSalt;
     }
-    
+
     public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
     {
         var saltBytes = Convert.FromBase64String(storedSalt);

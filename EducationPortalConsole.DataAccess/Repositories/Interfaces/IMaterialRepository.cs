@@ -4,5 +4,4 @@ namespace EducationPortalConsole.DataAccess.Repositories;
 
 public interface IMaterialRepository : IGenericRepository<Material>
 {
-        
 }

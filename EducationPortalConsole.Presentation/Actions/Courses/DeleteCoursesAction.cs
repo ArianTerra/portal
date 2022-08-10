@@ -16,7 +16,7 @@ public class DeleteCoursesAction : Action
         base.Run();
 
         ICourseService courseService = Configuration.Instance.CourseService;
-        
+
         var courses = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Course>()
                 .Title("Delete selected [green]Courses[/]")
@@ -24,7 +24,7 @@ public class DeleteCoursesAction : Action
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more Courses)[/]")
                 .InstructionsText(
-                    "[grey](Press [blue]<space>[/] to toggle a course, " + 
+                    "[grey](Press [blue]<space>[/] to toggle a course, " +
                     "[green]<enter>[/] to accept)[/]")
                 .AddChoices(courseService.GetAll())
                 .UseConverter(x => x.Name)
@@ -38,7 +38,7 @@ public class DeleteCoursesAction : Action
         }
 
         AnsiConsole.Write(new Markup($"[yellow]{deleted}[/] [green]Courses[/] were deleted\n"));
-        
+
         WaitForUserInput();
         Back();
     }

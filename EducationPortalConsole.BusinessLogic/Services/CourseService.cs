@@ -12,7 +12,7 @@ public class CourseService : ICourseService
     {
         _repository = new CourseRepository("Courses");
     }
-    
+
     public CourseService(ICourseRepository repository)
     {
         _repository = repository;

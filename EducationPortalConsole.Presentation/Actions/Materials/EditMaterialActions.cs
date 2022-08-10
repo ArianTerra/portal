@@ -19,7 +19,7 @@ public class EditMaterialActions : Action
         base.Run();
 
         IMaterialService materialService = Configuration.Instance.MaterialService;
-        
+
         var material = AnsiConsole.Prompt(
             new SelectionPrompt<Material>()
                 .PageSize(10)

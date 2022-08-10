@@ -20,7 +20,7 @@ public static class ArticleInfoPrinter
         table.AddRow("Updated", articleMaterial.UpdatedOn.ToString() ?? String.Empty);
         table.AddRow("Date", articleMaterial.Date.ToString());
         table.AddRow("Format", articleMaterial.Source);
-        
+
         AnsiConsole.Write(table);
     }
 }
