@@ -15,10 +15,10 @@ public abstract class Action
 
         if (!string.IsNullOrEmpty(Description))
         {
-            AnsiConsole.Write(new Markup(Description + "\n"));
+            AnsiConsole.Write(new Markup(Description + "\n\n"));
         }
         
-        ActionNavigationProvider.AddAction(this);
+        ActionNavigationProvider.AddToNavigationHistory(this);
     }
 
     protected static void WaitForUserInput()
@@ -27,9 +27,9 @@ public abstract class Action
         Console.ReadKey();
     }
 
-    protected static void Back()
+    protected static void Back(int steps = 1)
     {
-        var backToAction = ActionNavigationProvider.GetAction();
+        var backToAction = ActionNavigationProvider.GetLastAction(steps);
 
         backToAction?.Run();
     }

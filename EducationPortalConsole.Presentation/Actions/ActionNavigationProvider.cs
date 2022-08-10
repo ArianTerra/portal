@@ -4,7 +4,7 @@ public static class ActionNavigationProvider
 {
     private static Stack<Action> _actionsQueue = new Stack<Action>();
 
-    public static void AddAction(Action action)
+    public static void AddToNavigationHistory(Action action)
     {
         if (!_actionsQueue.Contains(action))
         {
@@ -12,14 +12,20 @@ public static class ActionNavigationProvider
         }
     }
 
-    public static Action? GetAction()
+    public static Action? GetLastAction(int steps = 1)
     {
+        Action result = null;
+        
         if (_actionsQueue.Count == 0)
         {
-            return null;
+            return result;
+        }
+        
+        for (int i = 0; i <= steps; i++)
+        {
+            result = _actionsQueue.Pop();
         }
 
-        _actionsQueue.Pop();
-        return _actionsQueue.Pop();
+        return result;
     }
 }

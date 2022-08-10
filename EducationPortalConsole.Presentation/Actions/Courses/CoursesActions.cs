@@ -2,15 +2,16 @@
 
 namespace EducationPortalConsole.Presentation.Actions.Courses;
 
-public class CoursesAction : MenuAction
+public class CoursesActions : MenuAction
 {
-    public CoursesAction()
+    public CoursesActions()
     {
         Name = "Courses commands";
         Actions = new List<Action>()
         {
             new AddCourseAction(),
             new ShowCoursesAction(),
+            new EditCourseAction(),
             new DeleteCoursesAction(),
             new BackAction()
         };
