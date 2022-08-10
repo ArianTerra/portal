@@ -20,7 +20,7 @@ public static class VideoInfoPrinter
         table.AddRow("Updated", videoMaterial.UpdatedOn.ToString() ?? String.Empty);
         table.AddRow("Duration", videoMaterial.Duration.ToString());
         table.AddRow("Quality", videoMaterial.Quality);
-        
+
         AnsiConsole.Write(table);
     }
 }

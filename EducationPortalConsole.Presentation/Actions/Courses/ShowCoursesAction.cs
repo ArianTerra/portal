@@ -9,7 +9,6 @@ public class ShowCoursesAction : Action
     public ShowCoursesAction()
     {
         Name = "Show All Courses";
-        
     }
 
     public override void Run()
@@ -17,7 +16,7 @@ public class ShowCoursesAction : Action
         base.Run();
 
         ICourseService courseService = Configuration.Instance.CourseService;
-        
+
         var table = new Table();
 
         table.AddColumns("ID", "Name", "Materials", "Created by", "Created", "Updated by", "Updated");
@@ -27,8 +26,8 @@ public class ShowCoursesAction : Action
             var materialNames = course.Materials.Select(x => x.Name);
             var materials = string.Join(", ", materialNames);
             table.AddRow(
-                course.Id.ToString(), 
-                course.Name, 
+                course.Id.ToString(),
+                course.Name,
                 materials,
                 UserHelper.GetUsernameById(course.CreatedByUserId),
                 course.CreatedOn?.ToString() ?? string.Empty,
@@ -36,9 +35,9 @@ public class ShowCoursesAction : Action
                 course.UpdatedOn?.ToString() ?? string.Empty
                 );
         }
-        
+
         AnsiConsole.Write(table);
-        
+
         WaitForUserInput();
         Back();
     }

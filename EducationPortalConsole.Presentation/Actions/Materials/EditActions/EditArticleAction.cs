@@ -9,6 +9,7 @@ namespace EducationPortalConsole.Presentation.Actions.Materials.EditActions;
 public class EditArticleAction : Action
 {
     private ArticleMaterial _articleMaterial;
+
     public EditArticleAction(ArticleMaterial articleMaterial)
     {
         Name = "Edit Article";
@@ -20,11 +21,11 @@ public class EditArticleAction : Action
     {
         base.Run();
         IMaterialService materialService = Configuration.Instance.MaterialService;
-        
+
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_articleMaterial.Name}[/]):")
                 .AllowEmpty());
-        
+
         if (!name.IsNullOrEmpty())
         {
             _articleMaterial.Name = name;
@@ -36,7 +37,7 @@ public class EditArticleAction : Action
             new TextPrompt<string>($"Enter [green]Date[/] (previous: [yellow]{_articleMaterial.Date}[/]):")
                 .AllowEmpty()
         );
-        
+
         if (!dateStr.IsNullOrEmpty())
         {
             if (DateOnly.TryParse(dateStr, out date))
@@ -48,7 +49,7 @@ public class EditArticleAction : Action
                 AnsiConsole.Write(new Markup("[red]Input Date[/] was in wrong format, it was not changed\n"));
             }
         }
-        
+
         var source = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Source[/] (previous: [yellow]{_articleMaterial.Source}[/]):")
                 .AllowEmpty());
@@ -57,14 +58,14 @@ public class EditArticleAction : Action
         {
             _articleMaterial.Source = source;
         }
-        
+
         _articleMaterial.UpdatedOn = DateTime.Now;
         _articleMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
 
         materialService.Update(_articleMaterial);
-        
+
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
-        
+
         WaitForUserInput();
         Back(2);
     }

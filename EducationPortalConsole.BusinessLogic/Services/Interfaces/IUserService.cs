@@ -7,7 +7,7 @@ public interface IUserService
     User? GetById(Guid id);
 
     User? GetByName(string name);
-    
+
     IEnumerable<User> GetAll();
 
     void Add(User user);

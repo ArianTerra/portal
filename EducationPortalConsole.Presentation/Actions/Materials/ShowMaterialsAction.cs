@@ -32,7 +32,7 @@ public class ShowMaterialsAction : Action
                 material.UpdatedOn?.ToString() ?? string.Empty
             );
         }
-            
+
         AnsiConsole.Write(table);
 
         WaitForUserInput();

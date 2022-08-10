@@ -12,12 +12,12 @@ public class MaterialService : IMaterialService
     {
         _repository = new MaterialRepository("Materials");
     }
-    
+
     public MaterialService(IMaterialRepository repository)
     {
         _repository = repository;
     }
-        
+
     public Material? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id);

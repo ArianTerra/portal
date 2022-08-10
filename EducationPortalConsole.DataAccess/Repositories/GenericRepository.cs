@@ -13,7 +13,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _fileSerializer = new JsonSerializer<TEntity>(filename);
         _fileSerializer.Load();
     }
-        
+
     public TEntity? FindFirst(Func<TEntity, bool> predicate)
     {
         return _fileSerializer.GetFirst(predicate);
@@ -35,7 +35,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         {
             throw new ArgumentException($"Entity with ID {entity.Id} already exist");
         }
-            
+
         _fileSerializer.Add(entity);
         _fileSerializer.Save();
     }

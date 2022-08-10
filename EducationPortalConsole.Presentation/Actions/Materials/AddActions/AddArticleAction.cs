@@ -11,6 +11,7 @@ public class AddArticleAction : Action
     {
         Name = "Add Article";
     }
+
     public override void Run()
     {
         base.Run();
@@ -22,11 +23,11 @@ public class AddArticleAction : Action
         DateOnly date;
         AnsiConsole.Prompt(
             new TextPrompt<string>("Enter [green]Date[/]:")
-                .Validate(x => 
+                .Validate(x =>
                     DateOnly.TryParse(x, out date)
                         ? ValidationResult.Success()
                         : ValidationResult.Error("Input is not date")));
-            
+
         var source = AnsiConsole.Ask<string>("Enter material [green]Source[/]:");
 
         var material = new ArticleMaterial()
@@ -38,11 +39,11 @@ public class AddArticleAction : Action
             CreatedByUserId = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
-            
+
         materialService.Add(material);
-        
+
         AnsiConsole.Write(new Markup($"Successfully added new Article with ID [bold yellow]{material.Id}[/]\n"));
-        
+
         WaitForUserInput();
         Back();
     }

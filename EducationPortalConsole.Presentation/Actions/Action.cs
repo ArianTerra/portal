@@ -5,9 +5,9 @@ namespace EducationPortalConsole.Presentation.Actions;
 public abstract class Action
 {
     public string Name { get; set; }
-    
-    public string Description { get; set; }
-    
+
+    protected string? Description { get; set; }
+
     public virtual void Run()
     {
         AnsiConsole.Clear();
@@ -17,8 +17,13 @@ public abstract class Action
         {
             AnsiConsole.Write(new Markup(Description + "\n\n"));
         }
-        
+
         ActionNavigationProvider.AddToNavigationHistory(this);
+    }
+
+    public string? ToString()
+    {
+        return Name;
     }
 
     protected static void WaitForUserInput()
@@ -32,10 +37,5 @@ public abstract class Action
         var backToAction = ActionNavigationProvider.GetLastAction(steps);
 
         backToAction?.Run();
-    }
-
-    public string? ToString()
-    {
-        return Name;
     }
 }

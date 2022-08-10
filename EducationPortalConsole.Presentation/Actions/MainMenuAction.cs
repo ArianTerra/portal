@@ -11,7 +11,7 @@ public class MainMenuAction : MenuAction
     {
         Name = "Main menu";
         Description = $"You are logged in as [yellow]{UserSession.Instance.CurrentUser.Name}[/]";
-        
+
         Actions = new List<Action>()
         {
             new MaterialsAction(),
@@ -19,6 +19,4 @@ public class MainMenuAction : MenuAction
             new ExitAction()
         };
     }
-    
-    
 }

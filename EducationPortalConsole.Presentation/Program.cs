@@ -1,6 +1,4 @@
-﻿using EducationPortalConsole.Core.Entities.Materials;
-using EducationPortalConsole.Presentation;
-using EducationPortalConsole.Presentation.Actions;
+﻿using EducationPortalConsole.Presentation.Actions;
 using EducationPortalConsole.Presentation.Actions.Users;
 using EducationPortalConsole.Presentation.Session;
 
