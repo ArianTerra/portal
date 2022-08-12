@@ -10,7 +10,7 @@ public class MaterialService : IMaterialService
 
     public MaterialService()
     {
-        _repository = new MaterialRepository("Materials");
+        _repository = new MaterialRepository();
     }
 
     public MaterialService(IMaterialRepository repository)

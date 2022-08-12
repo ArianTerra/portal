@@ -4,7 +4,7 @@ namespace EducationPortalConsole.DataAccess.Repositories;
 
 public class UserRepository : GenericRepository<User>, IUserRepository
 {
-    public UserRepository(string filename) : base(filename)
+    public UserRepository() : base()
     {
     }
 }

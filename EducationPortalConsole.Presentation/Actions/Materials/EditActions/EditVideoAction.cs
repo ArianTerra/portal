@@ -52,7 +52,7 @@ public class EditVideoAction : Action
         }
 
         _videoMaterial.UpdatedOn = DateTime.Now;
-        _videoMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
+        _videoMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
         materialService.Update(_videoMaterial);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));

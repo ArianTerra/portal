@@ -63,7 +63,7 @@ public class EditBookAction : Action
         _bookMaterial.Format = format;
 
         _bookMaterial.UpdatedOn = DateTime.Now;
-        _bookMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
+        _bookMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
         materialService.Update(_bookMaterial);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));

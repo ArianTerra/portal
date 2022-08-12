@@ -36,7 +36,7 @@ public class AddBookAction : Action
             Pages = pages,
             Year = year,
             Format = format,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 

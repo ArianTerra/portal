@@ -60,7 +60,7 @@ public class EditArticleAction : Action
         }
 
         _articleMaterial.UpdatedOn = DateTime.Now;
-        _articleMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
+        _articleMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
 
         materialService.Update(_articleMaterial);
 

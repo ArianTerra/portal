@@ -39,7 +39,7 @@ public class AddCourseAction : Action
             Id = Guid.NewGuid(),
             Name = name,
             Materials = materials,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 

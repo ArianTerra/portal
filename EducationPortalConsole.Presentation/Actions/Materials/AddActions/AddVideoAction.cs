@@ -36,7 +36,7 @@ public class AddVideoAction : Action
             Name = name,
             Duration = time,
             Quality = quality,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 

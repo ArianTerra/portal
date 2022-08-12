@@ -14,9 +14,9 @@ public static class VideoInfoPrinter
 
         table.AddRow("Id", videoMaterial.Id.ToString());
         table.AddRow("Type", "Article");
-        table.AddRow("CreatedBy", UserHelper.GetUsernameById(videoMaterial.CreatedByUserId));
+        table.AddRow("CreatedBy", videoMaterial.CreatedBy?.Name ?? String.Empty);
         table.AddRow("Created", videoMaterial.CreatedOn.ToString() ?? String.Empty);
-        table.AddRow("UpdatedBy", UserHelper.GetUsernameById(videoMaterial.UpdatedByUserId));
+        table.AddRow("UpdatedBy", videoMaterial.UpdatedBy?.Name ?? String.Empty);
         table.AddRow("Updated", videoMaterial.UpdatedOn.ToString() ?? String.Empty);
         table.AddRow("Duration", videoMaterial.Duration.ToString());
         table.AddRow("Quality", videoMaterial.Quality);

@@ -26,9 +26,9 @@ public class ShowMaterialsAction : Action
                 material.Id.ToString(),
                 material.GetType().Name,
                 material.Name,
-                UserHelper.GetUsernameById(material.CreatedByUserId),
+                material.CreatedBy?.Name ?? string.Empty,
                 material.CreatedOn?.ToString() ?? string.Empty,
-                UserHelper.GetUsernameById(material.UpdatedByUserId),
+                material.UpdatedBy?.Name ?? string.Empty,
                 material.UpdatedOn?.ToString() ?? string.Empty
             );
         }

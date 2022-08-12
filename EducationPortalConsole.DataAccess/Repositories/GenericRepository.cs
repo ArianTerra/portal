@@ -1,62 +1,55 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EducationPortalConsole.Core;
+using EducationPortalConsole.DataAccess.DataContext;
 using EducationPortalConsole.DataAccess.Serializers;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    private IFileSerializer<TEntity> _fileSerializer;
+    //private IFileSerializer<TEntity> _fileSerializer;
+    private DatabaseContext _context;
 
-    public GenericRepository(string filename)
+    public GenericRepository()
     {
-        _fileSerializer = new JsonSerializer<TEntity>(filename);
-        _fileSerializer.Load();
+        _context = new DatabaseContext(); //TODO should it be initialized here?
     }
 
     public TEntity? FindFirst(Func<TEntity, bool> predicate)
     {
-        return _fileSerializer.GetFirst(predicate);
+        return _context.Set<TEntity>().Where(predicate).FirstOrDefault();
     }
 
     public IEnumerable<TEntity> FindAll(Func<TEntity, bool> predicate)
     {
-        return _fileSerializer.FindAll(predicate);
+        return _context.Set<TEntity>().Where(predicate);
     }
 
     public IEnumerable<TEntity> GetAll()
     {
-        return _fileSerializer.GetAll();
+        return _context.Set<TEntity>();
     }
 
     public void Add([NotNull] TEntity entity)
     {
-        if (_fileSerializer.GetFirst(x => x.Id == entity.Id) != null)
-        {
-            throw new ArgumentException($"Entity with ID {entity.Id} already exist");
-        }
-
-        _fileSerializer.Add(entity);
-        _fileSerializer.Save();
+        _context.Set<TEntity>().Add(entity);
+        _context.SaveChanges();
     }
 
     public void Update(TEntity entity)
     {
-        var entityToUpdate = _fileSerializer.GetFirst(x => x.Id == entity.Id);
+        var entityToUpdate = FindFirst(x => x.Id == entity.Id);
         if (entityToUpdate == null)
         {
             throw new ArgumentNullException(nameof(entity));
         }
 
-        _fileSerializer.Delete(entityToUpdate);
-        _fileSerializer.Add(entity);
-        _fileSerializer.Save();
+        _context.Entry(entityToUpdate).CurrentValues.SetValues(entity);
+        _context.SaveChanges();
     }
 
     public bool Delete(TEntity entity)
     {
-        var result = _fileSerializer.Delete(entity);
-        _fileSerializer.Save();
-        return result;
+        return entity == _context.Set<TEntity>().Remove(entity);
     }
 }

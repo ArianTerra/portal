@@ -29,9 +29,9 @@ public class ShowCoursesAction : Action
                 course.Id.ToString(),
                 course.Name,
                 materials,
-                UserHelper.GetUsernameById(course.CreatedByUserId),
+                course.CreatedBy?.Name ?? string.Empty,
                 course.CreatedOn?.ToString() ?? string.Empty,
-                UserHelper.GetUsernameById(course.UpdatedByUserId),
+                course.UpdatedBy?.Name ?? string.Empty,
                 course.UpdatedOn?.ToString() ?? string.Empty
                 );
         }

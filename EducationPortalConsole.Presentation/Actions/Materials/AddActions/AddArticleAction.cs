@@ -36,7 +36,7 @@ public class AddArticleAction : Action
             Name = name,
             Date = date,
             Source = source,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 

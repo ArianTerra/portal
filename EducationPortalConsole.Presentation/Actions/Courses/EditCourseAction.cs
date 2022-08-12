@@ -59,7 +59,7 @@ public class EditCourseAction : Action
 
         course.Materials = materials;
         course.UpdatedOn = DateTime.Now;
-        course.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
+        course.UpdatedById = UserSession.Instance.CurrentUser.Id;
         courseService.Update(course);
 
         AnsiConsole.Write(new Markup($"[green]Course[/] updated\n"));

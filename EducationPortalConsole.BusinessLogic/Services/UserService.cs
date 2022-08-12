@@ -9,7 +9,7 @@ public class UserService : IUserService
 
     public UserService()
     {
-        _repository = new UserRepository("Users");
+        _repository = new UserRepository();
     }
 
     public UserService(IUserRepository repository)
