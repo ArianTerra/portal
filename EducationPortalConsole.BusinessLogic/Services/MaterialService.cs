@@ -20,15 +20,17 @@ public class MaterialService : IMaterialService
 
     public Material? GetById(Guid id)
     {
-        return _repository.FindFirst(x => x.Id == id);
+        return _repository.FindFirst(x => x.Id == id,
+            x => x.CreatedBy,
+            x => x.UpdatedBy);
     }
 
     public IEnumerable<Material> GetAll()
     {
-        return _repository.GetAll();
+        return _repository.GetAll(x => x.CreatedBy, x => x.UpdatedBy);
     }
 
-    public void Add([NotNull] Material material)
+    public void Add(Material material)
     {
         _repository.Add(material);
     }

@@ -20,15 +20,19 @@ public class CourseService : ICourseService
 
     public Course? GetById(Guid id)
     {
-        return _repository.FindFirst(x => x.Id == id);
+        return _repository.FindFirst(x => x.Id == id,
+            x => x.CreatedBy,
+            x => x.UpdatedBy);
     }
 
     public IEnumerable<Course> GetAll()
     {
-        return _repository.GetAll();
+        return _repository.GetAll(
+            x => x.CreatedBy,
+            x => x.UpdatedBy);
     }
 
-    public void Add([NotNull] Course course)
+    public void Add(Course course)
     {
         _repository.Add(course);
     }

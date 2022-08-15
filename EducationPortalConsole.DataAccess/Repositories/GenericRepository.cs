@@ -14,19 +14,51 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _context = new DatabaseContext(); //TODO should it be initialized here?
     }
 
-    public TEntity? FindFirst(Expression<Func<TEntity, bool>> expression)
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>> expression,
+        params Expression<Func<TEntity, object>>[] includeParams)
     {
-        return _context.Set<TEntity>().FirstOrDefault(expression);
+        var query = _context.Set<TEntity>().Where(expression);
+
+        if (includeParams != null && includeParams.Length > 0)
+        {
+            foreach (var param in includeParams)
+            {
+                query.Include(param);
+            }
+        }
+
+        return query.FirstOrDefault();
     }
 
-    public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression)
+    public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
+        params Expression<Func<TEntity, object>>[] includeParams)
     {
-        return _context.Set<TEntity>().Where(expression);
+        var query = _context.Set<TEntity>().Where(expression);
+
+        if (includeParams != null && includeParams.Length > 0)
+        {
+            foreach (var param in includeParams)
+            {
+                query.Include(param);
+            }
+        }
+
+        return query;
     }
 
-    public IEnumerable<TEntity> GetAll()
+    public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
     {
-        return _context.Set<TEntity>();
+        var query = _context.Set<TEntity>();
+
+        if (includeParams != null && includeParams.Length > 0)
+        {
+            foreach (var param in includeParams)
+            {
+                query.Include(param);
+            }
+        }
+
+        return query;
     }
 
     public void Add(TEntity entity)
