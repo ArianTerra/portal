@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Data.Entity;
+using System.Linq.Expressions;
 using EducationPortalConsole.Core;
 using EducationPortalConsole.DataAccess.DataContext;
 
@@ -6,7 +7,6 @@ namespace EducationPortalConsole.DataAccess.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    //private IFileSerializer<TEntity> _fileSerializer;
     private readonly DatabaseContext _context;
 
     public GenericRepository()
@@ -14,14 +14,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _context = new DatabaseContext(); //TODO should it be initialized here?
     }
 
-    public TEntity? FindFirst(Func<TEntity, bool> predicate)
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>> expression)
     {
-        return _context.Set<TEntity>().Where(predicate).FirstOrDefault();
+        return _context.Set<TEntity>().FirstOrDefault(expression);
     }
 
-    public IEnumerable<TEntity> FindAll(Func<TEntity, bool> predicate)
+    public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression)
     {
-        return _context.Set<TEntity>().Where(predicate);
+        return _context.Set<TEntity>().Where(expression);
     }
 
     public IEnumerable<TEntity> GetAll()
@@ -29,7 +29,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return _context.Set<TEntity>();
     }
 
-    public void Add([NotNull] TEntity entity)
+    public void Add(TEntity entity)
     {
         _context.Set<TEntity>().Add(entity);
         _context.SaveChanges();
@@ -37,13 +37,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public void Update(TEntity entity)
     {
-        var entityToUpdate = FindFirst(x => x.Id == entity.Id);
-        if (entityToUpdate == null)
-        {
-            throw new ArgumentNullException(nameof(entity));
-        }
-
-        _context.Entry(entityToUpdate).CurrentValues.SetValues(entity);
+        _context.Entry(entity).State = EntityState.Modified;
         _context.SaveChanges();
     }
 
