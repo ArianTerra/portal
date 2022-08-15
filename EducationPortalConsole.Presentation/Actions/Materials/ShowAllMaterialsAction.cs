@@ -4,11 +4,11 @@ using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials;
 
-public class ShowMaterialsAction : Action
+public class ShowAllMaterialsAction : Action
 {
-    public ShowMaterialsAction()
+    public ShowAllMaterialsAction()
     {
-        Name = "All Materials";
+        Name = "Show All Materials";
     }
 
     public override void Run()

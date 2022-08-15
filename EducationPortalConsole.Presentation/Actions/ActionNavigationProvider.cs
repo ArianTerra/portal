@@ -16,14 +16,12 @@ public static class ActionNavigationProvider
     {
         Action result = null;
 
-        if (_actionsQueue.Count == 0)
+        if (_actionsQueue.Count != 0)
         {
-            return result;
-        }
-
-        for (int i = 0; i <= steps; i++)
-        {
-            result = _actionsQueue.Pop();
+            for (int i = 0; i <= steps; i++)
+            {
+                result = _actionsQueue.Pop();
+            }
         }
 
         return result;

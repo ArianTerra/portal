@@ -1,14 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EducationPortalConsole.Core;
 using EducationPortalConsole.DataAccess.DataContext;
-using EducationPortalConsole.DataAccess.Serializers;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     //private IFileSerializer<TEntity> _fileSerializer;
-    private DatabaseContext _context;
+    private readonly DatabaseContext _context;
 
     public GenericRepository()
     {
@@ -50,6 +49,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public bool Delete(TEntity entity)
     {
-        return entity == _context.Set<TEntity>().Remove(entity);
+        var result = entity == _context.Set<TEntity>().Remove(entity);
+        _context.SaveChanges();
+        return result;
     }
 }

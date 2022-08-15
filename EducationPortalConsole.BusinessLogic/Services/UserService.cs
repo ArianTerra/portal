@@ -5,14 +5,14 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _repository;
+    private readonly IGenericRepository<User> _repository;
 
     public UserService()
     {
-        _repository = new UserRepository();
+        _repository = new GenericRepository<User>();
     }
 
-    public UserService(IUserRepository repository)
+    public UserService(IGenericRepository<User> repository)
     {
         _repository = repository;
     }

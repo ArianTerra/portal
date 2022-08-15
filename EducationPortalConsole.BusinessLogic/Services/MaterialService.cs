@@ -6,14 +6,14 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public class MaterialService : IMaterialService
 {
-    private readonly IMaterialRepository _repository;
+    private readonly IGenericRepository<Material> _repository;
 
     public MaterialService()
     {
-        _repository = new MaterialRepository();
+        _repository = new GenericRepository<Material>();
     }
 
-    public MaterialService(IMaterialRepository repository)
+    public MaterialService(IGenericRepository<Material> repository)
     {
         _repository = repository;
     }

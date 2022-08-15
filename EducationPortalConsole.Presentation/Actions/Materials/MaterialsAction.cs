@@ -11,7 +11,7 @@ public class MaterialsAction : MenuAction
         Actions = new List<Action>()
         {
             new AddMaterialAction(),
-            new ShowMaterialsAction(),
+            new ShowAllMaterialsAction(),
             new ShowMaterialInfo(),
             new ShowMaterialByIdAction(),
             new EditMaterialActions(),
