@@ -1,7 +1,7 @@
-﻿using System.Data.Entity;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using EducationPortalConsole.Core;
 using EducationPortalConsole.DataAccess.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
@@ -46,7 +46,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return query;
     }
 
-    public IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
+    public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
     {
         var query = _context.Set<TEntity>();
 
@@ -58,7 +58,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return query;
+        return query.ToList();
     }
 
     public void Add(TEntity entity)
@@ -75,7 +75,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public bool Delete(TEntity entity)
     {
-        var result = entity == _context.Set<TEntity>().Remove(entity);
+        var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
         _context.SaveChanges();
         return result;
     }

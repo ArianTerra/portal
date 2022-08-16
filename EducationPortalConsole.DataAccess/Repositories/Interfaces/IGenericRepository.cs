@@ -11,7 +11,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
         params Expression<Func<TEntity, object>>[] includeParams);
 
-    IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams);
+    IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams);
 
     void Add(TEntity entity);
 
