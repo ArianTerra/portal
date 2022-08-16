@@ -1,5 +1,7 @@
 ﻿using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
 using EducationPortalConsole.Core.Entities;
+
 
 namespace EducationPortalConsole.DataAccess.DataContext;
 

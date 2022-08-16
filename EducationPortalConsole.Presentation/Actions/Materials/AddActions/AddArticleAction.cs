@@ -20,11 +20,11 @@ public class AddArticleAction : Action
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
-        DateOnly date;
+        DateTime date = new DateTime();
         AnsiConsole.Prompt(
             new TextPrompt<string>("Enter [green]Date[/]:")
                 .Validate(x =>
-                    DateOnly.TryParse(x, out date)
+                    DateTime.TryParse(x, out date)
                         ? ValidationResult.Success()
                         : ValidationResult.Error("Input is not date")));
 

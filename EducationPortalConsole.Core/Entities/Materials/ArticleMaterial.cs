@@ -2,7 +2,7 @@
 
 public class ArticleMaterial : Material
 {
-    public DateOnly Date { get; set; } //TODO Date is not mapped to DB wtf
+    public DateTime Date { get; set; }
 
     public string Source { get; set; }
 }

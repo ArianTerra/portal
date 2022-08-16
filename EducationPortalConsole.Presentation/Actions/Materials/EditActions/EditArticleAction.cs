@@ -32,15 +32,15 @@ public class EditArticleAction : Action
         }
 
         //Date edit
-        DateOnly date;
+        DateTime date = new DateTime();
         var dateStr = AnsiConsole.Prompt(
-            new TextPrompt<string>($"Enter [green]Date[/] (previous: [yellow]{_articleMaterial.Date}[/]):")
+            new TextPrompt<string>($"Enter [green]Date[/] (previous: [yellow]{_articleMaterial.Date.Date}[/]):")
                 .AllowEmpty()
         );
 
         if (!dateStr.IsNullOrEmpty())
         {
-            if (DateOnly.TryParse(dateStr, out date))
+            if (DateTime.TryParse(dateStr, out date))
             {
                 _articleMaterial.Date = date;
             }

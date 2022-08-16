@@ -45,6 +45,12 @@ public class AddCourseAction : Action
 
         courseService.Add(course);
 
+        foreach (var material in materials)
+        {
+            material.CourseId = course.Id;
+            materialService.Update(material);
+        }
+
         AnsiConsole.Write(new Markup($"Successfully added new Course with ID [bold yellow]{course.Id}[/]\n"));
 
         WaitForUserInput();

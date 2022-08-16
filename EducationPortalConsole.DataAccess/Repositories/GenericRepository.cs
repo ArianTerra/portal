@@ -19,7 +19,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         var query = _context.Set<TEntity>().Where(expression);
 
-        if (includeParams != null && includeParams.Length > 0)
+        if (includeParams != null && includeParams.Any())
         {
             foreach (var param in includeParams)
             {
@@ -35,7 +35,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         var query = _context.Set<TEntity>().Where(expression);
 
-        if (includeParams != null && includeParams.Length > 0)
+        if (includeParams != null && includeParams.Any())
         {
             foreach (var param in includeParams)
             {
@@ -46,11 +46,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return query;
     }
 
-    public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
+    public IQueryable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
     {
         var query = _context.Set<TEntity>();
 
-        if (includeParams != null && includeParams.Length > 0)
+        if (includeParams != null && includeParams.Any())
         {
             foreach (var param in includeParams)
             {

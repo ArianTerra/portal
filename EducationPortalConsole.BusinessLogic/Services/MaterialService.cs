@@ -22,12 +22,16 @@ public class MaterialService : IMaterialService
     {
         return _repository.FindFirst(x => x.Id == id,
             x => x.CreatedBy,
-            x => x.UpdatedBy);
+            x => x.UpdatedBy,
+            x => x.Course);
     }
 
     public IEnumerable<Material> GetAll()
     {
-        return _repository.GetAll(x => x.CreatedBy, x => x.UpdatedBy);
+        return _repository.GetAll(
+            x => x.CreatedBy,
+            x => x.UpdatedBy,
+            x => x.Course);
     }
 
     public void Add(Material material)
