@@ -13,7 +13,6 @@ public class MaterialsAction : MenuAction
             new AddMaterialAction(),
             new ShowAllMaterialsAction(),
             new ShowMaterialInfo(),
-            new ShowMaterialByIdAction(),
             new EditMaterialActions(),
             new DeleteMaterialsAction(),
             new BackAction()

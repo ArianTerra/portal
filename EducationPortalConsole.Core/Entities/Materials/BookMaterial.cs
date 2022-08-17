@@ -2,7 +2,7 @@
 
 public class BookMaterial : Material
 {
-    public IEnumerable<string> Authors { get; set; }
+    public ICollection<BookAuthor> Authors { get; set; }
 
     public int Pages { get; set; }
 

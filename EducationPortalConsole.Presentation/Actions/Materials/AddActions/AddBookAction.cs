@@ -1,4 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
@@ -32,7 +33,7 @@ public class AddBookAction : Action
         {
             Id = Guid.NewGuid(),
             Name = name,
-            Authors = authors.Split(','),
+            Authors = authors.Split(',').Select(x => new BookAuthor() {Name = x}).ToHashSet(),
             Pages = pages,
             Year = year,
             Format = format,

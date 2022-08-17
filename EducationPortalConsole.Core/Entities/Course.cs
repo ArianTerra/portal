@@ -7,7 +7,7 @@ public class Course : AuditedEntity
         Materials = new HashSet<Material>();
     }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public IEnumerable<Material> Materials { get; set; }
 

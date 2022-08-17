@@ -1,4 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Extensions;
 using EducationPortalConsole.Presentation.Session;
@@ -38,7 +39,7 @@ public class EditBookAction : Action
 
         if (!authors.IsNullOrEmpty())
         {
-            _bookMaterial.Authors = authors.Split(",");
+            _bookMaterial.Authors = authors.Split(',').Select(x => new BookAuthor() {Name = x}).ToHashSet();
         }
 
         var pages = AnsiConsole.Prompt(

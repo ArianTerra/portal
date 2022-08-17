@@ -47,7 +47,7 @@ public class AddCourseAction : Action
 
         foreach (var material in materials)
         {
-            material.CourseId = course.Id;
+            material.Courses.Add(course);
             materialService.Update(material);
         }
 

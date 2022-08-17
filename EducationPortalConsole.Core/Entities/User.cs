@@ -26,8 +26,4 @@ public class User : BaseEntity //TODO should it be IAuditedEntity or not??
     public ICollection<Course> CreatedCourses { get; set; }
 
     public ICollection<Material> CreatedMaterials { get; set; }
-
-    //public ICollection<Course> UpdatedCourses { get; set; }
-
-    //public ICollection<Material> UpdatedMaterials { get; set; }
 }
