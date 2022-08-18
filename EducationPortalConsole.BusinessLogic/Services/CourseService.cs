@@ -22,16 +22,14 @@ public class CourseService : ICourseService
     {
         return _repository.FindFirst(x => x.Id == id,
             x => x.CreatedBy,
-            x => x.UpdatedBy,
-            x => x.Materials);
+            x => x.UpdatedBy);
     }
 
     public IEnumerable<Course> GetAll()
     {
         return _repository.GetAll(
             x => x.CreatedBy,
-            x => x.UpdatedBy,
-            x => x.Materials);
+            x => x.UpdatedBy);
     }
 
     public void Add(Course course)

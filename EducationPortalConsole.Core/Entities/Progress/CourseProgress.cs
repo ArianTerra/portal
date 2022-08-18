@@ -1,10 +1,14 @@
-﻿namespace EducationPortalConsole.Core.Entities.Progress
-{
-    //TODO Progress classes is in development. They may be united under generic type or interface
-    public class CourseProgress
-    {
-        public Course Course { get; set; }
+﻿namespace EducationPortalConsole.Core.Entities.Progress;
 
-        public int Progress { get; set; }
-    }
+public class CourseProgress
+{
+    public Guid CourseId { get; set; }
+
+    public Course Course { get; set; }
+
+    public Guid UserId { get; set; }
+
+    public User User { get; set; }
+
+    public int Progress { get; set; }
 }

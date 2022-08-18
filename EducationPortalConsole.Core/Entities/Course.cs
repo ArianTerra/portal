@@ -1,15 +1,18 @@
-﻿namespace EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities.ManyToManyTables;
+using EducationPortalConsole.Core.Entities.Progress;
+
+namespace EducationPortalConsole.Core.Entities;
 
 public class Course : AuditedEntity
 {
-    public Course()
-    {
-        Materials = new HashSet<Material>();
-    }
-
     public string? Description { get; set; }
 
-    public IEnumerable<Material> Materials { get; set; }
+    public ICollection<CourseMaterial> CourseMaterials { get; set; }
 
-    public IEnumerable<Skill> Skills { get; set; }
+    public ICollection<CourseSkill> CourseSkills { get; set; }
+
+    public ICollection<CourseProgress> CourseProgresses { get; set; }
+
+    public IEnumerable<Material> Materials => CourseMaterials.Where(cm => cm.Course == this).
+        Select(cm => cm.Material);
 }

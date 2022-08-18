@@ -1,8 +1,10 @@
-﻿namespace EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.ManyToManyTables;
+
+namespace EducationPortalConsole.Core.Entities.Materials;
 
 public class BookMaterial : Material
 {
-    public ICollection<BookAuthor> Authors { get; set; }
+    public ICollection<BookMaterialBookAuthor> BookMaterialBookAuthors { get; set; }
 
     public int Pages { get; set; }
 
