@@ -5,15 +5,17 @@ namespace EducationPortalConsole.Core.Entities;
 
 public class User : BaseEntity //TODO should it be IAuditedEntity or not??
 {
+    public string Name { get; set; }
+
     public string PasswordHash { get; set; }
 
     public string PasswordHashSalt { get; set; }
 
-    public IEnumerable<CourseProgress> CourseProgresses { get; set; }
+    public ICollection<CourseProgress> CourseProgresses { get; set; }
 
-    public IEnumerable<MaterialProgress> MaterialProgresses { get; set; }
+    public ICollection<MaterialProgress> MaterialProgresses { get; set; }
 
-    public IEnumerable<SkillProgress> SkillProgresses { get; set; }
+    public ICollection<SkillProgress> SkillProgresses { get; set; }
 
     public ICollection<Course> CreatedCourses { get; set; }
 

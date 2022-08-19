@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EducationPortalConsole.Core.Entities;
+using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
@@ -8,9 +9,12 @@ public class CourseService : ICourseService
 {
     private readonly IGenericRepository<Course> _repository;
 
+    private readonly IGenericRepository<CourseMaterial> _repositoryCourseMaterial;
+
     public CourseService()
     {
         _repository = new GenericRepository<Course>();
+        _repositoryCourseMaterial = new GenericRepository<CourseMaterial>();
     }
 
     public CourseService(IGenericRepository<Course> repository)
@@ -32,17 +36,45 @@ public class CourseService : ICourseService
             x => x.UpdatedBy);
     }
 
-    public void Add(Course course)
+    public void Add(Course course, IEnumerable<Material> materials)
     {
         _repository.Add(course);
+
+        foreach (var material in materials)
+        {
+            var link = new CourseMaterial()
+            {
+                CourseId = course.Id,
+                MaterialId = material.Id
+            };
+
+            _repositoryCourseMaterial.Add(link);
+        }
     }
 
-    public void Update(Course course)
+    public void Update(Course course, IEnumerable<Material> materials)
     {
         _repository.Update(course);
+
+        var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
+        foreach (var item in linksToDelete)
+        {
+            _repositoryCourseMaterial.Delete(item);
+        }
+
+        foreach (var material in materials)
+        {
+            var link = new CourseMaterial()
+            {
+                CourseId = course.Id,
+                MaterialId = material.Id
+            };
+
+            _repositoryCourseMaterial.Add(link);
+        }
     }
 
-    public bool Delete(Course course)
+    public bool Delete(Course course) //todo test it
     {
         return _repository.Delete(course);
     }

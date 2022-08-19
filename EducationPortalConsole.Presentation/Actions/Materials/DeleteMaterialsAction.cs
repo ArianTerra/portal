@@ -37,13 +37,13 @@ public class DeleteMaterialsAction : Action
             var skip = false;
             foreach (var course in courseService.GetAll())
             {
-                if (course.Materials.Contains(material))
-                {
-                    AnsiConsole.Write(
-                        new Markup($"Cannot delete material with [green]ID[/] [yellow]{material.Id}[/] because it used in " +
-                                   $"course with [green]ID[/] [yellow]{course.Id}[/]\n"));
-                    skip = true;
-                }
+                // if (course.Materials.Contains(material)) //TODO
+                // {
+                //     AnsiConsole.Write(
+                //         new Markup($"Cannot delete material with [green]ID[/] [yellow]{material.Id}[/] because it used in " +
+                //                    $"course with [green]ID[/] [yellow]{course.Id}[/]\n"));
+                //     skip = true;
+                // }
             }
 
             if (skip)

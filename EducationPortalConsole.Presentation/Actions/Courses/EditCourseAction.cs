@@ -50,17 +50,16 @@ public class EditCourseAction : Action
             .AddChoices(materialService.GetAll())
             .UseConverter(x => x.Name);
 
-        foreach (var material in course.Materials)
-        {
-            prompt.Select(material);
-        }
+        // foreach (var material in course.Materials) //TODO
+        // {
+        //     prompt.Select(material);
+        // }
 
         var materials = AnsiConsole.Prompt(prompt);
 
-        course.Materials = materials;
         course.UpdatedOn = DateTime.Now;
         course.UpdatedById = UserSession.Instance.CurrentUser.Id;
-        courseService.Update(course);
+        courseService.Update(course, materials);
 
         AnsiConsole.Write(new Markup($"[green]Course[/] updated\n"));
 

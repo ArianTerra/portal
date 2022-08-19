@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EducationPortalConsole.Core.Entities;
-using EducationPortalConsole.Core.Entities.ManyToManyTables;
+using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Core.Entities.Progress;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ public class DatabaseContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;
-            Database=EducationPortalConsole.DataAccess.DataContext.DatabaseContext");
+            Database=EducationPortalConsole.DataAccess.DataContext.DatabaseContext;MultipleActiveResultSets=True");
     }
 
     protected override void OnModelCreating([NotNull] ModelBuilder modelBuilder)
@@ -107,15 +107,15 @@ public class DatabaseContext : DbContext
             .HasForeignKey(cp => cp.BookAuthorId);
 
         modelBuilder.Entity<CourseMaterial>()
-            .HasKey(cp => new { cp.CourseId, cp.MaterialId });
+            .HasKey(cm => new { cm.CourseId, cm.MaterialId });
         modelBuilder.Entity<CourseMaterial>()
-            .HasOne(cp => cp.Course)
+            .HasOne(cm => cm.Course)
             .WithMany(c => c.CourseMaterials)
-            .HasForeignKey(cp => cp.CourseId);
+            .HasForeignKey(cm => cm.CourseId);
         modelBuilder.Entity<CourseMaterial>()
-            .HasOne(cp => cp.Material)
-            .WithMany(u => u.CourseMaterials)
-            .HasForeignKey(cp => cp.CourseId);
+            .HasOne(cm => cm.Material)
+            .WithMany(m => m.CourseMaterials)
+            .HasForeignKey(cm => cm.MaterialId);
 
         modelBuilder.Entity<CourseSkill>()
             .HasKey(cp => new { cp.CourseId, cp.SkillId });

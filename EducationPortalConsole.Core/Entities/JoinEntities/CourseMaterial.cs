@@ -1,6 +1,6 @@
-﻿namespace EducationPortalConsole.Core.Entities.ManyToManyTables;
+﻿namespace EducationPortalConsole.Core.Entities.JoinEntities;
 
-public class CourseMaterial : BaseEntity
+public class CourseMaterial
 {
     public Guid CourseId { get; set; }
 

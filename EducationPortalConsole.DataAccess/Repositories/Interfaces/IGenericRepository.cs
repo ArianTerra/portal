@@ -3,7 +3,7 @@ using EducationPortalConsole.Core;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
-public interface IGenericRepository<TEntity> where TEntity : BaseEntity
+public interface IGenericRepository<TEntity> where TEntity : class
 {
     TEntity? FindFirst(Expression<Func<TEntity, bool>> expression,
         params Expression<Func<TEntity, object>>[] includeParams);

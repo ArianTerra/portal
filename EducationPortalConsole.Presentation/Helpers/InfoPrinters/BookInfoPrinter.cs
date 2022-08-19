@@ -18,7 +18,7 @@ public static class BookInfoPrinter
         table.AddRow("Created", bookMaterial.CreatedOn.ToString() ?? String.Empty);
         table.AddRow("UpdatedBy", bookMaterial.UpdatedBy?.Name ?? String.Empty);
         table.AddRow("Updated", bookMaterial.UpdatedOn.ToString() ?? String.Empty);
-        table.AddRow("Authors", string.Join(", ", bookMaterial.Authors));
+        //table.AddRow("Authors", string.Join(", ", bookMaterial.Authors));
         table.AddRow("Pages", bookMaterial.Pages.ToString());
         table.AddRow("Year", bookMaterial.Year.ToString());
         table.AddRow("Format", bookMaterial.Format);

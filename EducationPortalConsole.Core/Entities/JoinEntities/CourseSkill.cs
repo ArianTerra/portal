@@ -1,4 +1,4 @@
-﻿namespace EducationPortalConsole.Core.Entities.ManyToManyTables;
+﻿namespace EducationPortalConsole.Core.Entities.JoinEntities;
 
 public class CourseSkill
 {

@@ -1,4 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
+using EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Extensions;
@@ -22,7 +23,7 @@ public class EditBookAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = new BookMaterialService();
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_bookMaterial.Name}[/]):")
@@ -37,9 +38,14 @@ public class EditBookAction : Action
             new TextPrompt<string>($"Enter [green]Authors[/] using comma (example: Author1,Author2): ")
                 .AllowEmpty());
 
+        HashSet<BookAuthor> authorsSplit = new HashSet<BookAuthor>();
         if (!authors.IsNullOrEmpty())
         {
-            _bookMaterial.Authors = authors.Split(',').Select(x => new BookAuthor() {Name = x}).ToHashSet();
+            authorsSplit = authors.Split(',').Select(x => new BookAuthor() {Id = Guid.NewGuid(), Name = x}).ToHashSet();
+        }
+        else
+        {
+            //authorsSplit = _bookMaterial.Authors.ToHashSet();
         }
 
         var pages = AnsiConsole.Prompt(
@@ -65,7 +71,7 @@ public class EditBookAction : Action
 
         _bookMaterial.UpdatedOn = DateTime.Now;
         _bookMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
-        materialService.Update(_bookMaterial);
+        materialService.Update(_bookMaterial, authorsSplit);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
 

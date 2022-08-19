@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {
     private readonly DatabaseContext _context;
 
@@ -27,7 +27,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return query.FirstOrDefault();
+        return query.AsNoTracking().FirstOrDefault();
     }
 
     public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
@@ -43,7 +43,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return query;
+        return query.AsNoTracking();
     }
 
     public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
@@ -58,25 +58,30 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return query.ToList();
+        return query.AsNoTracking();
     }
 
     public void Add(TEntity entity)
     {
         _context.Set<TEntity>().Add(entity);
-        _context.SaveChanges();
+        Save();
     }
 
     public void Update(TEntity entity)
     {
         _context.Entry(entity).State = EntityState.Modified;
-        _context.SaveChanges();
+        Save();
     }
 
     public bool Delete(TEntity entity)
     {
         var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
-        _context.SaveChanges();
+        Save();
         return result;
+    }
+
+    public void Save()
+    {
+        _context.SaveChanges();
     }
 }

@@ -16,7 +16,7 @@ public class AddArticleAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.ArticleMaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 

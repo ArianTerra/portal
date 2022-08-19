@@ -17,7 +17,7 @@ public class AddBookAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.BookMaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
@@ -33,7 +33,7 @@ public class AddBookAction : Action
         {
             Id = Guid.NewGuid(),
             Name = name,
-            Authors = authors.Split(',').Select(x => new BookAuthor() {Name = x}).ToHashSet(),
+            //Authors = ,
             Pages = pages,
             Year = year,
             Format = format,
@@ -41,7 +41,10 @@ public class AddBookAction : Action
             CreatedOn = DateTime.Now
         };
 
-        materialService.Add(material);
+        var authorsSplit = authors.Split(',').Select(x => new BookAuthor() { Id = Guid.NewGuid(), Name = x })
+            .ToHashSet();
+
+        materialService.Add(material, authorsSplit);
 
         AnsiConsole.Write(new Markup($"Successfully added new Book with ID [bold yellow]{material.Id}[/]\n"));
 

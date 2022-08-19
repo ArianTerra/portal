@@ -23,12 +23,13 @@ public class ShowCoursesAction : Action
 
         foreach (var course in courseService.GetAll())
         {
-            var materialNames = course.Materials.Select(x => x.Name);
-            var materials = string.Join(", ", materialNames);
+            // var materialNames = course.Materials.Select(x => x.Name);
+            // var materials = string.Join(", ", materialNames);
             table.AddRow(
                 course.Id.ToString(),
                 course.Name,
-                materials,
+                //materials,
+                String.Empty, //TODO
                 course.CreatedBy?.Name ?? string.Empty,
                 course.CreatedOn?.ToString() ?? string.Empty,
                 course.UpdatedBy?.Name ?? string.Empty,

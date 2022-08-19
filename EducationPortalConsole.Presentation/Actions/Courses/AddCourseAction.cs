@@ -38,18 +38,12 @@ public class AddCourseAction : Action
         {
             Id = Guid.NewGuid(),
             Name = name,
-            Materials = materials,
+            //Materials = materials,
             CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 
-        courseService.Add(course);
-
-        foreach (var material in materials)
-        {
-            material.CourseId = course.Id;
-            materialService.Update(material);
-        }
+        courseService.Add(course, materials);
 
         AnsiConsole.Write(new Markup($"Successfully added new Course with ID [bold yellow]{course.Id}[/]\n"));
 

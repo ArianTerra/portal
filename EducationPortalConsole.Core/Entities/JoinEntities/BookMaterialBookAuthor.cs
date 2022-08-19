@@ -1,6 +1,6 @@
 ﻿using EducationPortalConsole.Core.Entities.Materials;
 
-namespace EducationPortalConsole.Core.Entities.ManyToManyTables;
+namespace EducationPortalConsole.Core.Entities.JoinEntities;
 
 public class BookMaterialBookAuthor
 {

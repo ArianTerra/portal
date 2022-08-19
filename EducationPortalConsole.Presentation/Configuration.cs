@@ -1,4 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
+using EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 
 namespace EducationPortalConsole.Presentation;
 
@@ -11,6 +12,9 @@ public class Configuration
         UserService = new UserService();
         MaterialService = new MaterialService();
         CourseService = new CourseService();
+        ArticleMaterialService = new ArticleMaterialService();
+        BookMaterialService = new BookMaterialService();
+        VideoMaterialService = new VideoMaterialService();
     }
 
     public static Configuration Instance
@@ -23,4 +27,10 @@ public class Configuration
     public IMaterialService MaterialService { get; }
 
     public ICourseService CourseService { get; }
+
+    public ArticleMaterialService ArticleMaterialService { get; }
+
+    public BookMaterialService BookMaterialService { get; }
+
+    public VideoMaterialService VideoMaterialService { get; }
 }

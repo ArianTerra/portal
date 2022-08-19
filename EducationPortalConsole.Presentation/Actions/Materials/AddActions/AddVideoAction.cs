@@ -16,7 +16,7 @@ public class AddVideoAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.VideoMaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 

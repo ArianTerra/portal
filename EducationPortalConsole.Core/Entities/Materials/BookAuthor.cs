@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.Core.Entities.ManyToManyTables;
+﻿using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 
 namespace EducationPortalConsole.Core.Entities;
