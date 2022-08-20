@@ -22,21 +22,6 @@ namespace EducationPortalConsole.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EducationPortalConsole.Core.Entities.BookAuthor", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BookAuthor");
-                });
-
             modelBuilder.Entity("EducationPortalConsole.Core.Entities.Course", b =>
                 {
                     b.Property<Guid>("Id")
@@ -71,19 +56,19 @@ namespace EducationPortalConsole.DataAccess.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("EducationPortalConsole.Core.Entities.JoinEntities.BookMaterialBookAuthor", b =>
+            modelBuilder.Entity("EducationPortalConsole.Core.Entities.JoinEntities.BookAuthorBookMaterial", b =>
                 {
-                    b.Property<Guid>("BookMaterialId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("BookAuthorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("BookMaterialId", "BookAuthorId");
+                    b.Property<Guid>("BookMaterialId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("BookAuthorId");
+                    b.HasKey("BookAuthorId", "BookMaterialId");
 
-                    b.ToTable("BookMaterialBookAuthor");
+                    b.HasIndex("BookMaterialId");
+
+                    b.ToTable("BookAuthorBookMaterial");
                 });
 
             modelBuilder.Entity("EducationPortalConsole.Core.Entities.JoinEntities.CourseMaterial", b =>
@@ -153,6 +138,37 @@ namespace EducationPortalConsole.DataAccess.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Material");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("EducationPortalConsole.Core.Entities.Materials.BookAuthor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("BookAuthor");
                 });
 
             modelBuilder.Entity("EducationPortalConsole.Core.Entities.Progress.CourseProgress", b =>
@@ -336,16 +352,16 @@ namespace EducationPortalConsole.DataAccess.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("EducationPortalConsole.Core.Entities.JoinEntities.BookMaterialBookAuthor", b =>
+            modelBuilder.Entity("EducationPortalConsole.Core.Entities.JoinEntities.BookAuthorBookMaterial", b =>
                 {
-                    b.HasOne("EducationPortalConsole.Core.Entities.BookAuthor", "BookAuthor")
-                        .WithMany("BookMaterialBookAuthors")
+                    b.HasOne("EducationPortalConsole.Core.Entities.Materials.BookAuthor", "BookAuthor")
+                        .WithMany("BookAuthorBookMaterial")
                         .HasForeignKey("BookAuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EducationPortalConsole.Core.Entities.Materials.BookMaterial", "BookMaterial")
-                        .WithMany("BookMaterialBookAuthors")
+                        .WithMany("BookAuthorBookMaterial")
                         .HasForeignKey("BookMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -397,6 +413,21 @@ namespace EducationPortalConsole.DataAccess.Migrations
                 {
                     b.HasOne("EducationPortalConsole.Core.Entities.User", "CreatedBy")
                         .WithMany("CreatedMaterials")
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("EducationPortalConsole.Core.Entities.User", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("EducationPortalConsole.Core.Entities.Materials.BookAuthor", b =>
+                {
+                    b.HasOne("EducationPortalConsole.Core.Entities.User", "CreatedBy")
+                        .WithMany()
                         .HasForeignKey("CreatedById");
 
                     b.HasOne("EducationPortalConsole.Core.Entities.User", "UpdatedBy")
@@ -480,11 +511,6 @@ namespace EducationPortalConsole.DataAccess.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("EducationPortalConsole.Core.Entities.BookAuthor", b =>
-                {
-                    b.Navigation("BookMaterialBookAuthors");
-                });
-
             modelBuilder.Entity("EducationPortalConsole.Core.Entities.Course", b =>
                 {
                     b.Navigation("CourseMaterials");
@@ -499,6 +525,11 @@ namespace EducationPortalConsole.DataAccess.Migrations
                     b.Navigation("CourseMaterials");
 
                     b.Navigation("MaterialProgresses");
+                });
+
+            modelBuilder.Entity("EducationPortalConsole.Core.Entities.Materials.BookAuthor", b =>
+                {
+                    b.Navigation("BookAuthorBookMaterial");
                 });
 
             modelBuilder.Entity("EducationPortalConsole.Core.Entities.Skill", b =>
@@ -523,7 +554,7 @@ namespace EducationPortalConsole.DataAccess.Migrations
 
             modelBuilder.Entity("EducationPortalConsole.Core.Entities.Materials.BookMaterial", b =>
                 {
-                    b.Navigation("BookMaterialBookAuthors");
+                    b.Navigation("BookAuthorBookMaterial");
                 });
 #pragma warning restore 612, 618
         }

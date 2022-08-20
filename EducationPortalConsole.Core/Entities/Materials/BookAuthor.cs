@@ -1,13 +1,23 @@
 ﻿using EducationPortalConsole.Core.Entities.JoinEntities;
-using EducationPortalConsole.Core.Entities.Materials;
 
-namespace EducationPortalConsole.Core.Entities;
+namespace EducationPortalConsole.Core.Entities.Materials;
 
-public class BookAuthor : BaseEntity
+public class BookAuthor : AuditedEntity
 {
     public string Name { get; set; }
 
-    public ICollection<BookMaterialBookAuthor> BookMaterialBookAuthors { get; set; }
+    public ICollection<BookAuthorBookMaterial> BookAuthorBookMaterial { get; set; }
+
+    public IEnumerable<BookMaterial> GetBooks()
+    {
+        if (BookAuthorBookMaterial == null)
+        {
+            return new List<BookMaterial>();
+        }
+
+        return BookAuthorBookMaterial
+            .Where(x => x.BookAuthorId == this.Id).Select(x => x.BookMaterial);
+    }
 
     public override string ToString()
     {

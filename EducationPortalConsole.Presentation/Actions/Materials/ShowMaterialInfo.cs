@@ -17,13 +17,18 @@ public class ShowMaterialInfo : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var articleService = Configuration.Instance.ArticleMaterialService;
+        var bookService = Configuration.Instance.BookMaterialService;
+        var videoService = Configuration.Instance.VideoMaterialService;
+
+        List<Material> allMaterials = articleService.GetAll()
+            .Concat<Material>(bookService.GetAll())
+            .Concat(videoService.GetAll()).ToList();
 
         var material = AnsiConsole.Prompt(
             new SelectionPrompt<Material>()
-                .PageSize(10)
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(materialService.GetAll())
+                .AddChoices(allMaterials)
                 .UseConverter(x => x.Name)
         );
 

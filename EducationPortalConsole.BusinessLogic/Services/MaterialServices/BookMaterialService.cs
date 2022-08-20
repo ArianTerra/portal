@@ -9,13 +9,13 @@ public class BookMaterialService
 {
     private readonly IGenericRepository<BookMaterial> _repository;
     private readonly IGenericRepository<BookAuthor> _repositoryAuthors;
-    private readonly IGenericRepository<BookMaterialBookAuthor> _repositoryBookAuthors;
+    private readonly IGenericRepository<BookAuthorBookMaterial> _repositoryLinks;
 
     public BookMaterialService()
     {
         _repository = new GenericRepository<BookMaterial>();
         _repositoryAuthors = new GenericRepository<BookAuthor>();
-        _repositoryBookAuthors = new GenericRepository<BookMaterialBookAuthor>();
+        _repositoryLinks = new GenericRepository<BookAuthorBookMaterial>();
     }
 
     public BookMaterial? GetById(Guid id)
@@ -23,7 +23,7 @@ public class BookMaterialService
         return _repository.FindFirst(x => x.Id == id,
             x => x.CreatedBy,
             x => x.UpdatedBy,
-            x => x.BookMaterialBookAuthors);
+            x => x.BookAuthorBookMaterial);
     }
 
     public IEnumerable<BookMaterial> GetAll()
@@ -31,7 +31,7 @@ public class BookMaterialService
         return _repository.GetAll(
             x => x.CreatedBy,
             x => x.UpdatedBy,
-            x => x.BookMaterialBookAuthors);
+            x => x.BookAuthorBookMaterial);
     }
 
     public void Add(BookMaterial material, IEnumerable<BookAuthor> authors)
@@ -40,24 +40,22 @@ public class BookMaterialService
 
         foreach (var author in authors)
         {
-            _repositoryAuthors.Add(author);
-
-            var link = new BookMaterialBookAuthor()
+            var link = new BookAuthorBookMaterial()
             {
                 BookMaterialId = material.Id,
                 BookAuthorId = author.Id
             };
 
-            _repositoryBookAuthors.Add(link);
+            _repositoryLinks.Add(link);
         }
     }
 
     public void Update(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
-        var linksToDelete = _repositoryBookAuthors.FindAll(x => x.BookMaterialId == material.Id);
+        var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id);
         foreach (var item in linksToDelete)
         {
-            _repositoryBookAuthors.Delete(item);
+            _repositoryLinks.Delete(item);
 
             var author = _repositoryAuthors.FindFirst(x => x.Id == item.BookAuthorId);
             if (author != null)
@@ -68,15 +66,13 @@ public class BookMaterialService
 
         foreach (var author in authors)
         {
-            _repositoryAuthors.Add(author);
-
-            var link = new BookMaterialBookAuthor()
+            var link = new BookAuthorBookMaterial()
             {
                 BookMaterialId = material.Id,
                 BookAuthorId = author.Id
             };
 
-            _repositoryBookAuthors.Add(link);
+            _repositoryLinks.Add(link);
         }
 
         _repository.Update(material);

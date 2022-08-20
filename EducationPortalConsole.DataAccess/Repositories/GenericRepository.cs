@@ -19,11 +19,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         var query = _context.Set<TEntity>().Where(expression);
 
-        if (includeParams != null && includeParams.Any())
+        if (includeParams.Any())
         {
             foreach (var param in includeParams)
             {
-                query.Include(param);
+                query = query.Include(param);
             }
         }
 
@@ -35,11 +35,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         var query = _context.Set<TEntity>().Where(expression);
 
-        if (includeParams != null && includeParams.Any())
+        if (includeParams.Any())
         {
             foreach (var param in includeParams)
             {
-                query.Include(param);
+                query = query.Include(param);
             }
         }
 
@@ -48,17 +48,17 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
     {
-        var query = _context.Set<TEntity>();
+        var query = _context.Set<TEntity>().AsNoTracking();
 
-        if (includeParams != null && includeParams.Any())
+        if (includeParams.Any())
         {
             foreach (var param in includeParams)
             {
-                query.Include(param);
+                query = query.Include(param);
             }
         }
 
-        return query.AsNoTracking();
+        return query;
     }
 
     public void Add(TEntity entity)

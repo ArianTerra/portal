@@ -1,6 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Core.Entities.Materials;
-using EducationPortalConsole.Presentation.Extensions;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -26,7 +25,7 @@ public class EditArticleAction : Action
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_articleMaterial.Name}[/]):")
                 .AllowEmpty());
 
-        if (!name.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(name))
         {
             _articleMaterial.Name = name;
         }
@@ -38,7 +37,7 @@ public class EditArticleAction : Action
                 .AllowEmpty()
         );
 
-        if (!dateStr.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(dateStr))
         {
             if (DateTime.TryParse(dateStr, out date))
             {
@@ -54,7 +53,7 @@ public class EditArticleAction : Action
             new TextPrompt<string>($"Enter [green]Source[/] (previous: [yellow]{_articleMaterial.Source}[/]):")
                 .AllowEmpty());
 
-        if (!source.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(source))
         {
             _articleMaterial.Source = source;
         }

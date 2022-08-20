@@ -1,6 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Core.Entities.Materials;
-using EducationPortalConsole.Presentation.Extensions;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -27,7 +26,7 @@ public class EditVideoAction : Action
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_videoMaterial.Name}[/]):")
                 .AllowEmpty());
 
-        if (!name.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(name))
         {
             _videoMaterial.Name = name;
         }
@@ -46,7 +45,7 @@ public class EditVideoAction : Action
             new TextPrompt<string>($"Enter [green]Quality[/] (previous: [yellow]{_videoMaterial.Quality}[/]):")
                 .AllowEmpty());
 
-        if (!qualtity.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(qualtity))
         {
             _videoMaterial.Quality = qualtity;
         }

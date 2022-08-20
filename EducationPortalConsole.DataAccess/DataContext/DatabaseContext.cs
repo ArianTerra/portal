@@ -29,7 +29,7 @@ public class DatabaseContext : DbContext
 
     public DbSet<SkillProgress> SkillProgresses { get; set; }
 
-    public DbSet<BookMaterialBookAuthor> BookMaterialBookAuthor { get; set; }
+    public DbSet<BookAuthorBookMaterial> BookAuthorBookMaterial { get; set; }
 
     public DbSet<CourseMaterial> CourseMaterial { get; set; }
 
@@ -95,16 +95,16 @@ public class DatabaseContext : DbContext
             .WithMany(u => u.SkillProgresses)
             .HasForeignKey(cp => cp.UserId);
 
-        modelBuilder.Entity<BookMaterialBookAuthor>()
-            .HasKey(cp => new { cp.BookMaterialId, cp.BookAuthorId });
-        modelBuilder.Entity<BookMaterialBookAuthor>()
-            .HasOne(cp => cp.BookMaterial)
-            .WithMany(c => c.BookMaterialBookAuthors)
-            .HasForeignKey(cp => cp.BookMaterialId);
-        modelBuilder.Entity<BookMaterialBookAuthor>()
+        modelBuilder.Entity<BookAuthorBookMaterial>()
+            .HasKey(cp => new { cp.BookAuthorId, cp.BookMaterialId});
+        modelBuilder.Entity<BookAuthorBookMaterial>()
             .HasOne(cp => cp.BookAuthor)
-            .WithMany(u => u.BookMaterialBookAuthors)
+            .WithMany(u => u.BookAuthorBookMaterial)
             .HasForeignKey(cp => cp.BookAuthorId);
+        modelBuilder.Entity<BookAuthorBookMaterial>()
+            .HasOne(cp => cp.BookMaterial)
+            .WithMany(c => c.BookAuthorBookMaterial)
+            .HasForeignKey(cp => cp.BookMaterialId);
 
         modelBuilder.Entity<CourseMaterial>()
             .HasKey(cm => new { cm.CourseId, cm.MaterialId });

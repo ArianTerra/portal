@@ -12,18 +12,6 @@ namespace EducationPortalConsole.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BookAuthor",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookAuthor", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -35,6 +23,32 @@ namespace EducationPortalConsole.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookAuthor",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookAuthor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookAuthor_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BookAuthor_Users_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -152,23 +166,23 @@ namespace EducationPortalConsole.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookMaterialBookAuthor",
+                name: "BookAuthorBookMaterial",
                 columns: table => new
                 {
-                    BookMaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    BookAuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookMaterialId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookMaterialBookAuthor", x => new { x.BookMaterialId, x.BookAuthorId });
+                    table.PrimaryKey("PK_BookAuthorBookMaterial", x => new { x.BookAuthorId, x.BookMaterialId });
                     table.ForeignKey(
-                        name: "FK_BookMaterialBookAuthor_BookAuthor_BookAuthorId",
+                        name: "FK_BookAuthorBookMaterial_BookAuthor_BookAuthorId",
                         column: x => x.BookAuthorId,
                         principalTable: "BookAuthor",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookMaterialBookAuthor_Materials_BookMaterialId",
+                        name: "FK_BookAuthorBookMaterial_Materials_BookMaterialId",
                         column: x => x.BookMaterialId,
                         principalTable: "Materials",
                         principalColumn: "Id",
@@ -276,9 +290,19 @@ namespace EducationPortalConsole.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookMaterialBookAuthor_BookAuthorId",
-                table: "BookMaterialBookAuthor",
-                column: "BookAuthorId");
+                name: "IX_BookAuthor_CreatedById",
+                table: "BookAuthor",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookAuthor_UpdatedById",
+                table: "BookAuthor",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookAuthorBookMaterial_BookMaterialId",
+                table: "BookAuthorBookMaterial",
+                column: "BookMaterialId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseMaterial_MaterialId",
@@ -340,7 +364,7 @@ namespace EducationPortalConsole.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookMaterialBookAuthor");
+                name: "BookAuthorBookMaterial");
 
             migrationBuilder.DropTable(
                 name: "CourseMaterial");
