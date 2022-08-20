@@ -8,16 +8,16 @@ public class BookAuthor : AuditedEntity
 
     public ICollection<BookAuthorBookMaterial> BookAuthorBookMaterial { get; set; }
 
-    public IEnumerable<BookMaterial> GetBooks()
-    {
-        if (BookAuthorBookMaterial == null)
-        {
-            return new List<BookMaterial>();
-        }
-
-        return BookAuthorBookMaterial
-            .Where(x => x.BookAuthorId == this.Id).Select(x => x.BookMaterial);
-    }
+    // public IEnumerable<BookMaterial> GetBooks()
+    // {
+    //     if (BookAuthorBookMaterial == null)
+    //     {
+    //         return new List<BookMaterial>();
+    //     }
+    //
+    //     return BookAuthorBookMaterial
+    //         .Where(x => x.BookAuthorId == this.Id).Select(x => x.BookMaterial);
+    // }
 
     public override string ToString()
     {

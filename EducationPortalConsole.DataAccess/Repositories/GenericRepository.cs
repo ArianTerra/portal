@@ -80,6 +80,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return result;
     }
 
+    public void DeleteRange(IEnumerable<TEntity> entities)
+    {
+        foreach (var entity in entities)
+        {
+            _context.Set<TEntity>().Remove(entity);
+        }
+    }
+
     public void Save()
     {
         _context.SaveChanges();

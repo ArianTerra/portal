@@ -1,5 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 using EducationPortalConsole.Core.Entities;
+using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
@@ -44,6 +45,11 @@ public class MaterialService : IMaterialService
 
     public bool Delete(Material material)
     {
+        if (material is BookMaterial book)
+        {
+            return (new BookMaterialService()).Delete(book);
+        }
+
         return _repository.Delete(material);
     }
 }

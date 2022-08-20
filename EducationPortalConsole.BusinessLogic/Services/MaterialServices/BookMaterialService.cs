@@ -53,16 +53,8 @@ public class BookMaterialService
     public void Update(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
         var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id);
-        foreach (var item in linksToDelete)
-        {
-            _repositoryLinks.Delete(item);
 
-            var author = _repositoryAuthors.FindFirst(x => x.Id == item.BookAuthorId);
-            if (author != null)
-            {
-                _repositoryAuthors.Delete(author);
-            }
-        }
+        _repositoryLinks.DeleteRange(linksToDelete);
 
         foreach (var author in authors)
         {

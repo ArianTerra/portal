@@ -12,14 +12,14 @@ public class BookMaterial : Material
 
     public string Format { get; set; }
 
-    public IEnumerable<BookAuthor> GetAuthors()
-    {
-        if (BookAuthorBookMaterial == null)
-        {
-            return new List<BookAuthor>();
-        }
-
-        return BookAuthorBookMaterial
-            .Where(x => x.BookMaterialId == this.Id).Select(x => x.BookAuthor);
-    }
+    // public IEnumerable<BookAuthor> GetAuthors()
+    // {
+    //     if (BookAuthorBookMaterial == null)
+    //     {
+    //         return new List<BookAuthor>();
+    //     }
+    //
+    //     return BookAuthorBookMaterial
+    //         .Where(x => x.BookMaterialId == this.Id).Select(x => x.BookAuthor);
+    // }
 }

@@ -42,7 +42,9 @@ public class EditBookAction : Action
             .AddChoices(bookAuthorService.GetAll())
             .UseConverter(x => x.Name);
 
-        foreach (var author in _bookMaterial.GetAuthors())
+        var selectedAuthors = _bookMaterial.BookAuthorBookMaterial.Where(x => x.BookMaterialId == _bookMaterial.Id)
+            .Select(x => bookAuthorService.GetById(x.BookAuthorId));
+        foreach (var author in selectedAuthors)
         {
             prompt.Select(author);
         }
