@@ -1,4 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Presentation.Helpers;
 using Spectre.Console;
 
@@ -15,7 +16,8 @@ public class ShowCoursesAction : Action
     {
         base.Run();
 
-        ICourseService courseService = Configuration.Instance.CourseService;
+        var courseService = Configuration.Instance.CourseService;
+        var materialService = Configuration.Instance.MaterialService;
 
         var table = new Table();
 
@@ -23,13 +25,20 @@ public class ShowCoursesAction : Action
 
         foreach (var course in courseService.GetAll())
         {
-            // var materialNames = course.Materials.Select(x => x.Name);
-            // var materials = string.Join(", ", materialNames);
+            var materialIds = course.CourseMaterials.Where(x => x.CourseId == course.Id)
+                .Select(x => x.MaterialId);
+            var materials = new List<Material>();
+            foreach (var id in materialIds)
+            {
+                materials.Add(materialService.GetById(id));
+            }
+
+            // var matNames =
+
             table.AddRow(
                 course.Id.ToString(),
                 course.Name,
-                //materials,
-                String.Empty, //TODO
+                string.Join(", ", materials.Select(x => x.Name)),
                 course.CreatedBy?.Name ?? string.Empty,
                 course.CreatedOn?.ToString() ?? string.Empty,
                 course.UpdatedBy?.Name ?? string.Empty,

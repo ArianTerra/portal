@@ -76,7 +76,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public bool Delete(TEntity entity)
     {
         var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
-        Save();
         return result;
     }
 

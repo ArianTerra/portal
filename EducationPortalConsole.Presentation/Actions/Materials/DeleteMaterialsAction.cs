@@ -16,7 +16,6 @@ public class DeleteMaterialsAction : Action
         base.Run();
 
         IMaterialService materialService = Configuration.Instance.MaterialService;
-        ICourseService courseService = Configuration.Instance.CourseService;
 
         var materials = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Material>()

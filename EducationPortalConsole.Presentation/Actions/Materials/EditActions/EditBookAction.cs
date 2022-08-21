@@ -46,7 +46,7 @@ public class EditBookAction : Action
             .Select(x => bookAuthorService.GetById(x.BookAuthorId));
         foreach (var author in selectedAuthors)
         {
-            prompt.Select(author);
+            prompt = prompt.Select(author);
         }
 
         var authors = AnsiConsole.Prompt(prompt);

@@ -33,7 +33,7 @@ public class DeleteCoursesAction : Action
         int deleted = 0;
         foreach (var course in courses)
         {
-            courseService.Delete(course);
+            Configuration.Instance.CourseService.Delete(course);
             deleted++;
         }
 

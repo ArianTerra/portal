@@ -26,14 +26,16 @@ public class CourseService : ICourseService
     {
         return _repository.FindFirst(x => x.Id == id,
             x => x.CreatedBy,
-            x => x.UpdatedBy);
+            x => x.UpdatedBy,
+            x => x.CourseMaterials);
     }
 
     public IEnumerable<Course> GetAll()
     {
         return _repository.GetAll(
             x => x.CreatedBy,
-            x => x.UpdatedBy);
+            x => x.UpdatedBy,
+            x => x.CourseMaterials);
     }
 
     public void Add(Course course, IEnumerable<Material> materials)
@@ -74,8 +76,14 @@ public class CourseService : ICourseService
         }
     }
 
-    public bool Delete(Course course) //todo test it
+    public bool Delete(Course course)
     {
+        var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
+        foreach (var item in linksToDelete)
+        {
+            _repositoryCourseMaterial.Delete(item);
+        }
+
         return _repository.Delete(course);
     }
 }
