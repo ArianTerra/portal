@@ -21,6 +21,7 @@ public class BookMaterialService
     public BookMaterial? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
+            false,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.BookAuthorBookMaterial);
@@ -30,6 +31,7 @@ public class BookMaterialService
     {
         return _repository.FindAll(
             _ => true,
+            true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.BookAuthorBookMaterial);

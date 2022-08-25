@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.Core.Entities;
-using EducationPortalConsole.Core.Entities.JoinEntities;
+﻿using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
 
@@ -19,6 +18,7 @@ public class BookAuthorService : IBookAuthorService
     public BookAuthor? GetById(Guid id)
     {
         return _repositoryAuthors.FindFirst(x => x.Id == id,
+            false,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.BookAuthorBookMaterial);
@@ -28,6 +28,7 @@ public class BookAuthorService : IBookAuthorService
     {
         return _repositoryAuthors.FindAll(
             _ => true,
+            true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.BookAuthorBookMaterial).AsEnumerable();

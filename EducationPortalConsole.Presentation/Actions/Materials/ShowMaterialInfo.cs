@@ -24,26 +24,33 @@ public class ShowMaterialInfo : Action
             .Concat<Material>(bookService.GetAll())
             .Concat(videoService.GetAll()).ToList();
 
-        var material = AnsiConsole.Prompt(
-            new SelectionPrompt<Material>()
-                .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(allMaterials)
-                .UseConverter(x => x.Name)
-        );
-
-        if (material is ArticleMaterial articleMaterial) //TODO change this to smth appropriate
+        if (allMaterials.Any())
         {
-            ArticleInfoPrinter.Print(articleMaterial);
+            var material = AnsiConsole.Prompt(
+                new SelectionPrompt<Material>()
+                    .MoreChoicesText("[grey](See more...)[/]")
+                    .AddChoices(allMaterials)
+                    .UseConverter(x => x.Name)
+            );
+
+            if (material is ArticleMaterial articleMaterial) //TODO change this to smth appropriate
+            {
+                ArticleInfoPrinter.Print(articleMaterial);
+            }
+
+            if (material is BookMaterial bookMaterial)
+            {
+                BookInfoPrinter.Print(bookMaterial);
+            }
+
+            if (material is VideoMaterial videoMaterial)
+            {
+                VideoInfoPrinter.Print(videoMaterial);
+            }
         }
-
-        if (material is BookMaterial bookMaterial)
+        else
         {
-            BookInfoPrinter.Print(bookMaterial);
-        }
-
-        if (material is VideoMaterial videoMaterial)
-        {
-            VideoInfoPrinter.Print(videoMaterial);
+            AnsiConsole.Write("No materials found\n");
         }
 
         WaitForUserInput();

@@ -15,6 +15,7 @@ public class ArticleMaterialService
     public ArticleMaterial? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
+            false,
             x => x.CreatedBy,
             x => x.UpdatedBy);
     }
@@ -23,6 +24,7 @@ public class ArticleMaterialService
     {
         return _repository.FindAll(
             _ => true,
+            true,
             x => x.CreatedBy,
             x => x.UpdatedBy);
     }

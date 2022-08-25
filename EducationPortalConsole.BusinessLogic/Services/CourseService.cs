@@ -25,6 +25,7 @@ public class CourseService : ICourseService
     public Course? GetById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
+            false,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.CourseMaterials);
@@ -34,6 +35,7 @@ public class CourseService : ICourseService
     {
         return _repository.FindAll(
             _ => true,
+            true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.CourseMaterials);

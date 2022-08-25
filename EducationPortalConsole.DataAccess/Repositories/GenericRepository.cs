@@ -14,9 +14,15 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
 
     public TEntity? FindFirst(Expression<Func<TEntity, bool>> expression,
+        bool tracking = true,
         params Expression<Func<TEntity, object>>[] includeParams)
     {
         var query = _context.Set<TEntity>().Where(expression);
+
+        if (!tracking)
+        {
+            query = query.AsNoTracking();
+        }
 
         if (includeParams.Any())
         {
@@ -26,15 +32,21 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return query.AsNoTracking().FirstOrDefault();
+        return query.FirstOrDefault();
     }
 
     public IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
+        bool tracking = true,
         params Expression<Func<TEntity, object>>[] includeParams)
     {
         var query = _context.Set<TEntity>().Where(expression);
 
-        if (includeParams.Any())
+        if (!tracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        if (includeParams != null)
         {
             foreach (var param in includeParams)
             {
@@ -42,7 +54,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return query.AsNoTracking();
+        return query;
     }
 
     public void Add(TEntity entity)

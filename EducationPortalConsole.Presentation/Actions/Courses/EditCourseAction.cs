@@ -49,11 +49,6 @@ public class EditCourseAction : Action
             .AddChoices(materialService.GetAll())
             .UseConverter(x => x.Name);
 
-        // foreach (var material in course.Materials) //TODO
-        // {
-        //     prompt.Select(material);
-        // }
-
         var materials = AnsiConsole.Prompt(prompt);
 
         course.UpdatedOn = DateTime.Now;
