@@ -51,6 +51,6 @@ public class MaterialService : IMaterialService
             return (new BookMaterialService()).Delete(book);
         }
 
-        return _repository.Delete(material);
+        return _repository.Remove(material);
     }
 }

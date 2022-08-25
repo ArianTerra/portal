@@ -46,11 +46,8 @@ public class BookAuthorService : IBookAuthorService
     public bool Delete(BookAuthor author)
     {
         var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == author.Id);
-        foreach (var item in linksToDelete)
-        {
-            _repositoryLinks.Delete(item);
-        }
+        _repositoryLinks.RemoveRange(linksToDelete);
 
-        return _repositoryAuthors.Delete(author);
+        return _repositoryAuthors.Remove(author);
     }
 }

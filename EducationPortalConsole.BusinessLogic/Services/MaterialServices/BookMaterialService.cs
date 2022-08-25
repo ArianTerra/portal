@@ -55,7 +55,7 @@ public class BookMaterialService
     {
         var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id);
 
-        _repositoryLinks.DeleteRange(linksToDelete);
+        _repositoryLinks.RemoveRange(linksToDelete);
 
         foreach (var author in authors)
         {
@@ -73,6 +73,6 @@ public class BookMaterialService
 
     public bool Delete(BookMaterial material) //todo test it
     {
-        return _repository.Delete(material);
+        return _repository.Remove(material);
     }
 }

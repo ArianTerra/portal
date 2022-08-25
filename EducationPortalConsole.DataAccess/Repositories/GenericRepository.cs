@@ -57,22 +57,20 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         Save();
     }
 
-    public bool Delete(TEntity entity)
+    public bool Remove(TEntity entity)
     {
         var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
         Save();
         return result;
     }
 
-    public void DeleteRange(IEnumerable<TEntity> entities)
+    public void RemoveRange(IEnumerable<TEntity> entities)
     {
-        foreach (var entity in entities)
-        {
-            _context.Set<TEntity>().Remove(entity);
-        }
+        _context.Set<TEntity>().RemoveRange(entities);
+        Save();
     }
 
-    public void Save()
+    private void Save()
     {
         _context.SaveChanges();
     }

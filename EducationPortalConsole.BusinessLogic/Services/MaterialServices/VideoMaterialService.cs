@@ -39,6 +39,6 @@ public class VideoMaterialService
 
     public bool Delete(VideoMaterial material)
     {
-        return _repository.Delete(material);
+        return _repository.Remove(material);
     }
 }

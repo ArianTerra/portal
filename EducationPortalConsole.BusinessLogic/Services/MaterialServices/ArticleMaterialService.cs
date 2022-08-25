@@ -39,6 +39,6 @@ public class ArticleMaterialService
 
     public bool Delete(ArticleMaterial material)
     {
-        return _repository.Delete(material);
+        return _repository.Remove(material);
     }
 }

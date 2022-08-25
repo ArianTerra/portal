@@ -44,6 +44,6 @@ public class UserService : IUserService
 
     public bool Delete(User user)
     {
-        return _repository.Delete(user);
+        return _repository.Remove(user);
     }
 }

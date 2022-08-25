@@ -60,10 +60,7 @@ public class CourseService : ICourseService
         _repository.Update(course);
 
         var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
-        foreach (var item in linksToDelete)
-        {
-            _repositoryCourseMaterial.Delete(item);
-        }
+        _repositoryCourseMaterial.RemoveRange(linksToDelete);
 
         foreach (var material in materials)
         {
@@ -80,11 +77,8 @@ public class CourseService : ICourseService
     public bool Delete(Course course)
     {
         var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
-        foreach (var item in linksToDelete)
-        {
-            _repositoryCourseMaterial.Delete(item);
-        }
+        _repositoryCourseMaterial.RemoveRange(linksToDelete);
 
-        return _repository.Delete(course);
+        return _repository.Remove(course);
     }
 }
