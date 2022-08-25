@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using EducationPortalConsole.Core;
 using EducationPortalConsole.DataAccess.DataContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +29,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return query.AsNoTracking().FirstOrDefault();
     }
 
-    public IEnumerable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
+    public IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
         params Expression<Func<TEntity, object>>[] includeParams)
     {
         var query = _context.Set<TEntity>().Where(expression);
@@ -44,21 +43,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         }
 
         return query.AsNoTracking();
-    }
-
-    public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] includeParams)
-    {
-        var query = _context.Set<TEntity>().AsNoTracking();
-
-        if (includeParams.Any())
-        {
-            foreach (var param in includeParams)
-            {
-                query = query.Include(param);
-            }
-        }
-
-        return query;
     }
 
     public void Add(TEntity entity)
@@ -76,6 +60,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public bool Delete(TEntity entity)
     {
         var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
+        Save();
         return result;
     }
 

@@ -28,7 +28,8 @@ public class MaterialService : IMaterialService
 
     public IEnumerable<Material> GetAll()
     {
-        return _repository.GetAll(
+        return _repository.FindAll(
+            _ => true,
             x => x.CreatedBy,
             x => x.UpdatedBy);
     }

@@ -26,10 +26,11 @@ public class BookAuthorService : IBookAuthorService
 
     public IEnumerable<BookAuthor> GetAll()
     {
-        return _repositoryAuthors.GetAll(
+        return _repositoryAuthors.FindAll(
+            _ => true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
-            x => x.BookAuthorBookMaterial);
+            x => x.BookAuthorBookMaterial).AsEnumerable();
     }
 
     public void Add(BookAuthor author)

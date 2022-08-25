@@ -29,7 +29,7 @@ public class UserService : IUserService
 
     public IEnumerable<User> GetAll()
     {
-        return _repository.GetAll();
+        return _repository.FindAll(_ => true);
     }
 
     public void Add(User user)

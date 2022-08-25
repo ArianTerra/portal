@@ -40,7 +40,7 @@ public class DatabaseContext : DbContext
             Database=EducationPortalConsole.DataAccess.DataContext.DatabaseContext;MultipleActiveResultSets=True");
     }
 
-    protected override void OnModelCreating([NotNull] ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Material>()
             .HasOne(x => x.CreatedBy)

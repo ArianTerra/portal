@@ -5,11 +5,11 @@ namespace EducationPortalConsole.Presentation;
 
 public class Configuration
 {
-    private static Configuration? _userSession;
+    private static Configuration? _configuration;
 
     public static Configuration Instance
     {
-        get { return _userSession ??= new Configuration(); }
+        get { return _configuration ??= new Configuration(); }
     }
 
     public IUserService UserService { get => new UserService(); }

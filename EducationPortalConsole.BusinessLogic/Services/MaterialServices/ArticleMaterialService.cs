@@ -21,7 +21,8 @@ public class ArticleMaterialService
 
     public IEnumerable<ArticleMaterial> GetAll()
     {
-        return _repository.GetAll(
+        return _repository.FindAll(
+            _ => true,
             x => x.CreatedBy,
             x => x.UpdatedBy);
     }

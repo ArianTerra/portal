@@ -21,7 +21,8 @@ public class VideoMaterialService
 
     public IEnumerable<VideoMaterial> GetAll()
     {
-        return _repository.GetAll(
+        return _repository.FindAll(
+            _ => true,
             x => x.CreatedBy,
             x => x.UpdatedBy);
     }

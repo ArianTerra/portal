@@ -11,15 +11,4 @@ public class BookMaterial : Material
     public int Year { get; set; } //TODO maybe change it to DateOnly
 
     public string Format { get; set; }
-
-    // public IEnumerable<BookAuthor> GetAuthors()
-    // {
-    //     if (BookAuthorBookMaterial == null)
-    //     {
-    //         return new List<BookAuthor>();
-    //     }
-    //
-    //     return BookAuthorBookMaterial
-    //         .Where(x => x.BookMaterialId == this.Id).Select(x => x.BookAuthor);
-    // }
 }

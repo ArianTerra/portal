@@ -32,7 +32,8 @@ public class CourseService : ICourseService
 
     public IEnumerable<Course> GetAll()
     {
-        return _repository.GetAll(
+        return _repository.FindAll(
+            _ => true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.CourseMaterials);
