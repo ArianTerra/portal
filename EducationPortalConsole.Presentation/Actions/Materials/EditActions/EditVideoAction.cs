@@ -1,6 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Core.Entities.Materials;
-using EducationPortalConsole.Presentation.Extensions;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -27,7 +26,7 @@ public class EditVideoAction : Action
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_videoMaterial.Name}[/]):")
                 .AllowEmpty());
 
-        if (!name.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(name))
         {
             _videoMaterial.Name = name;
         }
@@ -46,14 +45,14 @@ public class EditVideoAction : Action
             new TextPrompt<string>($"Enter [green]Quality[/] (previous: [yellow]{_videoMaterial.Quality}[/]):")
                 .AllowEmpty());
 
-        if (!qualtity.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(qualtity))
         {
             _videoMaterial.Quality = qualtity;
         }
 
         _videoMaterial.UpdatedOn = DateTime.Now;
-        _videoMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
-        materialService.Update(_videoMaterial);
+        _videoMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
+        materialService.UpdateMaterial(_videoMaterial);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
 

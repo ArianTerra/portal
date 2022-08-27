@@ -21,7 +21,7 @@ public class UserRegisterAction : Action
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]name[/]:")
                 .Validate(x =>
-                    userService.GetByName(x) == null
+                    userService.GetUserByName(x) == null
                         ? ValidationResult.Success()
                         : ValidationResult.Error("This name is taken!")));
 
@@ -38,13 +38,12 @@ public class UserRegisterAction : Action
 
         var user = new User()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             PasswordHash = hashSalt.Hash,
             PasswordHashSalt = hashSalt.Salt
         };
 
-        userService.Add(user);
+        userService.AddUser(user);
 
         AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
         WaitForUserInput();

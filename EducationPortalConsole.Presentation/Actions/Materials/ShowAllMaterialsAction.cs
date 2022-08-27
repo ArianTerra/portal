@@ -1,14 +1,13 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Presentation.Helpers;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials;
 
-public class ShowMaterialsAction : Action
+public class ShowAllMaterialsAction : Action
 {
-    public ShowMaterialsAction()
+    public ShowAllMaterialsAction()
     {
-        Name = "All Materials";
+        Name = "Show All Materials";
     }
 
     public override void Run()
@@ -20,15 +19,15 @@ public class ShowMaterialsAction : Action
 
         IMaterialService service = Configuration.Instance.MaterialService;
 
-        foreach (var material in service.GetAll())
+        foreach (var material in service.GetAllMaterials())
         {
             table.AddRow(
                 material.Id.ToString(),
                 material.GetType().Name,
                 material.Name,
-                UserHelper.GetUsernameById(material.CreatedByUserId),
+                material.CreatedBy?.Name ?? string.Empty,
                 material.CreatedOn?.ToString() ?? string.Empty,
-                UserHelper.GetUsernameById(material.UpdatedByUserId),
+                material.UpdatedBy?.Name ?? string.Empty,
                 material.UpdatedOn?.ToString() ?? string.Empty
             );
         }

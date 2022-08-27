@@ -1,6 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
-using EducationPortalConsole.Presentation.Extensions;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -21,25 +19,37 @@ public class EditBookAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.BookMaterialService;
+        var bookAuthorService = Configuration.Instance.BookAuthorService;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_bookMaterial.Name}[/]):")
                 .AllowEmpty());
 
-        if (!name.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(name))
         {
             _bookMaterial.Name = name;
         }
 
-        var authors = AnsiConsole.Prompt(
-            new TextPrompt<string>($"Enter [green]Authors[/] using comma (example: Author1,Author2): ")
-                .AllowEmpty());
+        var prompt = new MultiSelectionPrompt<BookAuthor>()
+            .Title("Add selected [green]Book Authors[/] to Book")
+            .NotRequired()
+            .PageSize(10)
+            .MoreChoicesText("[grey](Move up and down to reveal more authors)[/]")
+            .InstructionsText(
+                "[grey](Press [blue]<space>[/] to toggle an author, " +
+                "[green]<enter>[/] to accept)[/]")
+            .AddChoices(bookAuthorService.GetAllBookAuthors())
+            .UseConverter(x => x.Name);
 
-        if (!authors.IsNullOrEmpty())
+        var selectedAuthors = _bookMaterial.BookAuthorBookMaterial.Where(x => x.BookMaterialId == _bookMaterial.Id)
+            .Select(x => bookAuthorService.GetBookAuthorById(x.BookAuthorId));
+        foreach (var author in selectedAuthors)
         {
-            _bookMaterial.Authors = authors.Split(",");
+            prompt = prompt.Select(author);
         }
+
+        var authors = AnsiConsole.Prompt(prompt);
 
         var pages = AnsiConsole.Prompt(
             new TextPrompt<int>($"Enter number of [green]Pages[/] " +
@@ -63,8 +73,9 @@ public class EditBookAction : Action
         _bookMaterial.Format = format;
 
         _bookMaterial.UpdatedOn = DateTime.Now;
-        _bookMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
-        materialService.Update(_bookMaterial);
+        _bookMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
+
+        materialService.UpdateBook(_bookMaterial, authors);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
 

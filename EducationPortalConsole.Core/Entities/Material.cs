@@ -1,12 +1,13 @@
-﻿namespace EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities.JoinEntities;
+using EducationPortalConsole.Core.Entities.Progress;
 
-public class Material : BaseEntity, IAuditedEntity
+namespace EducationPortalConsole.Core.Entities;
+
+public class Material : AuditedEntity
 {
-    public Guid? CreatedByUserId { get; set; }
+    public string Name { get; set; }
 
-    public DateTime? CreatedOn { get; set; }
+    public ICollection<CourseMaterial> CourseMaterials { get; set; }
 
-    public Guid? UpdatedByUserId { get; set; }
-
-    public DateTime? UpdatedOn { get; set; }
+    public ICollection<MaterialProgress> MaterialProgresses { get; set; }
 }

@@ -1,18 +1,20 @@
-﻿namespace EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities.JoinEntities;
+using EducationPortalConsole.Core.Entities.Progress;
 
-public class Course : BaseEntity, IAuditedEntity
+namespace EducationPortalConsole.Core.Entities;
+
+public class Course : AuditedEntity
 {
-    public string Description { get; set; }
+    public string Name { get; set; }
 
-    public IEnumerable<Material> Materials { get; set; }
+    public string? Description { get; set; }
 
-    public IEnumerable<Skill> Skills { get; set; }
+    public ICollection<CourseMaterial> CourseMaterials { get; set; }
 
-    public Guid? CreatedByUserId { get; set; }
+    public ICollection<CourseSkill> CourseSkills { get; set; }
 
-    public DateTime? CreatedOn { get; set; }
+    public ICollection<CourseProgress> CourseProgresses { get; set; }
 
-    public Guid? UpdatedByUserId { get; set; }
-
-    public DateTime? UpdatedOn { get; set; }
+    // public IEnumerable<Material> Materials => CourseMaterials.Where(cm => cm.Course == this).
+    //     Select(cm => cm.Material);
 }

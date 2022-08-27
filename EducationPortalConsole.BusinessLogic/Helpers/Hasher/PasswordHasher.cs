@@ -7,8 +7,7 @@ public static class PasswordHasher
     public static HashSalt GenerateSaltedHash(int size, string password)
     {
         var saltBytes = new byte[size];
-        var provider = new RNGCryptoServiceProvider();
-        provider.GetNonZeroBytes(saltBytes);
+        RandomNumberGenerator.Fill(saltBytes);
         var salt = Convert.ToBase64String(saltBytes);
 
         var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000);

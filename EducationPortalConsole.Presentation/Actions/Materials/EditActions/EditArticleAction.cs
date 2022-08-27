@@ -1,6 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Core.Entities.Materials;
-using EducationPortalConsole.Presentation.Extensions;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -26,21 +25,21 @@ public class EditArticleAction : Action
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_articleMaterial.Name}[/]):")
                 .AllowEmpty());
 
-        if (!name.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(name))
         {
             _articleMaterial.Name = name;
         }
 
         //Date edit
-        DateOnly date;
+        DateTime date = new DateTime();
         var dateStr = AnsiConsole.Prompt(
-            new TextPrompt<string>($"Enter [green]Date[/] (previous: [yellow]{_articleMaterial.Date}[/]):")
+            new TextPrompt<string>($"Enter [green]Date[/] (previous: [yellow]{_articleMaterial.Date.Date}[/]):")
                 .AllowEmpty()
         );
 
-        if (!dateStr.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(dateStr))
         {
-            if (DateOnly.TryParse(dateStr, out date))
+            if (DateTime.TryParse(dateStr, out date))
             {
                 _articleMaterial.Date = date;
             }
@@ -54,15 +53,15 @@ public class EditArticleAction : Action
             new TextPrompt<string>($"Enter [green]Source[/] (previous: [yellow]{_articleMaterial.Source}[/]):")
                 .AllowEmpty());
 
-        if (!source.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(source))
         {
             _articleMaterial.Source = source;
         }
 
         _articleMaterial.UpdatedOn = DateTime.Now;
-        _articleMaterial.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
+        _articleMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
 
-        materialService.Update(_articleMaterial);
+        materialService.UpdateMaterial(_articleMaterial);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
 

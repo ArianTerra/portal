@@ -1,4 +1,5 @@
 ﻿using EducationPortalConsole.Presentation.Actions.BaseActions;
+using EducationPortalConsole.Presentation.Actions.Materials.BookAuthorActions;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials;
 
@@ -11,11 +12,11 @@ public class MaterialsAction : MenuAction
         Actions = new List<Action>()
         {
             new AddMaterialAction(),
-            new ShowMaterialsAction(),
+            new ShowAllMaterialsAction(),
             new ShowMaterialInfo(),
-            new ShowMaterialByIdAction(),
             new EditMaterialActions(),
             new DeleteMaterialsAction(),
+            new AuthorActions(),
             new BackAction()
         };
     }

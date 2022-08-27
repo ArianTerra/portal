@@ -14,9 +14,9 @@ public static class ArticleInfoPrinter
 
         table.AddRow("Id", articleMaterial.Id.ToString());
         table.AddRow("Type", "Article");
-        table.AddRow("CreatedBy", UserHelper.GetUsernameById(articleMaterial.CreatedByUserId));
+        table.AddRow("CreatedBy", articleMaterial.CreatedBy?.Name ?? String.Empty);
         table.AddRow("Created", articleMaterial.CreatedOn.ToString() ?? String.Empty);
-        table.AddRow("UpdatedBy", UserHelper.GetUsernameById(articleMaterial.UpdatedByUserId));
+        table.AddRow("UpdatedBy", articleMaterial.UpdatedBy?.Name ?? String.Empty);
         table.AddRow("Updated", articleMaterial.UpdatedOn.ToString() ?? String.Empty);
         table.AddRow("Date", articleMaterial.Date.ToString());
         table.AddRow("Format", articleMaterial.Source);

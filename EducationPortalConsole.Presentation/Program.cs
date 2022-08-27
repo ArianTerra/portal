@@ -9,7 +9,3 @@ while (!UserSession.Instance.IsLoggedIn)
 
 var menu = new MainMenuAction();
 menu.Run();
-
-// ArticleMaterial material = (ArticleMaterial)Configuration.Instance.MaterialService.GetById(0);
-//
-// Console.WriteLine();

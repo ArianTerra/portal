@@ -5,45 +5,45 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _repository;
+    private readonly IGenericRepository<User> _repository;
 
     public UserService()
     {
-        _repository = new UserRepository("Users");
+        _repository = new GenericRepository<User>();
     }
 
-    public UserService(IUserRepository repository)
+    public UserService(IGenericRepository<User> repository)
     {
         _repository = repository;
     }
 
-    public User? GetById(Guid id)
+    public User? GetUserById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id);
     }
 
-    public User? GetByName(string name)
+    public User? GetUserByName(string name)
     {
         return _repository.FindFirst(x => x.Name == name);
     }
 
-    public IEnumerable<User> GetAll()
+    public IEnumerable<User> GetAllUsers()
     {
-        return _repository.GetAll();
+        return _repository.FindAll(_ => true);
     }
 
-    public void Add(User user)
+    public void AddUser(User user)
     {
         _repository.Add(user);
     }
 
-    public void Update(User user)
+    public void UpdateUser(User user)
     {
         _repository.Update(user);
     }
 
-    public bool Delete(User user)
+    public bool DeleteUser(User user)
     {
-        return _repository.Delete(user);
+        return _repository.Remove(user);
     }
 }

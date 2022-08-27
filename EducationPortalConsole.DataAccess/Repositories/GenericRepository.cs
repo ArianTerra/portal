@@ -1,62 +1,94 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EducationPortalConsole.Core;
-using EducationPortalConsole.DataAccess.Serializers;
+﻿using System.Linq.Expressions;
+using EducationPortalConsole.DataAccess.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {
-    private IFileSerializer<TEntity> _fileSerializer;
+    private readonly DatabaseContext _context;
 
-    public GenericRepository(string filename)
+    public GenericRepository()
     {
-        _fileSerializer = new JsonSerializer<TEntity>(filename);
-        _fileSerializer.Load();
+        _context = new DatabaseContext(); //TODO should it be initialized here?
     }
 
-    public TEntity? FindFirst(Func<TEntity, bool> predicate)
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>> expression,
+        bool tracking = true,
+        params Expression<Func<TEntity, object>>[] includeParams)
     {
-        return _fileSerializer.GetFirst(predicate);
-    }
+        var query = _context.Set<TEntity>().AsQueryable();
 
-    public IEnumerable<TEntity> FindAll(Func<TEntity, bool> predicate)
-    {
-        return _fileSerializer.FindAll(predicate);
-    }
-
-    public IEnumerable<TEntity> GetAll()
-    {
-        return _fileSerializer.GetAll();
-    }
-
-    public void Add([NotNull] TEntity entity)
-    {
-        if (_fileSerializer.GetFirst(x => x.Id == entity.Id) != null)
+        if (!tracking)
         {
-            throw new ArgumentException($"Entity with ID {entity.Id} already exist");
+            query = query.AsNoTracking();
         }
 
-        _fileSerializer.Add(entity);
-        _fileSerializer.Save();
+        foreach (var param in includeParams)
+        {
+            query = query.Include(param);
+        }
+
+        return query.FirstOrDefault(expression);
+    }
+
+    public IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
+        bool tracking = true,
+        params Expression<Func<TEntity, object>>[] includeParams)
+    {
+        var query = _context.Set<TEntity>().Where(expression);
+
+        if (!tracking)
+        {
+            query = query.AsNoTracking();
+        }
+
+        foreach (var param in includeParams)
+        {
+            query = query.Include(param);
+        }
+
+        return query;
+    }
+
+    public void Add(TEntity entity)
+    {
+        _context.Set<TEntity>().Add(entity);
+        Save();
+    }
+
+    public void AddRange(IEnumerable<TEntity> entities)
+    {
+        _context.Set<TEntity>().AddRange(entities);
+        Save();
     }
 
     public void Update(TEntity entity)
     {
-        var entityToUpdate = _fileSerializer.GetFirst(x => x.Id == entity.Id);
-        if (entityToUpdate == null)
-        {
-            throw new ArgumentNullException(nameof(entity));
-        }
-
-        _fileSerializer.Delete(entityToUpdate);
-        _fileSerializer.Add(entity);
-        _fileSerializer.Save();
+        _context.Entry(entity).State = EntityState.Modified;
+        Save();
     }
 
-    public bool Delete(TEntity entity)
+    public bool Remove(TEntity entity)
     {
-        var result = _fileSerializer.Delete(entity);
-        _fileSerializer.Save();
+        var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
+        Save();
         return result;
+    }
+
+    public void RemoveRange(IEnumerable<TEntity> entities)
+    {
+        _context.Set<TEntity>().RemoveRange(entities);
+        Save();
+    }
+
+    public bool Exists(TEntity entity)
+    {
+        return _context.Set<TEntity>().Any(x => x == entity);
+    }
+
+    private void Save()
+    {
+        _context.SaveChanges();
     }
 }

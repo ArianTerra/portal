@@ -1,6 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Core.Entities;
-using EducationPortalConsole.Presentation.Extensions;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -24,7 +23,7 @@ public class EditCourseAction : Action
         var course = AnsiConsole.Prompt(
             new SelectionPrompt<Course>()
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(courseService.GetAll())
+                .AddChoices(courseService.GetAllCourses())
                 .UseConverter(x => x.Name)
         );
 
@@ -32,7 +31,7 @@ public class EditCourseAction : Action
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{course.Name}[/]):")
                 .AllowEmpty());
 
-        if (!name.IsNullOrEmpty())
+        if (!string.IsNullOrEmpty(name))
         {
             course.Name = name;
         }
@@ -47,20 +46,14 @@ public class EditCourseAction : Action
             .InstructionsText(
                 "[grey](Press [blue]<space>[/] to toggle a material, " +
                 "[green]<enter>[/] to accept)[/]")
-            .AddChoices(materialService.GetAll())
+            .AddChoices(materialService.GetAllMaterials())
             .UseConverter(x => x.Name);
-
-        foreach (var material in course.Materials)
-        {
-            prompt.Select(material);
-        }
 
         var materials = AnsiConsole.Prompt(prompt);
 
-        course.Materials = materials;
         course.UpdatedOn = DateTime.Now;
-        course.UpdatedByUserId = UserSession.Instance.CurrentUser.Id;
-        courseService.Update(course);
+        course.UpdatedById = UserSession.Instance.CurrentUser.Id;
+        courseService.UpdateCourse(course, materials);
 
         AnsiConsole.Write(new Markup($"[green]Course[/] updated\n"));
 

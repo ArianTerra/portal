@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -16,7 +15,7 @@ public class AddVideoAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.VideoMaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
@@ -32,11 +31,10 @@ public class AddVideoAction : Action
 
         var material = new VideoMaterial()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Duration = time,
             Quality = quality,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 

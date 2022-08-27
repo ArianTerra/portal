@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -16,15 +15,15 @@ public class AddArticleAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.ArticleMaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
-        DateOnly date;
+        DateTime date = new DateTime();
         AnsiConsole.Prompt(
             new TextPrompt<string>("Enter [green]Date[/]:")
                 .Validate(x =>
-                    DateOnly.TryParse(x, out date)
+                    DateTime.TryParse(x, out date)
                         ? ValidationResult.Success()
                         : ValidationResult.Error("Input is not date")));
 
@@ -32,15 +31,14 @@ public class AddArticleAction : Action
 
         var material = new ArticleMaterial()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Date = date,
             Source = source,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 
-        materialService.Add(material);
+        materialService.AddArticle(material);
 
         AnsiConsole.Write(new Markup($"Successfully added new Article with ID [bold yellow]{material.Id}[/]\n"));
 

@@ -4,13 +4,13 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface ICourseService
 {
-    Course? GetById(Guid id);
+    Course? GetCourseById(Guid id);
 
-    IEnumerable<Course> GetAll();
+    IEnumerable<Course> GetAllCourses();
 
-    void Add(Course course);
+    void AddCourse(Course course, IEnumerable<Material> materials);
 
-    void Update(Course course);
+    void UpdateCourse(Course course, IEnumerable<Material> materials);
 
-    bool Delete(Course course);
+    bool DeleteCourse(Course course);
 }

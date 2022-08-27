@@ -1,8 +1,10 @@
-﻿namespace EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.JoinEntities;
+
+namespace EducationPortalConsole.Core.Entities.Materials;
 
 public class BookMaterial : Material
 {
-    public IEnumerable<string> Authors { get; set; }
+    public ICollection<BookAuthorBookMaterial> BookAuthorBookMaterial { get; set; }
 
     public int Pages { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Actions.Materials.EditActions;
 using Spectre.Console;
@@ -18,13 +17,18 @@ public class EditMaterialActions : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var articleService = Configuration.Instance.ArticleMaterialService;
+        var bookService = Configuration.Instance.BookMaterialService;
+        var videoService = Configuration.Instance.VideoMaterialService;
+
+        List<Material> allMaterials = articleService.GetAllArticles()
+            .Concat<Material>(bookService.GetAllBooks())
+            .Concat(videoService.GetAllVideos()).ToList();
 
         var material = AnsiConsole.Prompt(
             new SelectionPrompt<Material>()
-                .PageSize(10)
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(materialService.GetAll())
+                .AddChoices(allMaterials)
                 .UseConverter(x => x.Name)
         );
 

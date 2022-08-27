@@ -30,20 +30,18 @@ public class AddCourseAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(materialService.GetAll())
+                .AddChoices(materialService.GetAllMaterials())
                 .UseConverter(x => x.Name)
         );
 
         var course = new Course()
         {
-            Id = Guid.NewGuid(),
             Name = name,
-            Materials = materials,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 
-        courseService.Add(course);
+        courseService.AddCourse(course, materials);
 
         AnsiConsole.Write(new Markup($"Successfully added new Course with ID [bold yellow]{course.Id}[/]\n"));
 

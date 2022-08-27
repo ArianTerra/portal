@@ -1,14 +1,15 @@
-﻿namespace EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities.JoinEntities;
+using EducationPortalConsole.Core.Entities.Progress;
 
-public class Skill : BaseEntity, IAuditedEntity
+namespace EducationPortalConsole.Core.Entities;
+
+public class Skill : AuditedEntity
 {
+    public string Name { get; set; }
+
     public string Description { get; set; }
 
-    public Guid? CreatedByUserId { get; set; }
+    public ICollection<CourseSkill> CourseSkills { get; set; }
 
-    public DateTime? CreatedOn { get; set; }
-
-    public Guid? UpdatedByUserId { get; set; }
-
-    public DateTime? UpdatedOn { get; set; }
+    public ICollection<SkillProgress> SkillProgresses { get; set; }
 }

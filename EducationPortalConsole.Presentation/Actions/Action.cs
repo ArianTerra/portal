@@ -21,7 +21,7 @@ public abstract class Action
         ActionNavigationProvider.AddToNavigationHistory(this);
     }
 
-    public string? ToString()
+    public override string ToString()
     {
         return Name;
     }

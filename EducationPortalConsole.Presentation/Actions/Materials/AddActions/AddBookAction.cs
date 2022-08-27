@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -16,11 +15,23 @@ public class AddBookAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.BookMaterialService;
+        var bookAuthorService = Configuration.Instance.BookAuthorService;
 
         var name = AnsiConsole.Ask<string>("Enter material [green]Name[/]:");
 
-        var authors = AnsiConsole.Ask<string>("Enter [green]Authors[/] using comma (example: Author1,Author2):");
+        var authors = AnsiConsole.Prompt(
+            new MultiSelectionPrompt<BookAuthor>()
+                .Title("Add selected [green]Book Authors[/] to Book")
+                .NotRequired()
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more authors)[/]")
+                .InstructionsText(
+                    "[grey](Press [blue]<space>[/] to toggle an author, " +
+                    "[green]<enter>[/] to accept)[/]")
+                .AddChoices(bookAuthorService.GetAllBookAuthors())
+                .UseConverter(x => x.Name)
+        );
 
         var pages = AnsiConsole.Ask<int>("Enter number of [green]Pages[/]:"); //TODO add validation
 
@@ -30,17 +41,15 @@ public class AddBookAction : Action
 
         var material = new BookMaterial()
         {
-            Id = Guid.NewGuid(),
             Name = name,
-            Authors = authors.Split(','),
             Pages = pages,
             Year = year,
             Format = format,
-            CreatedByUserId = UserSession.Instance.CurrentUser.Id,
+            CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now
         };
 
-        materialService.Add(material);
+        materialService.AddBook(material, authors);
 
         AnsiConsole.Write(new Markup($"Successfully added new Book with ID [bold yellow]{material.Id}[/]\n"));
 

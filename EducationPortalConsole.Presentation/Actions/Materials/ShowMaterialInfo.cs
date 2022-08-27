@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Helpers.InfoPrinters;
 using Spectre.Console;
@@ -17,29 +16,41 @@ public class ShowMaterialInfo : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var articleService = Configuration.Instance.ArticleMaterialService;
+        var bookService = Configuration.Instance.BookMaterialService;
+        var videoService = Configuration.Instance.VideoMaterialService;
 
-        var material = AnsiConsole.Prompt(
-            new SelectionPrompt<Material>()
-                .PageSize(10)
-                .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(materialService.GetAll())
-                .UseConverter(x => x.Name)
-        );
+        List<Material> allMaterials = articleService.GetAllArticles()
+            .Concat<Material>(bookService.GetAllBooks())
+            .Concat(videoService.GetAllVideos()).ToList();
 
-        if (material is ArticleMaterial articleMaterial) //TODO change this to smth appropriate
+        if (allMaterials.Any())
         {
-            ArticleInfoPrinter.Print(articleMaterial);
+            var material = AnsiConsole.Prompt(
+                new SelectionPrompt<Material>()
+                    .MoreChoicesText("[grey](See more...)[/]")
+                    .AddChoices(allMaterials)
+                    .UseConverter(x => x.Name)
+            );
+
+            if (material is ArticleMaterial articleMaterial) //TODO change this to smth appropriate
+            {
+                ArticleInfoPrinter.Print(articleMaterial);
+            }
+
+            if (material is BookMaterial bookMaterial)
+            {
+                BookInfoPrinter.Print(bookMaterial);
+            }
+
+            if (material is VideoMaterial videoMaterial)
+            {
+                VideoInfoPrinter.Print(videoMaterial);
+            }
         }
-
-        if (material is BookMaterial bookMaterial)
+        else
         {
-            BookInfoPrinter.Print(bookMaterial);
-        }
-
-        if (material is VideoMaterial videoMaterial)
-        {
-            VideoInfoPrinter.Print(videoMaterial);
+            AnsiConsole.Write("No materials found\n");
         }
 
         WaitForUserInput();
