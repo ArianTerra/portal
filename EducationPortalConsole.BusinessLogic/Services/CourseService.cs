@@ -1,4 +1,5 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.BusinessLogic.Comparers;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.DataAccess.Repositories;
 
@@ -58,21 +59,17 @@ public class CourseService : ICourseService
 
     public void Update(Course course, IEnumerable<Material> materials)
     {
-        _repository.Update(course);
+        var oldLinks = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id).ToList();
+        var newLinks = materials.Select(material => new CourseMaterial() { CourseId = course.Id, MaterialId = material.Id }).ToList();
 
-        var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
+        var comparer = new CourseMaterialComparer();
+        var linksToDelete = oldLinks.Except(newLinks, comparer).ToList();
+        var linksToAdd = newLinks.Except(oldLinks, comparer).ToList();
+
         _repositoryCourseMaterial.RemoveRange(linksToDelete);
+        _repositoryCourseMaterial.AddRange(linksToAdd);
 
-        foreach (var material in materials)
-        {
-            var link = new CourseMaterial()
-            {
-                CourseId = course.Id,
-                MaterialId = material.Id
-            };
-
-            _repositoryCourseMaterial.Add(link);
-        }
+        _repository.Update(course);
     }
 
     public bool Delete(Course course)

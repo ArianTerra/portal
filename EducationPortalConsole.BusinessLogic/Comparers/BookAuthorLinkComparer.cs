@@ -1,6 +1,6 @@
 ﻿using EducationPortalConsole.Core.Entities.JoinEntities;
 
-namespace EducationPortalConsole.BusinessLogic.Helpers;
+namespace EducationPortalConsole.BusinessLogic.Comparers;
 
 public class BookAuthorBookMaterialComparer : IEqualityComparer<BookAuthorBookMaterial>
 {

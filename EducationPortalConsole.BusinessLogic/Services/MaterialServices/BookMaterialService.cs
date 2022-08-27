@@ -1,4 +1,5 @@
-﻿using EducationPortalConsole.BusinessLogic.Helpers;
+﻿using EducationPortalConsole.BusinessLogic.Comparers;
+using EducationPortalConsole.BusinessLogic.Helpers;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
