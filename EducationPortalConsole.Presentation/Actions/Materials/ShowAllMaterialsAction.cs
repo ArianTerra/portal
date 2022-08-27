@@ -19,7 +19,7 @@ public class ShowAllMaterialsAction : Action
 
         IMaterialService service = Configuration.Instance.MaterialService;
 
-        foreach (var material in service.GetAll())
+        foreach (var material in service.GetAllMaterials())
         {
             table.AddRow(
                 material.Id.ToString(),

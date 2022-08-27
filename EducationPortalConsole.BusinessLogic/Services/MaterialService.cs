@@ -19,7 +19,7 @@ public class MaterialService : IMaterialService
         _repository = repository;
     }
 
-    public Material? GetById(Guid id)
+    public Material? GetMaterialById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
             false,
@@ -27,7 +27,7 @@ public class MaterialService : IMaterialService
             x => x.UpdatedBy);
     }
 
-    public IEnumerable<Material> GetAll()
+    public IEnumerable<Material> GetAllMaterials()
     {
         return _repository.FindAll(
             _ => true,
@@ -36,21 +36,21 @@ public class MaterialService : IMaterialService
             x => x.UpdatedBy);
     }
 
-    public void Add(Material material)
+    public void AddMaterial(Material material)
     {
         _repository.Add(material);
     }
 
-    public void Update(Material material)
+    public void UpdateMaterial(Material material)
     {
         _repository.Update(material);
     }
 
-    public bool Delete(Material material)
+    public bool DeleteMaterial(Material material)
     {
         if (material is BookMaterial book)
         {
-            return (new BookMaterialService()).Delete(book);
+            return (new BookMaterialService()).DeleteBook(book);
         }
 
         return _repository.Remove(material);

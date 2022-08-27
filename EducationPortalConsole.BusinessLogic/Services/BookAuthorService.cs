@@ -15,7 +15,7 @@ public class BookAuthorService : IBookAuthorService
         _repositoryLinks = new GenericRepository<BookAuthorBookMaterial>();
     }
 
-    public BookAuthor? GetById(Guid id)
+    public BookAuthor? GetBookAuthorById(Guid id)
     {
         return _repositoryAuthors.FindFirst(x => x.Id == id,
             false,
@@ -24,7 +24,7 @@ public class BookAuthorService : IBookAuthorService
             x => x.BookAuthorBookMaterial);
     }
 
-    public IEnumerable<BookAuthor> GetAll()
+    public IEnumerable<BookAuthor> GetAllBookAuthors()
     {
         return _repositoryAuthors.FindAll(
             _ => true,
@@ -34,17 +34,17 @@ public class BookAuthorService : IBookAuthorService
             x => x.BookAuthorBookMaterial).AsEnumerable();
     }
 
-    public void Add(BookAuthor author)
+    public void AddBookAuthor(BookAuthor author)
     {
         _repositoryAuthors.Add(author);
     }
 
-    public void Update(BookAuthor author)
+    public void UpdateBookAuthor(BookAuthor author)
     {
         _repositoryAuthors.Update(author);
     }
 
-    public bool Delete(BookAuthor author)
+    public bool DeleteBookAuthor(BookAuthor author)
     {
         var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == author.Id);
         _repositoryLinks.RemoveRange(linksToDelete);

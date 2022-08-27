@@ -38,7 +38,7 @@ public class AddArticleAction : Action
             CreatedOn = DateTime.Now
         };
 
-        materialService.Add(material);
+        materialService.AddArticle(material);
 
         AnsiConsole.Write(new Markup($"Successfully added new Article with ID [bold yellow]{material.Id}[/]\n"));
 

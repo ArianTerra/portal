@@ -61,7 +61,7 @@ public class EditArticleAction : Action
         _articleMaterial.UpdatedOn = DateTime.Now;
         _articleMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
 
-        materialService.Update(_articleMaterial);
+        materialService.UpdateMaterial(_articleMaterial);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
 

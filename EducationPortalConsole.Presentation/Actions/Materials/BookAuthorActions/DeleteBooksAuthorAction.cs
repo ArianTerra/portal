@@ -25,13 +25,13 @@ public class DeleteBooksAuthorAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(service.GetAll())
+                .AddChoices(service.GetAllBookAuthors())
                 .UseConverter(x => x.Name)
         );
 
         foreach (var author in authors)
         {
-            service.Delete(author);
+            service.DeleteBookAuthor(author);
         }
 
         WaitForUserInput();

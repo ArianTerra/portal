@@ -23,7 +23,7 @@ public class EditBookAuthorAction : Action
                 .Title("Delete selected [green]materials[/]")
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more materials)[/]")
-                .AddChoices(bookAuthorService.GetAll())
+                .AddChoices(bookAuthorService.GetAllBookAuthors())
                 .UseConverter(x => x.Name)
         );
 
@@ -39,7 +39,7 @@ public class EditBookAuthorAction : Action
         authors.UpdatedOn = DateTime.Now;
         authors.UpdatedById = UserSession.Instance.CurrentUser.Id;
 
-        bookAuthorService.Update(authors);
+        bookAuthorService.UpdateBookAuthor(authors);
 
         AnsiConsole.Write(new Markup($"[green]Author[/] updated\n"));
 

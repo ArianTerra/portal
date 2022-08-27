@@ -23,7 +23,7 @@ public class EditCourseAction : Action
         var course = AnsiConsole.Prompt(
             new SelectionPrompt<Course>()
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(courseService.GetAll())
+                .AddChoices(courseService.GetAllCourses())
                 .UseConverter(x => x.Name)
         );
 
@@ -46,14 +46,14 @@ public class EditCourseAction : Action
             .InstructionsText(
                 "[grey](Press [blue]<space>[/] to toggle a material, " +
                 "[green]<enter>[/] to accept)[/]")
-            .AddChoices(materialService.GetAll())
+            .AddChoices(materialService.GetAllMaterials())
             .UseConverter(x => x.Name);
 
         var materials = AnsiConsole.Prompt(prompt);
 
         course.UpdatedOn = DateTime.Now;
         course.UpdatedById = UserSession.Instance.CurrentUser.Id;
-        courseService.Update(course, materials);
+        courseService.UpdateCourse(course, materials);
 
         AnsiConsole.Write(new Markup($"[green]Course[/] updated\n"));
 

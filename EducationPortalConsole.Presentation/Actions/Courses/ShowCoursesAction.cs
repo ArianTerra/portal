@@ -21,14 +21,14 @@ public class ShowCoursesAction : Action
 
         table.AddColumns("ID", "Name", "Materials", "Created by", "Created", "Updated by", "Updated");
 
-        foreach (var course in courseService.GetAll())
+        foreach (var course in courseService.GetAllCourses())
         {
             var materialIds = course.CourseMaterials.Where(x => x.CourseId == course.Id)
                 .Select(x => x.MaterialId);
             var materials = new List<Material>();
             foreach (var id in materialIds)
             {
-                materials.Add(materialService.GetById(id));
+                materials.Add(materialService.GetMaterialById(id));
             }
 
             // var matNames =

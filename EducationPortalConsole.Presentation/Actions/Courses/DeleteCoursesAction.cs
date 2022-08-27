@@ -26,14 +26,14 @@ public class DeleteCoursesAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a course, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(courseService.GetAll())
+                .AddChoices(courseService.GetAllCourses())
                 .UseConverter(x => x.Name)
         );
 
         int deleted = 0;
         foreach (var course in courses)
         {
-            Configuration.Instance.CourseService.Delete(course);
+            Configuration.Instance.CourseService.DeleteCourse(course);
             deleted++;
         }
 

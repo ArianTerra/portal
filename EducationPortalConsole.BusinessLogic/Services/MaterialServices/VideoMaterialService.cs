@@ -12,7 +12,7 @@ public class VideoMaterialService
         _repository = new GenericRepository<VideoMaterial>();
     }
 
-    public VideoMaterial? GetById(Guid id)
+    public VideoMaterial? GetVideoById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
             false,
@@ -20,7 +20,7 @@ public class VideoMaterialService
             x => x.UpdatedBy);
     }
 
-    public IEnumerable<VideoMaterial> GetAll()
+    public IEnumerable<VideoMaterial> GetAllVideos()
     {
         return _repository.FindAll(
             _ => true,
@@ -34,12 +34,12 @@ public class VideoMaterialService
         _repository.Add(material);
     }
 
-    public void Update(VideoMaterial material)
+    public void UpdateVideo(VideoMaterial material)
     {
         _repository.Update(material);
     }
 
-    public bool Delete(VideoMaterial material)
+    public bool DeleteVideo(VideoMaterial material)
     {
         return _repository.Remove(material);
     }

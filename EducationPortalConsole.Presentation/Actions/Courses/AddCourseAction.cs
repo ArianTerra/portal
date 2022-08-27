@@ -30,7 +30,7 @@ public class AddCourseAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(materialService.GetAll())
+                .AddChoices(materialService.GetAllMaterials())
                 .UseConverter(x => x.Name)
         );
 
@@ -41,7 +41,7 @@ public class AddCourseAction : Action
             CreatedOn = DateTime.Now
         };
 
-        courseService.Add(course, materials);
+        courseService.AddCourse(course, materials);
 
         AnsiConsole.Write(new Markup($"Successfully added new Course with ID [bold yellow]{course.Id}[/]\n"));
 

@@ -29,7 +29,7 @@ public class UserLoginAction : Action
                         ? ValidationResult.Success()
                         : ValidationResult.Error("Password must be from 8 to 12 characters long")));
 
-        var user = userService.GetByName(name);
+        var user = userService.GetUserByName(name);
         if (user == null)
         {
             AnsiConsole.Write(new Markup($"User with name [bold yellow]{name}[/] does not exist\n"));

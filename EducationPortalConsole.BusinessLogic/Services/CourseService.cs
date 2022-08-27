@@ -22,7 +22,7 @@ public class CourseService : ICourseService
         _repository = repository;
     }
 
-    public Course? GetById(Guid id)
+    public Course? GetCourseById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
             false,
@@ -31,7 +31,7 @@ public class CourseService : ICourseService
             x => x.CourseMaterials);
     }
 
-    public IEnumerable<Course> GetAll()
+    public IEnumerable<Course> GetAllCourses()
     {
         return _repository.FindAll(
             _ => true,
@@ -41,7 +41,7 @@ public class CourseService : ICourseService
             x => x.CourseMaterials);
     }
 
-    public void Add(Course course, IEnumerable<Material> materials)
+    public void AddCourse(Course course, IEnumerable<Material> materials)
     {
         _repository.Add(course);
 
@@ -57,7 +57,7 @@ public class CourseService : ICourseService
         }
     }
 
-    public void Update(Course course, IEnumerable<Material> materials)
+    public void UpdateCourse(Course course, IEnumerable<Material> materials)
     {
         var oldLinks = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id).ToList();
         var newLinks = materials.Select(material => new CourseMaterial() { CourseId = course.Id, MaterialId = material.Id }).ToList();
@@ -72,7 +72,7 @@ public class CourseService : ICourseService
         _repository.Update(course);
     }
 
-    public bool Delete(Course course)
+    public bool DeleteCourse(Course course)
     {
         var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
         _repositoryCourseMaterial.RemoveRange(linksToDelete);

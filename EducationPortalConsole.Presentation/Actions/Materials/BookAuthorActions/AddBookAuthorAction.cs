@@ -26,7 +26,7 @@ public class AddBookAuthorAction : Action
             CreatedById = UserSession.Instance.CurrentUser.Id
         };
 
-        bookAuthorService.Add(author);
+        bookAuthorService.AddBookAuthor(author);
 
         AnsiConsole.Write(new Markup($"Successfully added new BookAuthor with ID [bold yellow]{author.Id}[/]\n"));
 

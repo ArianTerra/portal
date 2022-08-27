@@ -4,15 +4,15 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IUserService
 {
-    User? GetById(Guid id);
+    User? GetUserById(Guid id);
 
-    User? GetByName(string name);
+    User? GetUserByName(string name);
 
-    IEnumerable<User> GetAll();
+    IEnumerable<User> GetAllUsers();
 
-    void Add(User user);
+    void AddUser(User user);
 
-    void Update(User user);
+    void UpdateUser(User user);
 
-    bool Delete(User user);
+    bool DeleteUser(User user);
 }

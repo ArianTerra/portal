@@ -25,13 +25,13 @@ public class DeleteMaterialsAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(materialService.GetAll())
+                .AddChoices(materialService.GetAllMaterials())
                 .UseConverter(x => x.Name)
         );
 
         foreach (var material in materials)
         {
-            materialService.Delete(material);
+            materialService.DeleteMaterial(material);
         }
 
         AnsiConsole.Write(new Markup($"[green]Materials[/] were deleted\n"));

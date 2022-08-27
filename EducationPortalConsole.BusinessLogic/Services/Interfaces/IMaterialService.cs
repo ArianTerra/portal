@@ -4,13 +4,13 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IMaterialService
 {
-    Material? GetById(Guid id);
+    Material? GetMaterialById(Guid id);
 
-    IEnumerable<Material> GetAll();
+    IEnumerable<Material> GetAllMaterials();
 
-    void Add(Material material);
+    void AddMaterial(Material material);
 
-    void Update(Material material);
+    void UpdateMaterial(Material material);
 
-    bool Delete(Material material);
+    bool DeleteMaterial(Material material);
 }

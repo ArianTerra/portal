@@ -29,7 +29,7 @@ public class AddBookAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle an author, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(bookAuthorService.GetAll())
+                .AddChoices(bookAuthorService.GetAllBookAuthors())
                 .UseConverter(x => x.Name)
         );
 
@@ -49,7 +49,7 @@ public class AddBookAction : Action
             CreatedOn = DateTime.Now
         };
 
-        materialService.Add(material, authors);
+        materialService.AddBook(material, authors);
 
         AnsiConsole.Write(new Markup($"Successfully added new Book with ID [bold yellow]{material.Id}[/]\n"));
 

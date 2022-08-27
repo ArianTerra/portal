@@ -12,7 +12,7 @@ public class ArticleMaterialService
         _repository = new GenericRepository<ArticleMaterial>();
     }
 
-    public ArticleMaterial? GetById(Guid id)
+    public ArticleMaterial? GeArticleById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
             false,
@@ -20,7 +20,7 @@ public class ArticleMaterialService
             x => x.UpdatedBy);
     }
 
-    public IEnumerable<ArticleMaterial> GetAll()
+    public IEnumerable<ArticleMaterial> GetAllArticles()
     {
         return _repository.FindAll(
             _ => true,
@@ -29,17 +29,17 @@ public class ArticleMaterialService
             x => x.UpdatedBy);
     }
 
-    public void Add(ArticleMaterial material)
+    public void AddArticle(ArticleMaterial material)
     {
         _repository.Add(material);
     }
 
-    public void Update(ArticleMaterial material)
+    public void UpdateArticle(ArticleMaterial material)
     {
         _repository.Update(material);
     }
 
-    public bool Delete(ArticleMaterial material)
+    public bool DeleteArticle(ArticleMaterial material)
     {
         return _repository.Remove(material);
     }

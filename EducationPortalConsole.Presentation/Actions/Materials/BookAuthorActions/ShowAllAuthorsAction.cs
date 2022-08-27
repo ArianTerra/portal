@@ -18,7 +18,7 @@ public class ShowAllAuthorsAction : Action
 
         var service = Configuration.Instance.BookAuthorService;
 
-        foreach (var author in service.GetAll())
+        foreach (var author in service.GetAllBookAuthors())
         {
             table.AddRow(
                 author.Id.ToString(),

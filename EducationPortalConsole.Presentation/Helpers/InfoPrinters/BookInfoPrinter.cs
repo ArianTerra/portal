@@ -11,7 +11,7 @@ public static class BookInfoPrinter
 
         var authorService = Configuration.Instance.BookAuthorService;
         var authors = bookMaterial.BookAuthorBookMaterial.Where(x => x.BookMaterialId == bookMaterial.Id)
-            .Select(x => authorService.GetById(x.BookAuthorId));
+            .Select(x => authorService.GetBookAuthorById(x.BookAuthorId));
 
         table.AddColumns("Name", "Value");
 

@@ -1,5 +1,4 @@
 ﻿using EducationPortalConsole.BusinessLogic.Comparers;
-using EducationPortalConsole.BusinessLogic.Helpers;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
@@ -17,7 +16,7 @@ public class BookMaterialService
         _repositoryLinks = new GenericRepository<BookAuthorBookMaterial>();
     }
 
-    public BookMaterial? GetById(Guid id)
+    public BookMaterial? GetBookById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id,
             false,
@@ -26,7 +25,7 @@ public class BookMaterialService
             x => x.BookAuthorBookMaterial);
     }
 
-    public IEnumerable<BookMaterial> GetAll()
+    public IEnumerable<BookMaterial> GetAllBooks()
     {
         return _repository.FindAll(
             _ => true,
@@ -36,7 +35,7 @@ public class BookMaterialService
             x => x.BookAuthorBookMaterial);
     }
 
-    public void Add(BookMaterial material, IEnumerable<BookAuthor> authors)
+    public void AddBook(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
         _repository.Add(material);
 
@@ -52,7 +51,7 @@ public class BookMaterialService
         }
     }
 
-    public void Update(BookMaterial material, IEnumerable<BookAuthor> authors)
+    public void UpdateBook(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
         var oldLinks = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id).ToList();
         var newLinks = authors.Select(author => new BookAuthorBookMaterial { BookMaterialId = material.Id, BookAuthorId = author.Id }).ToList();
@@ -67,7 +66,7 @@ public class BookMaterialService
         _repository.Update(material);
     }
 
-    public bool Delete(BookMaterial material)
+    public bool DeleteBook(BookMaterial material)
     {
         return _repository.Remove(material);
     }

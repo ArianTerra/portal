@@ -39,11 +39,11 @@ public class EditBookAction : Action
             .InstructionsText(
                 "[grey](Press [blue]<space>[/] to toggle an author, " +
                 "[green]<enter>[/] to accept)[/]")
-            .AddChoices(bookAuthorService.GetAll())
+            .AddChoices(bookAuthorService.GetAllBookAuthors())
             .UseConverter(x => x.Name);
 
         var selectedAuthors = _bookMaterial.BookAuthorBookMaterial.Where(x => x.BookMaterialId == _bookMaterial.Id)
-            .Select(x => bookAuthorService.GetById(x.BookAuthorId));
+            .Select(x => bookAuthorService.GetBookAuthorById(x.BookAuthorId));
         foreach (var author in selectedAuthors)
         {
             prompt = prompt.Select(author);
@@ -75,7 +75,7 @@ public class EditBookAction : Action
         _bookMaterial.UpdatedOn = DateTime.Now;
         _bookMaterial.UpdatedById = UserSession.Instance.CurrentUser.Id;
 
-        materialService.Update(_bookMaterial, authors);
+        materialService.UpdateBook(_bookMaterial, authors);
 
         AnsiConsole.Write(new Markup($"[green]Material[/] updated\n"));
 

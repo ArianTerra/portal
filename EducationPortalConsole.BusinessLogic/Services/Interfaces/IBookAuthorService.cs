@@ -4,13 +4,13 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public interface IBookAuthorService
 {
-    BookAuthor? GetById(Guid id);
+    BookAuthor? GetBookAuthorById(Guid id);
 
-    IEnumerable<BookAuthor> GetAll();
+    IEnumerable<BookAuthor> GetAllBookAuthors();
 
-    void Add(BookAuthor course);
+    void AddBookAuthor(BookAuthor course);
 
-    void Update(BookAuthor course);
+    void UpdateBookAuthor(BookAuthor course);
 
-    bool Delete(BookAuthor course);
+    bool DeleteBookAuthor(BookAuthor course);
 }

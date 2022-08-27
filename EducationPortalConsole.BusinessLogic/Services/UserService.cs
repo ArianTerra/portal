@@ -17,32 +17,32 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public User? GetById(Guid id)
+    public User? GetUserById(Guid id)
     {
         return _repository.FindFirst(x => x.Id == id);
     }
 
-    public User? GetByName(string name)
+    public User? GetUserByName(string name)
     {
         return _repository.FindFirst(x => x.Name == name);
     }
 
-    public IEnumerable<User> GetAll()
+    public IEnumerable<User> GetAllUsers()
     {
         return _repository.FindAll(_ => true);
     }
 
-    public void Add(User user)
+    public void AddUser(User user)
     {
         _repository.Add(user);
     }
 
-    public void Update(User user)
+    public void UpdateUser(User user)
     {
         _repository.Update(user);
     }
 
-    public bool Delete(User user)
+    public bool DeleteUser(User user)
     {
         return _repository.Remove(user);
     }
