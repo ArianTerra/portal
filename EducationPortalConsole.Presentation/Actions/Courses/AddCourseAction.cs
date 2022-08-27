@@ -36,7 +36,6 @@ public class AddCourseAction : Action
 
         var course = new Course()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             CreatedById = UserSession.Instance.CurrentUser.Id,
             CreatedOn = DateTime.Now

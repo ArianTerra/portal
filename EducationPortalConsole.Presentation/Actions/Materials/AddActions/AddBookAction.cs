@@ -1,6 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -43,7 +41,6 @@ public class AddBookAction : Action
 
         var material = new BookMaterial()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Pages = pages,
             Year = year,

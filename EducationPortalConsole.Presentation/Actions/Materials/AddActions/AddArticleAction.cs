@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -32,7 +31,6 @@ public class AddArticleAction : Action
 
         var material = new ArticleMaterial()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Date = date,
             Source = source,

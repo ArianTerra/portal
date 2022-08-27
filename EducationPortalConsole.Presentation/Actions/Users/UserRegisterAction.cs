@@ -38,7 +38,6 @@ public class UserRegisterAction : Action
 
         var user = new User()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             PasswordHash = hashSalt.Hash,
             PasswordHashSalt = hashSalt.Salt

@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.BusinessLogic.Helpers;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
@@ -8,13 +8,11 @@ namespace EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 public class BookMaterialService
 {
     private readonly IGenericRepository<BookMaterial> _repository;
-    private readonly IGenericRepository<BookAuthor> _repositoryAuthors;
     private readonly IGenericRepository<BookAuthorBookMaterial> _repositoryLinks;
 
     public BookMaterialService()
     {
         _repository = new GenericRepository<BookMaterial>();
-        _repositoryAuthors = new GenericRepository<BookAuthor>();
         _repositoryLinks = new GenericRepository<BookAuthorBookMaterial>();
     }
 
@@ -55,25 +53,20 @@ public class BookMaterialService
 
     public void Update(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
-        var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id);
+        var oldLinks = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id).ToList();
+        var newLinks = authors.Select(author => new BookAuthorBookMaterial { BookMaterialId = material.Id, BookAuthorId = author.Id }).ToList();
+
+        var comparer = new BookAuthorBookMaterialComparer();
+        var linksToDelete = oldLinks.Except(newLinks, comparer).ToList();
+        var linksToAdd = newLinks.Except(oldLinks, comparer).ToList();
 
         _repositoryLinks.RemoveRange(linksToDelete);
-
-        foreach (var author in authors)
-        {
-            var link = new BookAuthorBookMaterial()
-            {
-                BookMaterialId = material.Id,
-                BookAuthorId = author.Id
-            };
-
-            _repositoryLinks.Add(link);
-        }
+        _repositoryLinks.AddRange(linksToAdd);
 
         _repository.Update(material);
     }
 
-    public bool Delete(BookMaterial material) //todo test it
+    public bool Delete(BookMaterial material)
     {
         return _repository.Remove(material);
     }

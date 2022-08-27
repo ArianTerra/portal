@@ -1,5 +1,4 @@
 ﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Presentation.Helpers;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials;

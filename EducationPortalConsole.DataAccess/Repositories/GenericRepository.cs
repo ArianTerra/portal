@@ -17,22 +17,19 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         bool tracking = true,
         params Expression<Func<TEntity, object>>[] includeParams)
     {
-        var query = _context.Set<TEntity>().Where(expression);
+        var query = _context.Set<TEntity>().AsQueryable();
 
         if (!tracking)
         {
             query = query.AsNoTracking();
         }
 
-        if (includeParams.Any())
+        foreach (var param in includeParams)
         {
-            foreach (var param in includeParams)
-            {
-                query = query.Include(param);
-            }
+            query = query.Include(param);
         }
 
-        return query.FirstOrDefault();
+        return query.FirstOrDefault(expression);
     }
 
     public IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
@@ -46,12 +43,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             query = query.AsNoTracking();
         }
 
-        if (includeParams != null)
+        foreach (var param in includeParams)
         {
-            foreach (var param in includeParams)
-            {
-                query = query.Include(param);
-            }
+            query = query.Include(param);
         }
 
         return query;
@@ -60,6 +54,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public void Add(TEntity entity)
     {
         _context.Set<TEntity>().Add(entity);
+        Save();
+    }
+
+    public void AddRange(IEnumerable<TEntity> entities)
+    {
+        _context.Set<TEntity>().AddRange(entities);
         Save();
     }
 
@@ -80,6 +80,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         _context.Set<TEntity>().RemoveRange(entities);
         Save();
+    }
+
+    public bool Exists(TEntity entity)
+    {
+        return _context.Set<TEntity>().Any(x => x == entity);
     }
 
     private void Save()

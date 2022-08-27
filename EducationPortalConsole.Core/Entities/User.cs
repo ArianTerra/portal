@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using EducationPortalConsole.Core.Entities.Progress;
+﻿using EducationPortalConsole.Core.Entities.Progress;
 
 namespace EducationPortalConsole.Core.Entities;
 

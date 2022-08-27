@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.Core.Entities;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Helpers.InfoPrinters;

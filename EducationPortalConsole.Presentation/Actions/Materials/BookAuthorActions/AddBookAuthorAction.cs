@@ -21,7 +21,6 @@ public class AddBookAuthorAction : Action
 
         var author = new BookAuthor()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             CreatedOn = DateTime.Now,
             CreatedById = UserSession.Instance.CurrentUser.Id

@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using EducationPortalConsole.Core;
 
 namespace EducationPortalConsole.DataAccess.Repositories;
 
@@ -15,9 +14,13 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     void Add(TEntity entity);
 
+    void AddRange(IEnumerable<TEntity> entities);
+
     void Update(TEntity entity);
 
     bool Remove(TEntity entity);
 
     void RemoveRange(IEnumerable<TEntity> entities);
+
+    public bool Exists(TEntity entity);
 }

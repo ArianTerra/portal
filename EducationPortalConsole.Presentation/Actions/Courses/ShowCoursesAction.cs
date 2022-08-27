@@ -1,6 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
-using EducationPortalConsole.Presentation.Helpers;
+﻿using EducationPortalConsole.Core.Entities;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Courses;

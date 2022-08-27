@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -32,7 +31,6 @@ public class AddVideoAction : Action
 
         var material = new VideoMaterial()
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Duration = time,
             Quality = quality,

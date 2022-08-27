@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Core.Entities.Progress;
