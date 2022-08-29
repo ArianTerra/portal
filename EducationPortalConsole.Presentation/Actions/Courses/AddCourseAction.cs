@@ -16,8 +16,8 @@ public class AddCourseAction : Action
     {
         base.Run();
 
-        ICourseService courseService = Configuration.Instance.CourseService;
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var courseService = Configuration.Instance.CourseService;
+        var materialService = Configuration.Instance.MaterialService;
 
         var name = AnsiConsole.Ask<string>("Enter course [green]Name[/]:");
 

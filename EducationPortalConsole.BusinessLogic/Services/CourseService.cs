@@ -7,24 +7,25 @@ namespace EducationPortalConsole.BusinessLogic.Services;
 
 public class CourseService : ICourseService
 {
-    private readonly IGenericRepository<Course> _repository;
+    private readonly IGenericRepository<Course> _courseRepository;
 
-    private readonly IGenericRepository<CourseMaterial> _repositoryCourseMaterial;
+    private readonly IGenericRepository<CourseMaterial> _courseMaterialRepository;
 
     public CourseService()
     {
-        _repository = new GenericRepository<Course>();
-        _repositoryCourseMaterial = new GenericRepository<CourseMaterial>();
+        _courseRepository = new GenericRepository<Course>();
+        _courseMaterialRepository = new GenericRepository<CourseMaterial>();
     }
 
-    public CourseService(IGenericRepository<Course> repository)
+    public CourseService(IGenericRepository<Course> courseRepository, IGenericRepository<CourseMaterial> courseMaterialRepository)
     {
-        _repository = repository;
+        _courseRepository = courseRepository;
+        _courseMaterialRepository = courseMaterialRepository;
     }
 
     public Course? GetCourseById(Guid id)
     {
-        return _repository.FindFirst(x => x.Id == id,
+        return _courseRepository.FindFirst(x => x.Id == id,
             false,
             x => x.CreatedBy,
             x => x.UpdatedBy,
@@ -33,7 +34,7 @@ public class CourseService : ICourseService
 
     public IEnumerable<Course> GetAllCourses()
     {
-        return _repository.FindAll(
+        return _courseRepository.FindAll(
             _ => true,
             true,
             x => x.CreatedBy,
@@ -43,7 +44,7 @@ public class CourseService : ICourseService
 
     public void AddCourse(Course course, IEnumerable<Material> materials)
     {
-        _repository.Add(course);
+        _courseRepository.Add(course);
 
         foreach (var material in materials)
         {
@@ -53,30 +54,30 @@ public class CourseService : ICourseService
                 MaterialId = material.Id
             };
 
-            _repositoryCourseMaterial.Add(link);
+            _courseMaterialRepository.Add(link);
         }
     }
 
     public void UpdateCourse(Course course, IEnumerable<Material> materials)
     {
-        var oldLinks = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id).ToList();
+        var oldLinks = _courseMaterialRepository.FindAll(x => x.CourseId == course.Id).ToList();
         var newLinks = materials.Select(material => new CourseMaterial() { CourseId = course.Id, MaterialId = material.Id }).ToList();
 
         var comparer = new CourseMaterialComparer();
         var linksToDelete = oldLinks.Except(newLinks, comparer).ToList();
         var linksToAdd = newLinks.Except(oldLinks, comparer).ToList();
 
-        _repositoryCourseMaterial.RemoveRange(linksToDelete);
-        _repositoryCourseMaterial.AddRange(linksToAdd);
+        _courseMaterialRepository.RemoveRange(linksToDelete);
+        _courseMaterialRepository.AddRange(linksToAdd);
 
-        _repository.Update(course);
+        _courseRepository.Update(course);
     }
 
     public bool DeleteCourse(Course course)
     {
-        var linksToDelete = _repositoryCourseMaterial.FindAll(x => x.CourseId == course.Id);
-        _repositoryCourseMaterial.RemoveRange(linksToDelete);
+        var linksToDelete = _courseMaterialRepository.FindAll(x => x.CourseId == course.Id);
+        _courseMaterialRepository.RemoveRange(linksToDelete);
 
-        return _repository.Remove(course);
+        return _courseRepository.Remove(course);
     }
 }

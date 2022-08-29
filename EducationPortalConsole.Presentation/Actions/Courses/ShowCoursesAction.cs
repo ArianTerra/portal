@@ -31,8 +31,6 @@ public class ShowCoursesAction : Action
                 materials.Add(materialService.GetMaterialById(id));
             }
 
-            // var matNames =
-
             table.AddRow(
                 course.Id.ToString(),
                 course.Name,
