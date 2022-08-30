@@ -4,7 +4,7 @@ using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class BookAuthorService : IBookAuthorService
+public class BookAuthorService
 {
     private readonly IGenericRepository<BookAuthor> _repositoryAuthors;
     private readonly IGenericRepository<BookAuthorBookMaterial> _repositoryLinks;

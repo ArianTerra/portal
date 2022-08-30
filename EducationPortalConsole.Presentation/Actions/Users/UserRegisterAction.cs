@@ -16,7 +16,7 @@ public class UserRegisterAction : Action
     {
         base.Run();
 
-        IUserService userService = Configuration.Instance.UserService;
+        var userService = Configuration.Instance.UserService;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]name[/]:")

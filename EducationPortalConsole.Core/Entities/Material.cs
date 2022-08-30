@@ -10,4 +10,9 @@ public class Material : AuditedEntity
     public ICollection<CourseMaterial> CourseMaterials { get; set; }
 
     public ICollection<MaterialProgress> MaterialProgresses { get; set; }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

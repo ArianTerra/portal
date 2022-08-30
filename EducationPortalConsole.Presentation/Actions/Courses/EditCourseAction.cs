@@ -17,15 +17,18 @@ public class EditCourseAction : Action
     {
         base.Run();
 
-        ICourseService courseService = Configuration.Instance.CourseService;
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var courseService = Configuration.Instance.CourseService;
+        var materialService = Configuration.Instance.MaterialService;
+        var skillService = Configuration.Instance.SkillService;
 
-        var course = AnsiConsole.Prompt(
+        var courseSelected = AnsiConsole.Prompt(
             new SelectionPrompt<Course>()
                 .MoreChoicesText("[grey](See more...)[/]")
                 .AddChoices(courseService.GetAllCourses())
                 .UseConverter(x => x.Name)
         );
+
+        var course = courseService.GetCourseById(courseSelected.Id);
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{course.Name}[/]):")
@@ -36,24 +39,29 @@ public class EditCourseAction : Action
             course.Name = name;
         }
 
-        // TODO fix bug when after loading data from 'DB' course's material isn't marked as selected
-        // it seems like .Select() method checks for equality of objects
-        var prompt = new MultiSelectionPrompt<Material>()
+        var materials = AnsiConsole.Prompt(new MultiSelectionPrompt<Material>()
             .Title("Add selected [green]materials[/] to course")
             .NotRequired()
-            .PageSize(10)
             .MoreChoicesText("[grey](Move up and down to reveal more materials)[/]")
             .InstructionsText(
                 "[grey](Press [blue]<space>[/] to toggle a material, " +
                 "[green]<enter>[/] to accept)[/]")
             .AddChoices(materialService.GetAllMaterials())
-            .UseConverter(x => x.Name);
+            .UseConverter(x => x.Name));
 
-        var materials = AnsiConsole.Prompt(prompt);
+        var skills = AnsiConsole.Prompt(new MultiSelectionPrompt<Skill>()
+            .Title("Add selected [green]skills[/] to course")
+            .NotRequired()
+            .MoreChoicesText("[grey](Move up and down to reveal more skills)[/]")
+            .InstructionsText(
+                "[grey](Press [blue]<space>[/] to toggle a skill, " +
+                "[green]<enter>[/] to accept)[/]")
+            .AddChoices(skillService.GetAllSkills())
+            .UseConverter(x => x.Name));
 
         course.UpdatedOn = DateTime.Now;
         course.UpdatedById = UserSession.Instance.CurrentUser.Id;
-        courseService.UpdateCourse(course, materials);
+        courseService.UpdateCourse(course, materials, skills);
 
         AnsiConsole.Write(new Markup($"[green]Course[/] updated\n"));
 

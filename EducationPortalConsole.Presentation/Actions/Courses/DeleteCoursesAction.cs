@@ -15,7 +15,7 @@ public class DeleteCoursesAction : Action
     {
         base.Run();
 
-        ICourseService courseService = Configuration.Instance.CourseService;
+        var courseService = Configuration.Instance.CourseService;
 
         var courses = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Course>()

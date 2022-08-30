@@ -12,17 +12,17 @@ public class Configuration
         get { return _configuration ??= new Configuration(); }
     }
 
-    public IUserService UserService
+    public UserService UserService
     {
         get => new UserService();
     }
 
-    public IMaterialService MaterialService
+    public MaterialService MaterialService
     {
         get => new MaterialService();
     }
 
-    public ICourseService CourseService
+    public CourseService CourseService
     {
         get => new CourseService();
     }

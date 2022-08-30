@@ -17,7 +17,7 @@ public class ShowAllMaterialsAction : Action
         var table = new Table();
         table.AddColumns("ID", "Type", "Name", "Created by", "Created", "Updated by", "Updated");
 
-        IMaterialService service = Configuration.Instance.MaterialService;
+        var service = Configuration.Instance.MaterialService;
 
         foreach (var material in service.GetAllMaterials())
         {

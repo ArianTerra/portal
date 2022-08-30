@@ -20,7 +20,7 @@ public class EditVideoAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.MaterialService;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_videoMaterial.Name}[/]):")

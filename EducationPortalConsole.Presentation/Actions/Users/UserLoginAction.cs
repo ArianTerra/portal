@@ -16,7 +16,7 @@ public class UserLoginAction : Action
     {
         base.Run();
 
-        IUserService userService = Configuration.Instance.UserService;
+        var userService = Configuration.Instance.UserService;
 
         var name = AnsiConsole.Ask<string>("Enter your [green]name[/]:");
 

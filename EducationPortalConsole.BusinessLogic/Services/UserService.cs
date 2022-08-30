@@ -3,7 +3,7 @@ using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class UserService : IUserService
+public class UserService
 {
     private readonly IGenericRepository<User> _repository;
 

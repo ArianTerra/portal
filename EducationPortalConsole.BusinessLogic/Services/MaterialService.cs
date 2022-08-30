@@ -5,7 +5,7 @@ using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class MaterialService : IMaterialService
+public class MaterialService
 {
     private readonly IGenericRepository<Material> _repository;
 
