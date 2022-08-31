@@ -2,9 +2,11 @@
 
 namespace EducationPortalConsole.Core.Entities;
 
-public class User : BaseEntity //TODO should it be IAuditedEntity or not??
+public class User : BaseEntity
 {
     public string Name { get; set; }
+
+    public string? Email { get; set; }
 
     public string PasswordHash { get; set; }
 

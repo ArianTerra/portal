@@ -1,5 +1,7 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.BusinessLogic.Validators;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
@@ -27,14 +29,27 @@ public class UserService
         return _repository.FindFirst(x => x.Name == name);
     }
 
+    public User? GetUserByEmail(string email)
+    {
+        return _repository.FindFirst(x => x.Email == email);
+    }
+
     public IEnumerable<User> GetAllUsers()
     {
         return _repository.FindAll(_ => true);
     }
 
-    public void AddUser(User user)
+    public bool AddUser(User user)
     {
-        _repository.Add(user);
+        var validator = new UserValidator();
+        var isValid = validator.Validate(user).IsValid;
+
+        if (isValid)
+        {
+            _repository.Add(user);
+        }
+
+        return isValid; //TODO should return error code instead
     }
 
     public void UpdateUser(User user)

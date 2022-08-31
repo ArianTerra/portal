@@ -1,5 +1,5 @@
 ﻿using EducationPortalConsole.BusinessLogic.Helpers.Hasher;
-using EducationPortalConsole.BusinessLogic.Services;
+using EducationPortalConsole.BusinessLogic.Validators;
 using EducationPortalConsole.Core.Entities;
 using Spectre.Console;
 
@@ -25,6 +25,13 @@ public class UserRegisterAction : Action
                         ? ValidationResult.Success()
                         : ValidationResult.Error("This name is taken!")));
 
+        var email = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter your [green]email[/]:")
+                .Validate(x =>
+                    userService.GetUserByEmail(x) == null
+                        ? ValidationResult.Success()
+                        : ValidationResult.Error("This email is taken!")));
+
         var password = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter [green]password[/]:")
                 .PromptStyle("gray")
@@ -39,14 +46,22 @@ public class UserRegisterAction : Action
         var user = new User()
         {
             Name = name,
+            Email = email,
             PasswordHash = hashSalt.Hash,
             PasswordHashSalt = hashSalt.Salt
         };
 
-        userService.AddUser(user);
+        var result = userService.AddUser(user);
 
-        AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
+        if (result)
+        {
+            AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
+        }
+        else
+        {
+            AnsiConsole.Write(new Markup($"Could not create new User\n"));
+        }
+
         WaitForUserInput();
-        //ActionProvider.GetAction().Run();
     }
 }

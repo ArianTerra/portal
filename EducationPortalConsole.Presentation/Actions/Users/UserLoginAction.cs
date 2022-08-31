@@ -1,5 +1,4 @@
 ﻿using EducationPortalConsole.BusinessLogic.Helpers.Hasher;
-using EducationPortalConsole.BusinessLogic.Services;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
