@@ -51,4 +51,9 @@ public class Configuration
     {
         get => new SkillService();
     }
+
+    public CourseProgressService CourseProgressService
+    {
+        get => new CourseProgressService();
+    }
 }

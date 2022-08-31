@@ -1,10 +1,10 @@
-﻿using EducationPortalConsole.Core.Entities.JoinEntities;
+﻿using EducationPortalConsole.Core.Entities;
 
 namespace EducationPortalConsole.BusinessLogic.Comparers;
 
-public class CourseSkillComparer : IEqualityComparer<CourseSkill>
+public class CourseComparer : IEqualityComparer<Course>
 {
-    public bool Equals(CourseSkill? x, CourseSkill? y)
+    public bool Equals(Course? x, Course? y)
     {
         if (ReferenceEquals(x, y))
         {
@@ -26,11 +26,11 @@ public class CourseSkillComparer : IEqualityComparer<CourseSkill>
             return false;
         }
 
-        return x.CourseId.Equals(y.CourseId) && x.SkillId.Equals(y.SkillId);
+        return x.Id == y.Id;
     }
 
-    public int GetHashCode(CourseSkill obj)
+    public int GetHashCode(Course obj)
     {
-        return HashCode.Combine(obj.CourseId, obj.SkillId);
+        return obj.Id.GetHashCode();
     }
 }

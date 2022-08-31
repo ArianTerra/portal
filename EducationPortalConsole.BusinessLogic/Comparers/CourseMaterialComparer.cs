@@ -4,7 +4,7 @@ namespace EducationPortalConsole.BusinessLogic.Comparers;
 
 public class CourseMaterialComparer : IEqualityComparer<CourseMaterial>
 {
-    public bool Equals(CourseMaterial x, CourseMaterial y)
+    public bool Equals(CourseMaterial? x, CourseMaterial? y)
     {
         if (ReferenceEquals(x, y))
         {

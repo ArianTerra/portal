@@ -13,7 +13,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _context = new DatabaseContext(); //TODO should it be initialized here?
     }
 
-    public TEntity? FindFirst(Expression<Func<TEntity, bool>> expression,
+    public GenericRepository(DatabaseContext context)
+    {
+        _context = context;
+    }
+
+    public TEntity? FindFirst(Expression<Func<TEntity, bool>>? expression = null,
         bool tracking = true,
         params Expression<Func<TEntity, object>>[] includeParams)
     {
@@ -29,14 +34,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             query = query.Include(param);
         }
 
-        return query.FirstOrDefault(expression);
+        return expression == null ? query.FirstOrDefault() : query.FirstOrDefault(expression);
     }
 
-    public IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
+    public IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>>? expression = null,
         bool tracking = true,
         params Expression<Func<TEntity, object>>[] includeParams)
     {
-        var query = _context.Set<TEntity>().Where(expression);
+        var query = expression == null ? _context.Set<TEntity>().AsQueryable() : _context.Set<TEntity>().Where(expression);
 
         if (!tracking)
         {
@@ -80,11 +85,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         _context.Set<TEntity>().RemoveRange(entities);
         Save();
-    }
-
-    public bool Exists(TEntity entity)
-    {
-        return _context.Set<TEntity>().Any(x => x == entity);
     }
 
     private void Save()

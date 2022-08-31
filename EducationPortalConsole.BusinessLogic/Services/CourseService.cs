@@ -39,9 +39,9 @@ public class CourseService
     public IEnumerable<Course> GetAllCourses()
     {
         return _courseRepository.FindAll(
-            _ => true,
+            _ => true, //todo remove this
             false,
-            x => x.CreatedBy, //TODO
+            x => x.CreatedBy,
             x => x.UpdatedBy);
     }
 
