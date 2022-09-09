@@ -1,7 +1,7 @@
 ﻿using EducationPortalConsole.Core.Entities;
 using FluentValidation;
 
-namespace EducationPortalConsole.BusinessLogic.Validators;
+namespace EducationPortalConsole.BusinessLogic.Validators.FluentValidation;
 
 public class UserValidator : AbstractValidator<User>
 {

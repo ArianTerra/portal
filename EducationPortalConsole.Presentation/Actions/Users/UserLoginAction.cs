@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Helpers.Hasher;
+﻿using EducationPortalConsole.BusinessLogic.Utils.Hasher;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -28,14 +28,17 @@ public class UserLoginAction : Action
                         ? ValidationResult.Success()
                         : ValidationResult.Error("Password must be from 8 to 12 characters long")));
 
-        var user = userService.GetUserByName(name);
-        if (user == null)
+        var result = userService.GetUserByName(name);
+
+        if (result.IsFailed)
         {
             AnsiConsole.Write(new Markup($"User with name [bold yellow]{name}[/] does not exist\n"));
             WaitForUserInput();
 
             return;
         }
+
+        var user = result.Value;
 
         if (!PasswordHasher.VerifyPassword(password, user.PasswordHash, user.PasswordHashSalt))
         {

@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Comparers;
+﻿using EducationPortalConsole.BusinessLogic.Utils.Comparers;
 using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.DataAccess.Repositories;
@@ -24,11 +24,13 @@ public class CourseService
     {
         _courseRepository = courseRepository;
         _courseMaterialRepository = courseMaterialRepository;
+        _courseSkillRepository = courseSkillRepository;
     }
 
     public Course? GetCourseById(Guid id)
     {
-        return _courseRepository.FindFirst(x => x.Id == id,
+        return _courseRepository.FindFirst(
+            x => x.Id == id,
             true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
@@ -97,7 +99,7 @@ public class CourseService
         _courseRepository.Update(course);
     }
 
-    public bool DeleteCourse(Course course)
+    public void DeleteCourse(Course course)
     {
         var courseMaterials = _courseMaterialRepository.FindAll(x => x.CourseId == course.Id);
         _courseMaterialRepository.RemoveRange(courseMaterials);
@@ -105,6 +107,6 @@ public class CourseService
         var courseSkills = _courseSkillRepository.FindAll(x => x.CourseId == course.Id);
         _courseSkillRepository.RemoveRange(courseSkills);
 
-        return _courseRepository.Remove(course);
+        _courseRepository.Remove(course);
     }
 }

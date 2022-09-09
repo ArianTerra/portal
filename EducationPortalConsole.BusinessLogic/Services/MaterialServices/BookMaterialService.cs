@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Comparers;
+﻿using EducationPortalConsole.BusinessLogic.Utils.Comparers;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
@@ -66,8 +66,8 @@ public class BookMaterialService
         _repository.Update(material);
     }
 
-    public bool DeleteBook(BookMaterial material)
+    public void DeleteBook(BookMaterial material)
     {
-        return _repository.Remove(material);
+        _repository.Remove(material);
     }
 }

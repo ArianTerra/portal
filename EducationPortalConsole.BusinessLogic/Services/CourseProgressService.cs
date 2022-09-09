@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Comparers;
+﻿using EducationPortalConsole.BusinessLogic.Utils.Comparers;
 using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Core.Entities.Progress;
 using EducationPortalConsole.DataAccess.Repositories;

@@ -1,6 +1,8 @@
-﻿using EducationPortalConsole.BusinessLogic.Validators;
+﻿using EducationPortalConsole.BusinessLogic.Resources.ErrorMessages;
+using EducationPortalConsole.BusinessLogic.Validators.FluentValidation;
 using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentResults;
 using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
@@ -19,46 +21,86 @@ public class UserService
         _repository = repository;
     }
 
-    public User? GetUserById(Guid id)
+    public Result<User> GetUserByName(string name)
     {
-        return _repository.FindFirst(x => x.Id == id);
+        var user = _repository.FindFirst(x => x.Name == name);
+        return user != null
+            ? Result.Ok(user)
+            : Result.Fail(ErrorMessages.UsernameNotFound);
     }
 
-    public User? GetUserByName(string name)
+    public Result<User> GetUserByEmail(string email)
     {
-        return _repository.FindFirst(x => x.Name == name);
+        var user = _repository.FindFirst(x => x.Email == email);
+        return user != null
+            ? Result.Ok(user)
+            : Result.Fail(ErrorMessages.EmailNotFound);
     }
 
-    public User? GetUserByEmail(string email)
+    public Result AddUser(User user)
     {
-        return _repository.FindFirst(x => x.Email == email);
-    }
-
-    public IEnumerable<User> GetAllUsers()
-    {
-        return _repository.FindAll(_ => true);
-    }
-
-    public bool AddUser(User user)
-    {
-        var validator = new UserValidator();
-        var isValid = validator.Validate(user).IsValid;
-
-        if (isValid)
+        if (user == null)
         {
-            _repository.Add(user);
+            return Result.Fail(ErrorMessages.UserIsNull);
         }
 
-        return isValid; //TODO should return error code instead
+        var result = ValidateUser(user);
+
+        return result.IsSuccess
+            ? Result.Try(() => _repository.Add(user))
+            : result;
     }
 
-    public void UpdateUser(User user)
+    public Result UpdateUser(User user)
     {
-        _repository.Update(user);
+        if (user == null)
+        {
+            return Result.Fail(new Error(ErrorMessages.UserIsNull));
+        }
+
+        var result = ValidateUser(user);
+
+        return result.IsSuccess
+            ? Result.Try(() => _repository.Update(user))
+            : result;
     }
 
-    public bool DeleteUser(User user)
+    public Result DeleteUser(User user)
     {
-        return _repository.Remove(user);
+        if (user == null)
+        {
+            return Result.Fail(new Error(ErrorMessages.UserIsNull));
+        }
+
+        return Result.Try(() => _repository.Remove(user));
+    }
+
+    private static Result ValidateUserFields(User user)
+    {
+        var validator = new UserValidator();
+
+        try
+        {
+            validator.ValidateAndThrow(user);
+        }
+        catch (ValidationException e)
+        {
+            return Result.Fail(new Error(ErrorMessages.UserValidationError).CausedBy(e));
+        }
+
+        return Result.Ok();
+    }
+
+    private Result ValidateUser(User user)
+    {
+        var validationResult = ValidateUserFields(user);
+        var nameResult = GetUserByName(user.Name).IsFailed
+            ? Result.Ok()
+            : Result.Fail(ErrorMessages.UsernameTaken);
+        var emailResult = GetUserByEmail(user.Email).IsFailed
+            ? Result.Ok()
+            : Result.Fail(ErrorMessages.EmailTaken);
+
+        return Result.Merge(validationResult, nameResult, emailResult);
     }
 }

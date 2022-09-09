@@ -44,11 +44,11 @@ public class BookAuthorService
         _repositoryAuthors.Update(author);
     }
 
-    public bool DeleteBookAuthor(BookAuthor author)
+    public void DeleteBookAuthor(BookAuthor author)
     {
         var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == author.Id);
         _repositoryLinks.RemoveRange(linksToDelete);
 
-        return _repositoryAuthors.Remove(author);
+        _repositoryAuthors.Remove(author);
     }
 }

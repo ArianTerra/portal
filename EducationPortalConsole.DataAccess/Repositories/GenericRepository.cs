@@ -74,11 +74,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         Save();
     }
 
-    public bool Remove(TEntity entity)
+    public void Remove(TEntity entity)
     {
-        var result = entity == _context.Set<TEntity>().Remove(entity).Entity;
+        _context.Set<TEntity>().Remove(entity);
         Save();
-        return result;
     }
 
     public void RemoveRange(IEnumerable<TEntity> entities)

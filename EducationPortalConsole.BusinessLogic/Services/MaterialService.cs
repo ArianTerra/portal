@@ -46,13 +46,13 @@ public class MaterialService
         _repository.Update(material);
     }
 
-    public bool DeleteMaterial(Material material)
+    public void DeleteMaterial(Material material)
     {
         if (material is BookMaterial book)
         {
-            return (new BookMaterialService()).DeleteBook(book);
+            new BookMaterialService().DeleteBook(book);
         }
 
-        return _repository.Remove(material);
+        _repository.Remove(material);
     }
 }

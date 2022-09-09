@@ -1,4 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Helpers.Hasher;
+﻿using EducationPortalConsole.BusinessLogic.Utils.Hasher;
 using EducationPortalConsole.BusinessLogic.Validators;
 using EducationPortalConsole.Core.Entities;
 using Spectre.Console;
@@ -53,13 +53,17 @@ public class UserRegisterAction : Action
 
         var result = userService.AddUser(user);
 
-        if (result)
+        if (result.IsSuccess)
         {
             AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
         }
         else
         {
-            AnsiConsole.Write(new Markup($"Could not create new User\n"));
+            AnsiConsole.Write(new Markup($"Could not create new User. Reasons:\n"));
+            foreach (var error in result.Errors)
+            {
+                AnsiConsole.Write(error.Message + "\n");
+            }
         }
 
         WaitForUserInput();

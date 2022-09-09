@@ -1,6 +1,6 @@
 ﻿using EducationPortalConsole.Core.Entities;
 
-namespace EducationPortalConsole.BusinessLogic.Comparers;
+namespace EducationPortalConsole.BusinessLogic.Utils.Comparers;
 
 public class CourseComparer : IEqualityComparer<Course>
 {
