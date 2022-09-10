@@ -5,7 +5,7 @@ using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class MaterialService
+public class MaterialService //todo: to be deleted after implementation of ASP.NET layer and MVC
 {
     private readonly IGenericRepository<Material> _repository;
 

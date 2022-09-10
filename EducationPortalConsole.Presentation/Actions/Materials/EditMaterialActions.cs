@@ -22,6 +22,7 @@ public class EditMaterialActions : Action
         var videoService = Configuration.Instance.VideoMaterialService;
 
         List<Material> allMaterials = articleService.GetAllArticles()
+            .Value
             .Concat<Material>(bookService.GetAllBooks())
             .Concat(videoService.GetAllVideos()).ToList();
 

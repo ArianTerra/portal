@@ -28,7 +28,7 @@ public class SkillService
             return Result.Fail(ErrorMessages.SkillGuidEmpty);
         }
 
-        var repositoryResult = Result.Try(() =>
+        var result = Result.Try(() =>
             _repository.FindFirst(
             x => x.Id == id,
             true,
@@ -37,19 +37,12 @@ public class SkillService
             x => x.CourseSkills,
             x => x.SkillProgresses));
 
-        if (repositoryResult.IsFailed)
+        if (result.IsSuccess && result.Value == null)
         {
-            return repositoryResult;
+            return Result.Fail(ErrorMessages.SkillNotFound);
         }
 
-        var skill = repositoryResult.Value;
-
-        if (skill == null)
-        {
-            return Result.Fail(ErrorMessages.UserIsNull);
-        }
-
-        return Result.Ok(skill);
+        return result;
     }
 
     public Result<List<Skill>> GetAllSkills()

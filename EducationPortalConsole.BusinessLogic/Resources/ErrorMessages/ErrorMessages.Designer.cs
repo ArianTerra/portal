@@ -61,6 +61,15 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Article validation error.
+        /// </summary>
+        internal static string ArticleMaterialValidationError {
+            get {
+                return ResourceManager.GetString("ArticleMaterialValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email not found.
         /// </summary>
         internal static string EmailNotFound {
@@ -79,6 +88,33 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Material id is empty.
+        /// </summary>
+        internal static string MaterialGuidEmpty {
+            get {
+                return ResourceManager.GetString("MaterialGuidEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material is null.
+        /// </summary>
+        internal static string MaterialIsNull {
+            get {
+                return ResourceManager.GetString("MaterialIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material not found.
+        /// </summary>
+        internal static string MaterialNotFound {
+            get {
+                return ResourceManager.GetString("MaterialNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skill id is empty.
         /// </summary>
         internal static string SkillGuidEmpty {
@@ -88,11 +124,20 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SkillIsNull.
+        ///   Looks up a localized string similar to Skill is null.
         /// </summary>
         internal static string SkillIsNull {
             get {
                 return ResourceManager.GetString("SkillIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill not found.
+        /// </summary>
+        internal static string SkillNotFound {
+            get {
+                return ResourceManager.GetString("SkillNotFound", resourceCulture);
             }
         }
         

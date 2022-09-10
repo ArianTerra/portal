@@ -1,5 +1,9 @@
-﻿using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.BusinessLogic.Resources.ErrorMessages;
+using EducationPortalConsole.BusinessLogic.Validators;
+using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentResults;
+using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 
@@ -12,35 +16,90 @@ public class ArticleMaterialService
         _repository = new GenericRepository<ArticleMaterial>();
     }
 
-    public ArticleMaterial? GeArticleById(Guid id)
+    public ArticleMaterialService(GenericRepository<ArticleMaterial> repository)
     {
-        return _repository.FindFirst(x => x.Id == id,
-            false,
-            x => x.CreatedBy,
-            x => x.UpdatedBy);
+        _repository = repository;
     }
 
-    public IEnumerable<ArticleMaterial> GetAllArticles()
+    public Result<ArticleMaterial> GeArticleById(Guid id)
     {
-        return _repository.FindAll(
+        if (id == Guid.Empty)
+        {
+            return Result.Fail(ErrorMessages.MaterialGuidEmpty);
+        }
+
+        var result = Result.Try(() =>
+            _repository.FindFirst(x => x.Id == id,
+            true,
+            x => x.CreatedBy,
+            x => x.UpdatedBy));
+
+        if (result.IsSuccess && result.Value == null)
+        {
+            return Result.Fail(ErrorMessages.MaterialNotFound);
+        }
+
+        return result;
+    }
+
+    public Result<List<ArticleMaterial>> GetAllArticles()
+    {
+        var result = Result.Try(() =>
+            _repository.FindAll(
             _ => true,
             true,
             x => x.CreatedBy,
-            x => x.UpdatedBy);
+            x => x.UpdatedBy).ToList());
+
+        return result;
     }
 
-    public void AddArticle(ArticleMaterial material)
+    public Result AddArticle(ArticleMaterial article)
     {
-        _repository.Add(material);
+        var validationResult = ValidateArticle(article);
+
+        return validationResult.IsSuccess
+            ? Result.Try(() => _repository.Add(article))
+            : validationResult;
     }
 
-    public void UpdateArticle(ArticleMaterial material)
+    public Result UpdateArticle(ArticleMaterial article)
     {
-        _repository.Update(material);
+        var validationResult = ValidateArticle(article);
+
+        return validationResult.IsSuccess
+            ? Result.Try(() => _repository.Update(article))
+            : validationResult;
     }
 
-    public void DeleteArticle(ArticleMaterial material)
+    public Result DeleteArticle(ArticleMaterial article)
     {
-        _repository.Remove(material);
+        if (article == null)
+        {
+            return Result.Fail(ErrorMessages.MaterialIsNull);
+        }
+
+        return Result.Try(() => _repository.Remove(article));
+    }
+
+    private Result ValidateArticle(ArticleMaterial article)
+    {
+        if (article == null)
+        {
+            return Result.Fail(ErrorMessages.MaterialIsNull);
+        }
+
+        var validator = new ArticleMaterialValidator();
+
+        try
+        {
+            validator.ValidateAndThrow(article);
+        }
+        catch (Exception e)
+        {
+            return Result.Fail(new Error(ErrorMessages.ArticleMaterialValidationError).CausedBy(e));
+        }
+
+        return Result.Ok();
     }
 }

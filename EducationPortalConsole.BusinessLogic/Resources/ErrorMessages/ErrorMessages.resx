@@ -136,12 +136,27 @@
     <value>Email not found</value>
   </data>
   <data name="SkillIsNull" xml:space="preserve">
-    <value>SkillIsNull</value>
+    <value>Skill is null</value>
   </data>
   <data name="SkillValidationError" xml:space="preserve">
     <value>Skill validation error</value>
   </data>
   <data name="SkillGuidEmpty" xml:space="preserve">
     <value>Skill id is empty</value>
+  </data>
+  <data name="MaterialIsNull" xml:space="preserve">
+    <value>Material is null</value>
+  </data>
+  <data name="ArticleMaterialValidationError" xml:space="preserve">
+    <value>Article validation error</value>
+  </data>
+  <data name="MaterialGuidEmpty" xml:space="preserve">
+    <value>Material id is empty</value>
+  </data>
+  <data name="MaterialNotFound" xml:space="preserve">
+    <value>Material not found</value>
+  </data>
+  <data name="SkillNotFound" xml:space="preserve">
+    <value>Skill not found</value>
   </data>
 </root>
