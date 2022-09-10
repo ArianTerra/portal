@@ -79,6 +79,33 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skill id is empty.
+        /// </summary>
+        internal static string SkillGuidEmpty {
+            get {
+                return ResourceManager.GetString("SkillGuidEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SkillIsNull.
+        /// </summary>
+        internal static string SkillIsNull {
+            get {
+                return ResourceManager.GetString("SkillIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill validation error.
+        /// </summary>
+        internal static string SkillValidationError {
+            get {
+                return ResourceManager.GetString("SkillValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User is null.
         /// </summary>
         internal static string UserIsNull {
@@ -102,15 +129,6 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         internal static string UsernameTaken {
             get {
                 return ResourceManager.GetString("UsernameTaken", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User was not found by ID.
-        /// </summary>
-        internal static string UserNotFound {
-            get {
-                return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
         

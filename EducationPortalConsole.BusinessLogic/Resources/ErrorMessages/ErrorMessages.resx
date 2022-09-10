@@ -135,7 +135,13 @@
   <data name="EmailNotFound" xml:space="preserve">
     <value>Email not found</value>
   </data>
-  <data name="UserNotFound" xml:space="preserve">
-    <value>User was not found by ID</value>
+  <data name="SkillIsNull" xml:space="preserve">
+    <value>SkillIsNull</value>
+  </data>
+  <data name="SkillValidationError" xml:space="preserve">
+    <value>Skill validation error</value>
+  </data>
+  <data name="SkillGuidEmpty" xml:space="preserve">
+    <value>Skill id is empty</value>
   </data>
 </root>

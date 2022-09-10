@@ -18,7 +18,7 @@ public class ShowSkillsAction : Action
         var table = new Table();
         table.AddColumns("ID", "Name", "Created by", "Created", "Updated by", "Updated");
 
-        foreach (var skill in skillService.GetAllSkills())
+        foreach (var skill in skillService.GetAllSkills().Value)
         {
             table.AddRow(
                 skill.Id.ToString(),

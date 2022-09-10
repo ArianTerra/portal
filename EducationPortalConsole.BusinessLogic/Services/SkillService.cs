@@ -1,5 +1,9 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.BusinessLogic.Resources.ErrorMessages;
+using EducationPortalConsole.BusinessLogic.Validators.FluentValidation;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentResults;
+using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
@@ -17,44 +21,95 @@ public class SkillService
         _repository = repository;
     }
 
-    public Skill? GetSkillById(Guid id)
+    public Result<Skill> GetSkillById(Guid id)
     {
-        return _repository.FindFirst(x => x.Id == id,
+        if (id == Guid.Empty)
+        {
+            return Result.Fail(ErrorMessages.SkillGuidEmpty);
+        }
+
+        var repositoryResult = Result.Try(() =>
+            _repository.FindFirst(
+            x => x.Id == id,
             true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
             x => x.CourseSkills,
-            x => x.SkillProgresses);
+            x => x.SkillProgresses));
+
+        if (repositoryResult.IsFailed)
+        {
+            return repositoryResult;
+        }
+
+        var skill = repositoryResult.Value;
+
+        if (skill == null)
+        {
+            return Result.Fail(ErrorMessages.UserIsNull);
+        }
+
+        return Result.Ok(skill);
     }
 
-    public IEnumerable<Skill> GetAllSkills()
+    public Result<List<Skill>> GetAllSkills()
     {
-        return _repository.FindAll(
+        var repositoryResult = Result.Try(() =>
+            _repository.FindAll(
             _ => true,
-            true,
+            false,
             x => x.CreatedBy,
-            x => x.UpdatedBy,
-            x => x.CourseSkills,
-            x => x.SkillProgresses);
+            x => x.UpdatedBy).ToList());
+
+        return repositoryResult;
     }
 
-    public void AddSkill(Skill skill)
+    public Result AddSkill(Skill skill)
+    {
+        var validationResult = ValidateSkill(skill);
+
+        return validationResult.IsSuccess
+            ? Result.Try(() => _repository.Add(skill))
+            : validationResult;
+    }
+
+    public Result UpdateSkill(Skill skill)
+    {
+        var validationResult = ValidateSkill(skill);
+
+        return validationResult.IsSuccess
+            ? Result.Try(() => _repository.Update(skill))
+            : validationResult;
+    }
+
+    public Result DeleteSkills(IEnumerable<Skill> skills)
+    {
+        if (skills == null || !skills.Any())
+        {
+            return Result.Fail(ErrorMessages.SkillIsNull);
+        }
+
+        return Result.Try(() => _repository.RemoveRange(skills));
+    }
+
+    private Result ValidateSkill(Skill skill)
     {
         if (skill == null)
         {
-            //TODO validation
+            return Result.Fail(ErrorMessages.SkillIsNull);
         }
 
-        _repository.Add(skill);
-    }
+        var validator = new SkillValidator();
 
-    public void UpdateSkill(Skill skill)
-    {
-        _repository.Update(skill);
-    }
+        try
+        {
+            validator.ValidateAndThrow(skill);
+        }
+        catch (ValidationException e)
+        {
+            return Result.Fail(new Error(ErrorMessages.SkillValidationError).CausedBy(e));
+        }
 
-    public void DeleteSkills(IEnumerable<Skill> skills)
-    {
-        _repository.RemoveRange(skills);
+        return Result.Ok();
     }
 }

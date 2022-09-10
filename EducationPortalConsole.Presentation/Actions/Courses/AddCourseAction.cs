@@ -41,7 +41,7 @@ public class AddCourseAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a skill, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(skillService.GetAllSkills())
+                .AddChoices(skillService.GetAllSkills().Value)
                 .UseConverter(x => x.Name)
         );
 

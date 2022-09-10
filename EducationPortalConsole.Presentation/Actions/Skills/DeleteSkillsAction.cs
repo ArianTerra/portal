@@ -20,12 +20,11 @@ public class DeleteSkillsAction : Action
             new MultiSelectionPrompt<Skill>()
                 .Title("Delete selected [green]Skills[/]")
                 .NotRequired()
-                .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more Skills)[/]")
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a skill, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(skillService.GetAllSkills())
+                .AddChoices(skillService.GetAllSkills().Value)
                 .UseConverter(x => x.Name)
         );
 

@@ -28,7 +28,7 @@ public class ShowCourseInfo : Action
         var course = courseService.GetCourseById(courseSelected.Id);
 
         var materials = course.CourseMaterials.Select(x => materialService.GetMaterialById(x.MaterialId));
-        var skills = course.CourseSkills.Select(x => skillService.GetSkillById(x.SkillId));
+        var skills = course.CourseSkills.Select(x => skillService.GetSkillById(x.SkillId).Value);
 
         var table = new Table();
 

@@ -17,12 +17,14 @@ public class EditSkillAction : Action
 
         var skillService = Configuration.Instance.SkillService;
 
-        var skill = AnsiConsole.Prompt(
+        var selected = AnsiConsole.Prompt(
             new SelectionPrompt<Skill>()
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(skillService.GetAllSkills())
+                .AddChoices(skillService.GetAllSkills().Value)
                 .UseConverter(x => x.Name)
         );
+
+        var skill = skillService.GetSkillById(selected.Id).Value;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{skill.Name}[/]):")
