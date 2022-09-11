@@ -19,7 +19,7 @@ public class ShowCoursesAction : Action
 
         table.AddColumns("ID", "Name", "Created by", "Created", "Updated by", "Updated");
 
-        foreach (var course in courseService.GetAllCourses())
+        foreach (var course in courseService.GetAllCourses().Value)
         {
             table.AddRow(
                 course.Id.ToString(),

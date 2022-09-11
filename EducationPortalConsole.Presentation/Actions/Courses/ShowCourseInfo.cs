@@ -21,11 +21,11 @@ public class ShowCourseInfo : Action
         var courseSelected = AnsiConsole.Prompt(
             new SelectionPrompt<Course>()
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(courseService.GetAllCourses())
+                .AddChoices(courseService.GetAllCourses().Value)
                 .UseConverter(x => x.Name)
         );
 
-        var course = courseService.GetCourseById(courseSelected.Id);
+        var course = courseService.GetCourseById(courseSelected.Id).Value;
 
         var materials = course.CourseMaterials.Select(x => materialService.GetMaterialById(x.MaterialId));
         var skills = course.CourseSkills.Select(x => skillService.GetSkillById(x.SkillId).Value);

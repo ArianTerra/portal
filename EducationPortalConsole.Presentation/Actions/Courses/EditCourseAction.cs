@@ -23,11 +23,11 @@ public class EditCourseAction : Action
         var courseSelected = AnsiConsole.Prompt(
             new SelectionPrompt<Course>()
                 .MoreChoicesText("[grey](See more...)[/]")
-                .AddChoices(courseService.GetAllCourses())
+                .AddChoices(courseService.GetAllCourses().Value)
                 .UseConverter(x => x.Name)
         );
 
-        var course = courseService.GetCourseById(courseSelected.Id);
+        var course = courseService.GetCourseById(courseSelected.Id).Value;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{course.Name}[/]):")

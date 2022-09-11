@@ -25,7 +25,7 @@ public class DeleteCoursesAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a course, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(courseService.GetAllCourses())
+                .AddChoices(courseService.GetAllCourses().Value)
                 .UseConverter(x => x.Name)
         );
 
