@@ -49,9 +49,18 @@ public class AddBookAction : Action
             CreatedOn = DateTime.Now
         };
 
-        materialService.AddBook(material, authors);
-
-        AnsiConsole.Write(new Markup($"Successfully added new Book with ID [bold yellow]{material.Id}[/]\n"));
+        var result = materialService.AddBook(material, authors);
+        if (result.IsSuccess)
+        {
+            AnsiConsole.Write(new Markup($"Successfully added new Book with ID [bold yellow]{material.Id}[/]\n"));
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                AnsiConsole.Write(error.Message + "\n");
+            }
+        }
 
         WaitForUserInput();
         Back();

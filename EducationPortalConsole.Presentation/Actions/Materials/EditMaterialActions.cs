@@ -23,7 +23,7 @@ public class EditMaterialActions : Action
 
         List<Material> allMaterials = articleService.GetAllArticles()
             .Value
-            .Concat<Material>(bookService.GetAllBooks())
+            .Concat<Material>(bookService.GetAllBooks().Value)
             .Concat(videoService.GetAllVideos()).ToList();
 
         var material = AnsiConsole.Prompt(
@@ -47,7 +47,5 @@ public class EditMaterialActions : Action
             default:
                 throw new ArgumentException("Wrong material type");
         }
-
-        //Back();
     }
 }

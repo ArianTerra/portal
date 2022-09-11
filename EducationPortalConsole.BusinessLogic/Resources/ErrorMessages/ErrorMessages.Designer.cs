@@ -61,15 +61,6 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Article validation error.
-        /// </summary>
-        internal static string ArticleMaterialValidationError {
-            get {
-                return ResourceManager.GetString("ArticleMaterialValidationError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Email not found.
         /// </summary>
         internal static string EmailNotFound {
@@ -88,47 +79,29 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Material id is empty.
+        ///   Looks up a localized string similar to Guid is empty.
         /// </summary>
-        internal static string MaterialGuidEmpty {
+        internal static string GuidEmpty {
             get {
-                return ResourceManager.GetString("MaterialGuidEmpty", resourceCulture);
+                return ResourceManager.GetString("GuidEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Material is null.
+        ///   Looks up a localized string similar to Model is null.
         /// </summary>
-        internal static string MaterialIsNull {
+        internal static string ModelIsNull {
             get {
-                return ResourceManager.GetString("MaterialIsNull", resourceCulture);
+                return ResourceManager.GetString("ModelIsNull", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Material not found.
+        ///   Looks up a localized string similar to Not found.
         /// </summary>
-        internal static string MaterialNotFound {
+        internal static string NotFound {
             get {
-                return ResourceManager.GetString("MaterialNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Skill id is empty.
-        /// </summary>
-        internal static string SkillGuidEmpty {
-            get {
-                return ResourceManager.GetString("SkillGuidEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Skill is null.
-        /// </summary>
-        internal static string SkillIsNull {
-            get {
-                return ResourceManager.GetString("SkillIsNull", resourceCulture);
+                return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
         
@@ -138,24 +111,6 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         internal static string SkillNotFound {
             get {
                 return ResourceManager.GetString("SkillNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Skill validation error.
-        /// </summary>
-        internal static string SkillValidationError {
-            get {
-                return ResourceManager.GetString("SkillValidationError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User is null.
-        /// </summary>
-        internal static string UserIsNull {
-            get {
-                return ResourceManager.GetString("UserIsNull", resourceCulture);
             }
         }
         
@@ -178,11 +133,11 @@ namespace EducationPortalConsole.BusinessLogic.Resources.ErrorMessages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User validation error.
+        ///   Looks up a localized string similar to Validation error.
         /// </summary>
-        internal static string UserValidationError {
+        internal static string ValidationError {
             get {
-                return ResourceManager.GetString("UserValidationError", resourceCulture);
+                return ResourceManager.GetString("ValidationError", resourceCulture);
             }
         }
     }

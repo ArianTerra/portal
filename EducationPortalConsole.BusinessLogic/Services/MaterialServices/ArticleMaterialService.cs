@@ -25,7 +25,7 @@ public class ArticleMaterialService
     {
         if (id == Guid.Empty)
         {
-            return Result.Fail(ErrorMessages.MaterialGuidEmpty);
+            return Result.Fail(ErrorMessages.GuidEmpty);
         }
 
         var result = Result.Try(() =>
@@ -36,7 +36,7 @@ public class ArticleMaterialService
 
         if (result.IsSuccess && result.Value == null)
         {
-            return Result.Fail(ErrorMessages.MaterialNotFound);
+            return Result.Fail(ErrorMessages.NotFound);
         }
 
         return result;
@@ -76,7 +76,7 @@ public class ArticleMaterialService
     {
         if (article == null)
         {
-            return Result.Fail(ErrorMessages.MaterialIsNull);
+            return Result.Fail(ErrorMessages.ModelIsNull);
         }
 
         return Result.Try(() => _repository.Remove(article));
@@ -86,7 +86,7 @@ public class ArticleMaterialService
     {
         if (article == null)
         {
-            return Result.Fail(ErrorMessages.MaterialIsNull);
+            return Result.Fail(ErrorMessages.ModelIsNull);
         }
 
         var validator = new ArticleMaterialValidator();
@@ -97,7 +97,7 @@ public class ArticleMaterialService
         }
         catch (Exception e)
         {
-            return Result.Fail(new Error(ErrorMessages.ArticleMaterialValidationError).CausedBy(e));
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(e));
         }
 
         return Result.Ok();

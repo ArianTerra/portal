@@ -25,7 +25,7 @@ public class SkillService
     {
         if (id == Guid.Empty)
         {
-            return Result.Fail(ErrorMessages.SkillGuidEmpty);
+            return Result.Fail(ErrorMessages.GuidEmpty);
         }
 
         var result = Result.Try(() =>
@@ -79,7 +79,7 @@ public class SkillService
     {
         if (skills == null || !skills.Any())
         {
-            return Result.Fail(ErrorMessages.SkillIsNull);
+            return Result.Fail(ErrorMessages.ModelIsNull);
         }
 
         return Result.Try(() => _repository.RemoveRange(skills));
@@ -89,7 +89,7 @@ public class SkillService
     {
         if (skill == null)
         {
-            return Result.Fail(ErrorMessages.SkillIsNull);
+            return Result.Fail(ErrorMessages.ModelIsNull);
         }
 
         var validator = new SkillValidator();
@@ -100,7 +100,7 @@ public class SkillService
         }
         catch (ValidationException e)
         {
-            return Result.Fail(new Error(ErrorMessages.SkillValidationError).CausedBy(e));
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(e));
         }
 
         return Result.Ok();

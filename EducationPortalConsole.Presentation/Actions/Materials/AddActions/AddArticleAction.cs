@@ -38,9 +38,19 @@ public class AddArticleAction : Action
             CreatedOn = DateTime.Now
         };
 
-        materialService.AddArticle(material);
+        var result = materialService.AddArticle(material);
 
-        AnsiConsole.Write(new Markup($"Successfully added new Article with ID [bold yellow]{material.Id}[/]\n"));
+        if (result.IsSuccess)
+        {
+            AnsiConsole.Write(new Markup($"Successfully added new Article with ID [bold yellow]{material.Id}[/]\n"));
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                AnsiConsole.Write(error.Message + "\n");
+            }
+        }
 
         WaitForUserInput();
         Back();

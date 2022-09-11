@@ -39,11 +39,6 @@ public class UserService
 
     public Result AddUser(User user)
     {
-        if (user == null)
-        {
-            return Result.Fail(ErrorMessages.UserIsNull);
-        }
-
         var result = ValidateUser(user);
 
         return result.IsSuccess
@@ -53,11 +48,6 @@ public class UserService
 
     public Result UpdateUser(User user)
     {
-        if (user == null)
-        {
-            return Result.Fail(new Error(ErrorMessages.UserIsNull));
-        }
-
         var result = ValidateUser(user);
 
         return result.IsSuccess
@@ -69,7 +59,7 @@ public class UserService
     {
         if (user == null)
         {
-            return Result.Fail(new Error(ErrorMessages.UserIsNull));
+            return Result.Fail(new Error(ErrorMessages.ModelIsNull));
         }
 
         return Result.Try(() => _repository.Remove(user));
@@ -85,7 +75,7 @@ public class UserService
         }
         catch (ValidationException e)
         {
-            return Result.Fail(new Error(ErrorMessages.UserValidationError).CausedBy(e));
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(e));
         }
 
         return Result.Ok();
@@ -93,6 +83,11 @@ public class UserService
 
     private Result ValidateUser(User user)
     {
+        if (user == null)
+        {
+            return Result.Fail(new Error(ErrorMessages.ModelIsNull));
+        }
+
         var validationResult = ValidateUserFields(user);
         var nameResult = GetUserByName(user.Name).IsFailed
             ? Result.Ok()
