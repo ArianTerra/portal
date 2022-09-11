@@ -41,7 +41,7 @@ public class BookMaterialService
                 x => x.UpdatedBy,
                 x => x.BookAuthorBookMaterial));
 
-        if (result.Value == null)
+        if (result.IsSuccess && result.Value == null)
         {
             return Result.Fail(ErrorMessages.NotFound);
         }
@@ -140,7 +140,7 @@ public class BookMaterialService
         }
         catch (ValidationException ex)
         {
-            return Result.Fail(new Error(ErrorMessages.ValidationError));
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(ex));
         }
 
         return Result.Ok();
