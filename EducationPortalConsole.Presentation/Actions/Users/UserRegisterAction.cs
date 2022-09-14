@@ -21,14 +21,14 @@ public class UserRegisterAction : Action
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]name[/]:")
                 .Validate(x =>
-                    userService.GetUserByName(x) == null
+                    userService.GetUserByName(x).IsFailed
                         ? ValidationResult.Success()
                         : ValidationResult.Error("This name is taken!")));
 
         var email = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]email[/]:")
                 .Validate(x =>
-                    userService.GetUserByEmail(x) == null
+                    userService.GetUserByEmail(x).IsFailed
                         ? ValidationResult.Success()
                         : ValidationResult.Error("This email is taken!")));
 
