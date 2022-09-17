@@ -4,11 +4,11 @@ namespace EducationPortalConsole.DataAccess.Repositories;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
-    TEntity? FindFirst(Expression<Func<TEntity, bool>> expression,
+    TEntity? FindFirst(Expression<Func<TEntity, bool>>? expression = null,
         bool tracking = false,
         params Expression<Func<TEntity, object>>[] includeParams);
 
-    IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> expression,
+    IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>>? expression = null,
         bool tracking = false,
         params Expression<Func<TEntity, object>>[] includeParams);
 
@@ -18,9 +18,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     void Update(TEntity entity);
 
-    bool Remove(TEntity entity);
+    void Remove(TEntity entity);
 
     void RemoveRange(IEnumerable<TEntity> entities);
-
-    public bool Exists(TEntity entity);
 }

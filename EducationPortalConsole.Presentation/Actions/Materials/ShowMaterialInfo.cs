@@ -20,9 +20,9 @@ public class ShowMaterialInfo : Action
         var bookService = Configuration.Instance.BookMaterialService;
         var videoService = Configuration.Instance.VideoMaterialService;
 
-        List<Material> allMaterials = articleService.GetAllArticles()
-            .Concat<Material>(bookService.GetAllBooks())
-            .Concat(videoService.GetAllVideos()).ToList();
+        List<Material> allMaterials = articleService.GetAllArticles().Value
+            .Concat<Material>(bookService.GetAllBooks().Value)
+            .Concat(videoService.GetAllVideos().Value).ToList();
 
         if (allMaterials.Any())
         {

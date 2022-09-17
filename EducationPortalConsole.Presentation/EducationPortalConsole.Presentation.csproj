@@ -14,15 +14,16 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentResults" Version="3.11.0" />
       <PackageReference Include="Nix.StyleCop.Analyzers" Version="2.0.4">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Spectre.Console" Version="0.44.1-preview.0.29" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Extensions" />
+      <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

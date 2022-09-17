@@ -11,6 +11,7 @@ public class CoursesActions : MenuAction
         {
             new AddCourseAction(),
             new ShowCoursesAction(),
+            new ShowCourseInfo(),
             new EditCourseAction(),
             new DeleteCoursesAction(),
             new BackAction()

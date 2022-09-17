@@ -1,7 +1,11 @@
-﻿using EducationPortalConsole.BusinessLogic.Comparers;
+﻿using EducationPortalConsole.BusinessLogic.Resources.ErrorMessages;
+using EducationPortalConsole.BusinessLogic.Utils.Comparers;
+using EducationPortalConsole.BusinessLogic.Validators.FluentValidation;
 using EducationPortalConsole.Core.Entities.JoinEntities;
 using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentResults;
+using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 
@@ -16,58 +20,129 @@ public class BookMaterialService
         _repositoryLinks = new GenericRepository<BookAuthorBookMaterial>();
     }
 
-    public BookMaterial? GetBookById(Guid id)
+    public BookMaterialService(GenericRepository<BookMaterial> repository, GenericRepository<BookAuthorBookMaterial> links)
     {
-        return _repository.FindFirst(x => x.Id == id,
-            false,
-            x => x.CreatedBy,
-            x => x.UpdatedBy,
-            x => x.BookAuthorBookMaterial);
+        _repository = repository;
+        _repositoryLinks = links;
     }
 
-    public IEnumerable<BookMaterial> GetAllBooks()
+    public Result<BookMaterial> GetBookById(Guid id)
     {
-        return _repository.FindAll(
+        if (id == Guid.Empty)
+        {
+            return Result.Fail(ErrorMessages.GuidEmpty);
+        }
+
+        var result = Result.Try(() =>
+            _repository.FindFirst(
+                x => x.Id == id,
+                true,
+                x => x.CreatedBy,
+                x => x.UpdatedBy,
+                x => x.BookAuthorBookMaterial));
+
+        if (result.IsSuccess && result.Value == null)
+        {
+            return Result.Fail(ErrorMessages.NotFound);
+        }
+
+        return result;
+    }
+
+    public Result<List<BookMaterial>> GetAllBooks()
+    {
+        var result = Result.Try(() =>
+            _repository.FindAll(
             _ => true,
             true,
             x => x.CreatedBy,
             x => x.UpdatedBy,
-            x => x.BookAuthorBookMaterial);
+            x => x.BookAuthorBookMaterial).ToList());
+
+        return result;
     }
 
-    public void AddBook(BookMaterial material, IEnumerable<BookAuthor> authors)
+    public Result AddBook(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
-        _repository.Add(material);
-
-        foreach (var author in authors)
+        var validationResult = ValidateBook(material);
+        if (validationResult.IsFailed)
         {
-            var link = new BookAuthorBookMaterial()
-            {
-                BookMaterialId = material.Id,
-                BookAuthorId = author.Id
-            };
-
-            _repositoryLinks.Add(link);
+            return validationResult;
         }
+
+        var result = Result.Try(() =>
+        {
+            _repository.Add(material);
+
+            foreach (var author in authors)
+            {
+                var link = new BookAuthorBookMaterial()
+                {
+                    BookMaterialId = material.Id,
+                    BookAuthorId = author.Id
+                };
+
+                _repositoryLinks.Add(link);
+            }
+        });
+
+        return result;
     }
 
-    public void UpdateBook(BookMaterial material, IEnumerable<BookAuthor> authors)
+    public Result UpdateBook(BookMaterial material, IEnumerable<BookAuthor> authors)
     {
-        var oldLinks = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id).ToList();
-        var newLinks = authors.Select(author => new BookAuthorBookMaterial { BookMaterialId = material.Id, BookAuthorId = author.Id }).ToList();
+        var validationResult = ValidateBook(material);
+        if (validationResult.IsFailed)
+        {
+            return validationResult;
+        }
 
-        var comparer = new BookAuthorBookMaterialComparer();
-        var linksToDelete = oldLinks.Except(newLinks, comparer).ToList();
-        var linksToAdd = newLinks.Except(oldLinks, comparer).ToList();
+        var result = Result.Try(() =>
+        {
+            var oldLinks = _repositoryLinks.FindAll(x => x.BookMaterialId == material.Id).ToList();
+            var newLinks = authors.Select(author => new BookAuthorBookMaterial { BookMaterialId = material.Id, BookAuthorId = author.Id }).ToList();
 
-        _repositoryLinks.RemoveRange(linksToDelete);
-        _repositoryLinks.AddRange(linksToAdd);
+            var comparer = new BookAuthorBookMaterialComparer();
+            var linksToDelete = oldLinks.Except(newLinks, comparer).ToList();
+            var linksToAdd = newLinks.Except(oldLinks, comparer).ToList();
 
-        _repository.Update(material);
+            _repositoryLinks.RemoveRange(linksToDelete);
+            _repositoryLinks.AddRange(linksToAdd);
+
+            _repository.Update(material);
+        });
+
+        return result;
     }
 
-    public bool DeleteBook(BookMaterial material)
+    public Result DeleteBook(BookMaterial material)
     {
-        return _repository.Remove(material);
+        if (material == null)
+        {
+            return Result.Fail(ErrorMessages.ModelIsNull);
+        }
+
+        return Result.Try(() => _repository.Remove(material));
+    }
+
+    private Result ValidateBook(BookMaterial material)
+    {
+        if (material == null)
+        {
+            return Result.Fail(ErrorMessages.ModelIsNull);
+        }
+
+        var validator = new BookMaterialValidator();
+
+        try
+        {
+            validator.ValidateAndThrow(material);
+        }
+        catch (ValidationException ex)
+        {
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(ex));
+        }
+
+        return Result.Ok();
     }
 }

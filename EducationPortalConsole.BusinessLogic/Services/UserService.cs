@@ -1,9 +1,13 @@
-﻿using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.BusinessLogic.Resources.ErrorMessages;
+using EducationPortalConsole.BusinessLogic.Validators.FluentValidation;
+using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentResults;
+using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class UserService : IUserService
+public class UserService
 {
     private readonly IGenericRepository<User> _repository;
 
@@ -17,33 +21,81 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public User? GetUserById(Guid id)
+    public Result<User> GetUserByName(string name)
     {
-        return _repository.FindFirst(x => x.Id == id);
+        var user = _repository.FindFirst(x => x.Name == name);
+        return user != null
+            ? Result.Ok(user)
+            : Result.Fail(ErrorMessages.UsernameNotFound);
     }
 
-    public User? GetUserByName(string name)
+    public Result<User> GetUserByEmail(string email)
     {
-        return _repository.FindFirst(x => x.Name == name);
+        var user = _repository.FindFirst(x => x.Email == email);
+        return user != null
+            ? Result.Ok(user)
+            : Result.Fail(ErrorMessages.EmailNotFound);
     }
 
-    public IEnumerable<User> GetAllUsers()
+    public Result AddUser(User user)
     {
-        return _repository.FindAll(_ => true);
+        var result = ValidateUser(user);
+
+        return result.IsSuccess
+            ? Result.Try(() => _repository.Add(user))
+            : result;
     }
 
-    public void AddUser(User user)
+    public Result UpdateUser(User user)
     {
-        _repository.Add(user);
+        var result = ValidateUser(user);
+
+        return result.IsSuccess
+            ? Result.Try(() => _repository.Update(user))
+            : result;
     }
 
-    public void UpdateUser(User user)
+    public Result DeleteUser(User user)
     {
-        _repository.Update(user);
+        if (user == null)
+        {
+            return Result.Fail(new Error(ErrorMessages.ModelIsNull));
+        }
+
+        return Result.Try(() => _repository.Remove(user));
     }
 
-    public bool DeleteUser(User user)
+    private static Result ValidateUserFields(User user)
     {
-        return _repository.Remove(user);
+        var validator = new UserValidator();
+
+        try
+        {
+            validator.ValidateAndThrow(user);
+        }
+        catch (ValidationException e)
+        {
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(e));
+        }
+
+        return Result.Ok();
+    }
+
+    private Result ValidateUser(User user)
+    {
+        if (user == null)
+        {
+            return Result.Fail(new Error(ErrorMessages.ModelIsNull));
+        }
+
+        var validationResult = ValidateUserFields(user);
+        var nameResult = GetUserByName(user.Name).IsFailed
+            ? Result.Ok()
+            : Result.Fail(ErrorMessages.UsernameTaken);
+        var emailResult = GetUserByEmail(user.Email).IsFailed
+            ? Result.Ok()
+            : Result.Fail(ErrorMessages.EmailTaken);
+
+        return Result.Merge(validationResult, nameResult, emailResult);
     }
 }

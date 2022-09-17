@@ -1,5 +1,5 @@
-﻿using EducationPortalConsole.BusinessLogic.Helpers.Hasher;
-using EducationPortalConsole.BusinessLogic.Services;
+﻿using EducationPortalConsole.BusinessLogic.Utils.Hasher;
+using EducationPortalConsole.BusinessLogic.Validators;
 using EducationPortalConsole.Core.Entities;
 using Spectre.Console;
 
@@ -16,14 +16,21 @@ public class UserRegisterAction : Action
     {
         base.Run();
 
-        IUserService userService = Configuration.Instance.UserService;
+        var userService = Configuration.Instance.UserService;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter your [green]name[/]:")
                 .Validate(x =>
-                    userService.GetUserByName(x) == null
+                    userService.GetUserByName(x).IsFailed
                         ? ValidationResult.Success()
                         : ValidationResult.Error("This name is taken!")));
+
+        var email = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter your [green]email[/]:")
+                .Validate(x =>
+                    userService.GetUserByEmail(x).IsFailed
+                        ? ValidationResult.Success()
+                        : ValidationResult.Error("This email is taken!")));
 
         var password = AnsiConsole.Prompt(
             new TextPrompt<string>("Enter [green]password[/]:")
@@ -39,14 +46,26 @@ public class UserRegisterAction : Action
         var user = new User()
         {
             Name = name,
+            Email = email,
             PasswordHash = hashSalt.Hash,
             PasswordHashSalt = hashSalt.Salt
         };
 
-        userService.AddUser(user);
+        var result = userService.AddUser(user);
 
-        AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
+        if (result.IsSuccess)
+        {
+            AnsiConsole.Write(new Markup($"Created new user with ID [bold yellow]{user.Id}[/]\n"));
+        }
+        else
+        {
+            AnsiConsole.Write(new Markup($"Could not create new User. Reasons:\n"));
+            foreach (var error in result.Errors)
+            {
+                AnsiConsole.Write(error.Message + "\n");
+            }
+        }
+
         WaitForUserInput();
-        //ActionProvider.GetAction().Run();
     }
 }

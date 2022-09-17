@@ -1,6 +1,6 @@
 ﻿namespace EducationPortalConsole.Core.Entities.Progress;
 
-public class CourseProgress : BaseEntity
+public class CourseProgress
 {
     public Guid CourseId { get; set; }
 

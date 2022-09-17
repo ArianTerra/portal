@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Materials;
@@ -15,7 +14,7 @@ public class DeleteMaterialsAction : Action
     {
         base.Run();
 
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.MaterialService;
 
         var materials = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Material>()

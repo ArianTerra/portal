@@ -21,9 +21,9 @@ public class EditMaterialActions : Action
         var bookService = Configuration.Instance.BookMaterialService;
         var videoService = Configuration.Instance.VideoMaterialService;
 
-        List<Material> allMaterials = articleService.GetAllArticles()
-            .Concat<Material>(bookService.GetAllBooks())
-            .Concat(videoService.GetAllVideos()).ToList();
+        List<Material> allMaterials = articleService.GetAllArticles().Value
+            .Concat<Material>(bookService.GetAllBooks().Value)
+            .Concat(videoService.GetAllVideos().Value).ToList();
 
         var material = AnsiConsole.Prompt(
             new SelectionPrompt<Material>()
@@ -46,7 +46,5 @@ public class EditMaterialActions : Action
             default:
                 throw new ArgumentException("Wrong material type");
         }
-
-        //Back();
     }
 }

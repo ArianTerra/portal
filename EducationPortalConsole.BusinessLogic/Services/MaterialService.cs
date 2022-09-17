@@ -5,7 +5,7 @@ using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class MaterialService : IMaterialService
+public class MaterialService //todo: to be deleted after implementation of ASP.NET layer and MVC
 {
     private readonly IGenericRepository<Material> _repository;
 
@@ -46,13 +46,13 @@ public class MaterialService : IMaterialService
         _repository.Update(material);
     }
 
-    public bool DeleteMaterial(Material material)
+    public void DeleteMaterial(Material material)
     {
         if (material is BookMaterial book)
         {
-            return (new BookMaterialService()).DeleteBook(book);
+            new BookMaterialService().DeleteBook(book);
         }
 
-        return _repository.Remove(material);
+        _repository.Remove(material);
     }
 }

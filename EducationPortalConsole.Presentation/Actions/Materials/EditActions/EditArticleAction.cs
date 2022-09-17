@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -19,7 +18,7 @@ public class EditArticleAction : Action
     public override void Run()
     {
         base.Run();
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var materialService = Configuration.Instance.MaterialService;
 
         var name = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter [green]Name[/] (previous: [yellow]{_articleMaterial.Name}[/]):")

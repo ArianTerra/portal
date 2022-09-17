@@ -4,7 +4,7 @@ using EducationPortalConsole.DataAccess.Repositories;
 
 namespace EducationPortalConsole.BusinessLogic.Services;
 
-public class BookAuthorService : IBookAuthorService
+public class BookAuthorService
 {
     private readonly IGenericRepository<BookAuthor> _repositoryAuthors;
     private readonly IGenericRepository<BookAuthorBookMaterial> _repositoryLinks;
@@ -44,11 +44,11 @@ public class BookAuthorService : IBookAuthorService
         _repositoryAuthors.Update(author);
     }
 
-    public bool DeleteBookAuthor(BookAuthor author)
+    public void DeleteBookAuthor(BookAuthor author)
     {
         var linksToDelete = _repositoryLinks.FindAll(x => x.BookMaterialId == author.Id);
         _repositoryLinks.RemoveRange(linksToDelete);
 
-        return _repositoryAuthors.Remove(author);
+        _repositoryAuthors.Remove(author);
     }
 }

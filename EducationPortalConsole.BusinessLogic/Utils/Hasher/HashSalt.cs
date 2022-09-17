@@ -1,4 +1,4 @@
-﻿namespace EducationPortalConsole.BusinessLogic.Helpers.Hasher;
+﻿namespace EducationPortalConsole.BusinessLogic.Utils.Hasher;
 
 public class HashSalt
 {

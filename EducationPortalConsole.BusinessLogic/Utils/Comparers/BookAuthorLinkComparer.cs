@@ -1,10 +1,10 @@
 ﻿using EducationPortalConsole.Core.Entities.JoinEntities;
 
-namespace EducationPortalConsole.BusinessLogic.Comparers;
+namespace EducationPortalConsole.BusinessLogic.Utils.Comparers;
 
 public class BookAuthorBookMaterialComparer : IEqualityComparer<BookAuthorBookMaterial>
 {
-    public bool Equals(BookAuthorBookMaterial x, BookAuthorBookMaterial y)
+    public bool Equals(BookAuthorBookMaterial? x, BookAuthorBookMaterial? y)
     {
         if (ReferenceEquals(x, y))
         {

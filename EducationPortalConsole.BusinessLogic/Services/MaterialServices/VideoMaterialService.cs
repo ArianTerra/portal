@@ -1,5 +1,9 @@
-﻿using EducationPortalConsole.Core.Entities.Materials;
+﻿using EducationPortalConsole.BusinessLogic.Resources.ErrorMessages;
+using EducationPortalConsole.BusinessLogic.Validators.FluentValidation;
+using EducationPortalConsole.Core.Entities.Materials;
 using EducationPortalConsole.DataAccess.Repositories;
+using FluentResults;
+using FluentValidation;
 
 namespace EducationPortalConsole.BusinessLogic.Services.MaterialServices;
 
@@ -12,35 +16,91 @@ public class VideoMaterialService
         _repository = new GenericRepository<VideoMaterial>();
     }
 
-    public VideoMaterial? GetVideoById(Guid id)
+    public VideoMaterialService(GenericRepository<VideoMaterial> repository)
     {
-        return _repository.FindFirst(x => x.Id == id,
-            false,
-            x => x.CreatedBy,
-            x => x.UpdatedBy);
+        _repository = repository;
     }
 
-    public IEnumerable<VideoMaterial> GetAllVideos()
+    public Result<VideoMaterial> GetVideoById(Guid id)
     {
-        return _repository.FindAll(
+        if (id == Guid.Empty)
+        {
+            return Result.Fail(ErrorMessages.GuidEmpty);
+        }
+
+        var result = Result.Try(() => _repository.FindFirst(x => x.Id == id,
+            false,
+            x => x.CreatedBy,
+            x => x.UpdatedBy));
+
+        if (result.IsSuccess && result.Value == null)
+        {
+            return Result.Fail(ErrorMessages.NotFound);
+        }
+
+        return result;
+    }
+
+    public Result<List<VideoMaterial>> GetAllVideos()
+    {
+        var result = Result.Try(() => _repository.FindAll(
             _ => true,
             true,
             x => x.CreatedBy,
-            x => x.UpdatedBy);
+            x => x.UpdatedBy).ToList());
+
+        return result;
     }
 
-    public void Add(VideoMaterial material)
+    public Result Add(VideoMaterial material)
     {
-        _repository.Add(material);
+        var result = ValidateVideo(material);
+        if (result.IsFailed)
+        {
+            return result;
+        }
+
+        return Result.Try(() => _repository.Add(material));
     }
 
-    public void UpdateVideo(VideoMaterial material)
+    public Result UpdateVideo(VideoMaterial material)
     {
-        _repository.Update(material);
+        var result = ValidateVideo(material);
+        if (result.IsFailed)
+        {
+            return result;
+        }
+
+        return Result.Try(() => _repository.Update(material));
     }
 
-    public bool DeleteVideo(VideoMaterial material)
+    public Result DeleteVideo(VideoMaterial material)
     {
-        return _repository.Remove(material);
+        if (material == null)
+        {
+            return Result.Fail(ErrorMessages.ModelIsNull);
+        }
+
+        return Result.Try(() => _repository.Remove(material));
+    }
+
+    private Result ValidateVideo(VideoMaterial material)
+    {
+        if (material == null)
+        {
+            return Result.Fail(ErrorMessages.ModelIsNull);
+        }
+
+        var validator = new VideoMaterialValidator();
+        try
+        {
+            validator.ValidateAndThrow(material);
+        }
+        catch (ValidationException e)
+        {
+            return Result.Fail(new Error(ErrorMessages.ValidationError).CausedBy(e));
+        }
+
+        return Result.Ok();
     }
 }

@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities;
 using Spectre.Console;
 
 namespace EducationPortalConsole.Presentation.Actions.Courses;
@@ -15,7 +14,7 @@ public class DeleteCoursesAction : Action
     {
         base.Run();
 
-        ICourseService courseService = Configuration.Instance.CourseService;
+        var courseService = Configuration.Instance.CourseService;
 
         var courses = AnsiConsole.Prompt(
             new MultiSelectionPrompt<Course>()
@@ -26,7 +25,7 @@ public class DeleteCoursesAction : Action
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a course, " +
                     "[green]<enter>[/] to accept)[/]")
-                .AddChoices(courseService.GetAllCourses())
+                .AddChoices(courseService.GetAllCourses().Value)
                 .UseConverter(x => x.Name)
         );
 

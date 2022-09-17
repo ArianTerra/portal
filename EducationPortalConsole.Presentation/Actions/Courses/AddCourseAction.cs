@@ -1,5 +1,4 @@
-﻿using EducationPortalConsole.BusinessLogic.Services;
-using EducationPortalConsole.Core.Entities;
+﻿using EducationPortalConsole.Core.Entities;
 using EducationPortalConsole.Presentation.Session;
 using Spectre.Console;
 
@@ -16,8 +15,9 @@ public class AddCourseAction : Action
     {
         base.Run();
 
-        ICourseService courseService = Configuration.Instance.CourseService;
-        IMaterialService materialService = Configuration.Instance.MaterialService;
+        var courseService = Configuration.Instance.CourseService;
+        var materialService = Configuration.Instance.MaterialService;
+        var skillService = Configuration.Instance.SkillService;
 
         var name = AnsiConsole.Ask<string>("Enter course [green]Name[/]:");
 
@@ -25,12 +25,23 @@ public class AddCourseAction : Action
             new MultiSelectionPrompt<Material>()
                 .Title("Add selected [green]materials[/] to course")
                 .NotRequired()
-                .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more materials)[/]")
                 .InstructionsText(
                     "[grey](Press [blue]<space>[/] to toggle a material, " +
                     "[green]<enter>[/] to accept)[/]")
                 .AddChoices(materialService.GetAllMaterials())
+                .UseConverter(x => x.Name)
+        );
+
+        var skills = AnsiConsole.Prompt(
+            new MultiSelectionPrompt<Skill>()
+                .Title("Add selected [green]skills[/] to course")
+                .NotRequired()
+                .MoreChoicesText("[grey](Move up and down to reveal more skills)[/]")
+                .InstructionsText(
+                    "[grey](Press [blue]<space>[/] to toggle a skill, " +
+                    "[green]<enter>[/] to accept)[/]")
+                .AddChoices(skillService.GetAllSkills().Value)
                 .UseConverter(x => x.Name)
         );
 
@@ -41,7 +52,7 @@ public class AddCourseAction : Action
             CreatedOn = DateTime.Now
         };
 
-        courseService.AddCourse(course, materials);
+        courseService.AddCourse(course, materials, skills);
 
         AnsiConsole.Write(new Markup($"Successfully added new Course with ID [bold yellow]{course.Id}[/]\n"));
 
