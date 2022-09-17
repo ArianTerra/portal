@@ -1,0 +1,20 @@
+﻿@model EducationPortal.Presentation.ViewModels.ArticlesViewModel
+@{
+    ViewData["Title"] = "Articles";
+}
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Publish date</th>
+        <th>Source</th>
+    </tr>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.PublishDate</td>
+            <td>@item.Source</td>
+        </tr>
+    }
+</table>
