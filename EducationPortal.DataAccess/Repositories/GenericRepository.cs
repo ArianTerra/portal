@@ -112,15 +112,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
-        if (filter != null)
-        {
-            return await _context.Set<TEntity>().CountAsync(filter);
-        }
-        else
-        {
-            return await _context.Set<TEntity>().CountAsync();
-        }
-
+        return filter != null
+            ? await _context.Set<TEntity>().CountAsync(filter)
+            : await _context.Set<TEntity>().CountAsync();
     }
 
     private async Task SaveAsync()

@@ -1,13 +1,18 @@
-﻿@model EducationPortal.Presentation.ViewModels.ArticlesViewModel
+﻿@model EducationPortal.Presentation.ViewModels.PageViewModel<EducationPortal.BusinessLogic.DTO.ArticleMaterialDto>
 @{
     ViewData["Title"] = "Articles";
 }
+
+<h2>@ViewData["Title"]</h2>
+
+@Html.ActionLink("Add Article", "AddArticle")
 
 <table class="table">
     <tr>
         <th>Name</th>
         <th>Publish date</th>
         <th>Source</th>
+        <th>Actions</th>
     </tr>
     @foreach (var item in Model.Items)
     {
@@ -15,6 +20,11 @@
             <td>@item.Name</td>
             <td>@item.PublishDate</td>
             <td>@item.Source</td>
+            <td>
+                @Html.ActionLink("Details", "ArticleDetails", new {id = item.Id}) |
+                @Html.ActionLink("Edit", "EditArticle", new {id = item.Id}) |
+                @Html.ActionLink("Delete", "DeleteArticle", new {id = item.Id})
+            </td>
         </tr>
     }
 </table>

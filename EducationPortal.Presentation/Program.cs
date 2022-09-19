@@ -1,27 +1,19 @@
-using EducationPortal.BusinessLogic.Services.Interfaces;
-using EducationPortal.BusinessLogic.Services.MaterialServices;
 using EducationPortal.DataAccess.DataContext;
-using EducationPortal.DataAccess.Repositories;
 using EducationPortal.Presentation;
 using Microsoft.EntityFrameworkCore;
-using Task1.DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddDbContext<DatabaseContext>(
-        options => options.UseSqlServer(
-            builder.Configuration.GetConnectionString("Default")
-        ),
-        ServiceLifetime.Transient
-    );
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("Default")
+    ),
+    ServiceLifetime.Transient);
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<IArticleMaterialService, ArticleMaterialService>();
-//builder.Services.AddCustomServices();
-builder.Services.AddAutoMapper(typeof(EducationPortal.BusinessLogic.MappingProfile));
+builder.Services.AddCustomServices();
 
 var app = builder.Build();
 

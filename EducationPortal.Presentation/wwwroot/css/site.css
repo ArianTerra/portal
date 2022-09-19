@@ -16,3 +16,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.input-validation-error {
+  border: red solid 1px;
+}
+
+.field-validation-error {
+  color: red;
+  font-size: smaller;
+}
