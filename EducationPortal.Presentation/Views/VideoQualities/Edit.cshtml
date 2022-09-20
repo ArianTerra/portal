@@ -1,0 +1,21 @@
+﻿@model EducationPortal.BusinessLogic.DTO.VideoQualityDto
+@{
+    ViewData["Title"] = "Edit Article";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" asp-controller="VideoQualities" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Submit"/>
+</form>
+
+<h3>Actions</h3>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+
+

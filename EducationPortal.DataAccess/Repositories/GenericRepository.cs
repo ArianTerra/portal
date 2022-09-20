@@ -1,7 +1,5 @@
 ﻿using System.Linq.Expressions;
-using EducationPortal.DataAccess.DataContext;
 using Microsoft.EntityFrameworkCore;
-using Task1.DataAccess.Repository;
 
 namespace EducationPortal.DataAccess.Repositories;
 
@@ -34,9 +32,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             }
         }
 
-        return filter == null ?
-           await query.FirstOrDefaultAsync() :
-           await query.FirstOrDefaultAsync(filter);
+        return filter == null
+            ? await query.FirstOrDefaultAsync()
+            : await query.FirstOrDefaultAsync(filter);
     }
 
     public IQueryable<TEntity> FindAll(

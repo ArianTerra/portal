@@ -1,6 +1,6 @@
 ﻿using EducationPortal.DataAccess.DomainModels.JoinEntities;
 
-namespace EducationPortal.DataAccess.DomainModels;
+namespace EducationPortal.DataAccess.DomainModels.AdditionalModels;
 
 public class BookAuthor : AuditedEntity
 {

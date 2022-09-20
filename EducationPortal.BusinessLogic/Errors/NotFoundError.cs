@@ -6,6 +6,6 @@ public class NotFoundError : Error
 {
     public NotFoundError(Guid id) : base($"Item with ID {id} not found in the database")
     {
-        Metadata.Add("ErrorCode", 404);
+        Metadata.Add("ErrorCode", ErrorCode.NotFound);
     }
 }

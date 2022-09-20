@@ -1,4 +1,5 @@
-﻿using EducationPortal.DataAccess.DomainModels.Materials;
+﻿using EducationPortal.DataAccess.DomainModels.AdditionalModels;
+using EducationPortal.DataAccess.DomainModels.Materials;
 
 namespace EducationPortal.DataAccess.DomainModels.JoinEntities;
 

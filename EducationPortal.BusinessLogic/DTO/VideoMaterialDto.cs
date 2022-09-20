@@ -2,11 +2,11 @@
 
 namespace EducationPortal.BusinessLogic.DTO;
 
-public class ArticleMaterialDto : AuditedDto
+public class VideoMaterialDto : AuditedDto
 {
     public string Name { get; set; }
 
-    public DateTime PublishDate { get; set; }
+    public TimeSpan Duration { get; set; }
 
-    public string Source { get; set; }
+    public VideoQualityDto Quality { get; set; }
 }

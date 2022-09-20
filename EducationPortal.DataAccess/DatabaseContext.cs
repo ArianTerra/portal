@@ -1,10 +1,11 @@
 ﻿using EducationPortal.DataAccess.DomainModels;
+using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.JoinEntities;
 using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.DomainModels.Progress;
 using Microsoft.EntityFrameworkCore;
 
-namespace EducationPortal.DataAccess.DataContext;
+namespace EducationPortal.DataAccess;
 
 public class DatabaseContext : DbContext
 {
@@ -33,6 +34,8 @@ public class DatabaseContext : DbContext
     public DbSet<CourseMaterial> CourseMaterial { get; set; }
 
     public DbSet<CourseSkill> CourseSkill { get; set; }
+
+    public DbSet<VideoQuality> VideoQualities { get; set; }
 
     public DatabaseContext(DbContextOptions options) : base(options) {}
 

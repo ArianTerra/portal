@@ -1,4 +1,4 @@
-using EducationPortal.DataAccess.DataContext;
+using EducationPortal.DataAccess;
 using EducationPortal.Presentation;
 using Microsoft.EntityFrameworkCore;
 

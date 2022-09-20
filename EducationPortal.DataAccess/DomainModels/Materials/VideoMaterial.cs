@@ -1,8 +1,11 @@
-﻿namespace EducationPortal.DataAccess.DomainModels.Materials;
+﻿using EducationPortal.DataAccess.DomainModels.AdditionalModels;
+
+namespace EducationPortal.DataAccess.DomainModels.Materials;
 
 public class VideoMaterial : Material
 {
     public TimeSpan Duration { get; set; }
 
-    public string Quality { get; set; } //TODO maybe change it to Enum
+    public Guid QualityId { get; set; }
+    public VideoQuality Quality { get; set; }
 }

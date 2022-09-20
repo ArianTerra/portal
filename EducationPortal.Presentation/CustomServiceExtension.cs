@@ -1,10 +1,11 @@
-﻿using EducationPortal.BusinessLogic.Services.Interfaces;
-using EducationPortal.BusinessLogic.Services.MaterialServices;
+﻿using EducationPortal.BusinessLogic.Services;
+using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.BusinessLogic.Validators.FluentValidation;
+using EducationPortal.DataAccess.DomainModels;
+using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.Repositories;
 using FluentValidation;
-using Task1.DataAccess.Repository;
 
 namespace EducationPortal.Presentation;
 
@@ -15,7 +16,16 @@ public static class CustomServiceExtension
         services.AddAutoMapper(typeof(BusinessLogic.MappingProfile));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        //materials
         services.AddScoped<IValidator<ArticleMaterial>, ArticleMaterialValidator>();
         services.AddScoped<IArticleMaterialService, ArticleMaterialService>();
+
+        services.AddScoped<IValidator<VideoMaterial>, VideoMaterialValidator>();
+        services.AddScoped<IVideoMaterialService, VideoMaterialService>();
+
+        //additional entities
+        services.AddScoped<IValidator<VideoQuality>, VideoQualityValidator>();
+        services.AddScoped<IVideoQualityService, VideoQualityService>();
     }
 }

@@ -1,18 +1,16 @@
-﻿@model EducationPortal.Presentation.ViewModels.PageViewModel<EducationPortal.BusinessLogic.DTO.ArticleMaterialDto>
+﻿@model EducationPortal.Presentation.ViewModels.PageViewModel<EducationPortal.BusinessLogic.DTO.VideoQualityDto>
 @{
-    ViewData["Title"] = "Articles";
+    ViewData["Title"] = "Video Qualities";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-@Html.ActionLink("Add Article", "Add")
+@Html.ActionLink("Add Video Quality", "Add")
 
 <table class="table">
     <tr>
         <th>No.</th>
         <th>Name</th>
-        <th>Publish date</th>
-        <th>Source</th>
         <th>Actions</th>
     </tr>
     @for(int i = 0; i < Model.Items.Count; i++)
@@ -23,8 +21,6 @@
             }
             <td>@no</td>
             <td>@Model.Items[i].Name</td>
-            <td>@Model.Items[i].PublishDate</td>
-            <td>@Model.Items[i].Source</td>
             <td>
                 @Html.ActionLink("Details", "Details", new { id = @Model.Items[i].Id }) |
                 @Html.ActionLink("Edit", "Edit", new { id = @Model.Items[i].Id }) |
@@ -38,7 +34,7 @@
     @for (int i = 1; i <= Model.PageCount; i++)
     {
         <li class="@(i == Model.Page ? "page-item active" : "page-item")">
-            <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize})">@i</a>
+            <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize })">@i</a>
         </li>
     }
 </ul>

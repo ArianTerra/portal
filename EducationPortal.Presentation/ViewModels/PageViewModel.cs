@@ -2,7 +2,7 @@
 
 public class PageViewModel<T>
 {
-    public IEnumerable<T> Items { get; set; }
+    public IList<T> Items { get; set; }
 
     public int Page { get; set; }
 

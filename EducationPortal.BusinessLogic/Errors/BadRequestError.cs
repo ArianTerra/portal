@@ -6,6 +6,6 @@ public class BadRequestError : Error
 {
     public BadRequestError(string message) : base(message)
     {
-        Metadata.Add("ErrorCode", 400);
+        Metadata.Add("ErrorCode", ErrorCode.BadRequest);
     }
 }

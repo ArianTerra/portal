@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Task1.DataAccess.Repository;
+namespace EducationPortal.DataAccess.Repositories;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {

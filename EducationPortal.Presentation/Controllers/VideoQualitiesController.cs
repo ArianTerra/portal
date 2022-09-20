@@ -3,24 +3,24 @@ using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.Presentation.ViewModels;
-using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EducationPortal.Presentation.Controllers;
 
-public class ArticlesController : Controller
+public class VideoQualitiesController : Controller
 {
-    private readonly IArticleMaterialService _articleMaterialService;
+    private readonly IVideoQualityService _videoQualityService;
 
-    public ArticlesController(IArticleMaterialService articleMaterialService)
+    public VideoQualitiesController(IVideoQualityService videoQualityService)
     {
-        _articleMaterialService = articleMaterialService;
+        _videoQualityService = videoQualityService;
     }
 
     public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
     {
-        var result = await _articleMaterialService.GetArticlesPageAsync(page, pageSize);
-        var itemsCountResult = await _articleMaterialService.GetArticlesCountAsync();
+        var result = await _videoQualityService.GetVideoQualityPageAsync(page, pageSize);
+        var itemsCountResult = await _videoQualityService.GetVideoQualitiesCountAsync();
 
         if (result.IsFailed)
         {
@@ -33,12 +33,12 @@ public class ArticlesController : Controller
         }
 
         var pageCount = (int)Math.Ceiling((double)itemsCountResult.Value / pageSize);
-        if (pageCount <= 0)
+        if (pageCount == 0)
         {
             pageCount = 1;
         }
 
-        var viewModel = new PageViewModel<ArticleMaterialDto>()
+        var viewModel = new PageViewModel<VideoQualityDto>()
         {
             Items = result.Value.ToList(),
             Page = page,
@@ -51,7 +51,7 @@ public class ArticlesController : Controller
 
     public async Task<IActionResult> Details(Guid id)
     {
-        var result = await _articleMaterialService.GetArticleByIdAsync(id);
+        var result = await _videoQualityService.GetVideoQualityByIdAsync(id);
 
         if (result.IsFailed)
         {
@@ -67,9 +67,9 @@ public class ArticlesController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(ArticleMaterialDto dto)
+    public async Task<IActionResult> Add(VideoQualityDto dto)
     {
-        var result = await _articleMaterialService.AddArticleAsync(dto);
+        var result = await _videoQualityService.AddVideoQualityAsync(dto);
 
         if (result.IsFailed)
         {
@@ -88,7 +88,7 @@ public class ArticlesController : Controller
 
     public async Task<IActionResult> Edit(Guid id)
     {
-        var result = await _articleMaterialService.GetArticleByIdAsync(id);
+        var result = await _videoQualityService.GetVideoQualityByIdAsync(id);
 
         if (result.IsFailed)
         {
@@ -99,9 +99,9 @@ public class ArticlesController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(ArticleMaterialDto dto)
+    public async Task<IActionResult> Edit(VideoQualityDto dto)
     {
-        var result = await _articleMaterialService.UpdateArticleAsync(dto);
+        var result = await _videoQualityService.UpdateVideoQualityAsync(dto);
 
         if (result.IsFailed)
         {
@@ -120,13 +120,13 @@ public class ArticlesController : Controller
 
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _articleMaterialService.DeleteArticleByIdAsync(id);
+        var result = await _videoQualityService.DeleteVideoQualityByIdAsync(id);
 
         if (result.IsFailed)
         {
             return StatusCode(result.GetErrorCode());
         }
 
-        return RedirectToAction("Index");
+        return Redirect(Request.Headers["Referer"].ToString());
     }
 }

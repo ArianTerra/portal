@@ -12,44 +12,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EducationPortal.BusinessLogic.Services;
 
-public class ArticleMaterialService : IArticleMaterialService
+public class VideoMaterialService : IVideoMaterialService
 {
-    private readonly IGenericRepository<ArticleMaterial> _repository;
+    private readonly IGenericRepository<VideoMaterial> _repository;
 
     private readonly IMapper _mapper;
 
-    private readonly IValidator<ArticleMaterial> _validator;
+    private readonly IValidator<VideoMaterial> _validator;
 
-    public ArticleMaterialService(IGenericRepository<ArticleMaterial> repository, IMapper mapper, IValidator<ArticleMaterial> validator)
+    public VideoMaterialService(IGenericRepository<VideoMaterial> repository, IMapper mapper, IValidator<VideoMaterial> validator)
     {
         _repository = repository;
         _mapper = mapper;
         _validator = validator;
     }
 
-    public async Task<Result<ArticleMaterialDto>> GetArticleByIdAsync(Guid id)
+    public async Task<Result<VideoMaterialDto>> GetVideoByIdAsync(Guid id)
     {
-        var article = await _repository.FindFirstAsync(
-                filter: x => x.Id == id,
-                tracking: true,
-                includes: new Expression<Func<ArticleMaterial, object>>[]
-                {
-                    x => x.CreatedBy,
-                    x => x.UpdatedBy
-                }
+        var video = await _repository.FindFirstAsync(
+            filter: x => x.Id == id,
+            tracking: true,
+            includes: new Expression<Func<VideoMaterial, object>>[]
+            {
+                x => x.CreatedBy,
+                x => x.UpdatedBy,
+                x => x.Quality
+            }
         );
 
-        if (article == null)
+        if (video == null)
         {
             return Result.Fail(new NotFoundError(id));
         }
 
-        var articleDto = _mapper.Map<ArticleMaterialDto>(article);
+        var videoDto = _mapper.Map<VideoMaterialDto>(video);
 
-        return Result.Ok(articleDto);
+        return Result.Ok(videoDto);
     }
 
-    public async Task<Result<IEnumerable<ArticleMaterialDto>>> GetArticlesPageAsync(int page, int pageSize)
+    public async Task<Result<IEnumerable<VideoMaterialDto>>> GetVideosPageAsync(int page, int pageSize)
     {
         int itemsCount = await _repository.CountAsync();
         int pagesCount = (int)Math.Ceiling((double)itemsCount / pageSize);
@@ -69,39 +70,40 @@ public class ArticleMaterialService : IArticleMaterialService
             return Result.Fail(new BadRequestError("Page does not exist"));
         }
 
-        var articlePage = await _repository.FindAll(
+        var videoPage = await _repository.FindAll(
             page: page,
             pageSize: pageSize,
-            includes: new Expression<Func<ArticleMaterial, object>>[]
+            includes: new Expression<Func<VideoMaterial, object>>[]
             {
                 x => x.CreatedBy,
-                x => x.UpdatedBy
+                x => x.UpdatedBy,
+                x => x.Quality
             }
         ).ToListAsync();
 
-        var mapped = _mapper.Map<List<ArticleMaterial>, IEnumerable<ArticleMaterialDto>>(articlePage);
+        var mapped = _mapper.Map<List<VideoMaterial>, IEnumerable<VideoMaterialDto>>(videoPage);
 
         return Result.Ok(mapped);
     }
 
-    public async Task<Result<int>> GetArticlesCountAsync()
+    public async Task<Result<int>> GetVideosCountAsync()
     {
         return await _repository.CountAsync();
     }
 
-    public async Task<Result<Guid>> AddArticleAsync(ArticleMaterialDto dto)
+    public async Task<Result<Guid>> AddVideoAsync(VideoMaterialDto dto)
     {
         if (dto == null)
         {
-            return Result.Fail(new BadRequestError($"{nameof(ArticleMaterialDto)} is null"));
+            return Result.Fail(new BadRequestError($"{nameof(VideoMaterialDto)} is null"));
         }
 
-        var mapped = _mapper.Map<ArticleMaterial>(dto);
+        var mapped = _mapper.Map<VideoMaterial>(dto);
 
         if (mapped.Id != Guid.Empty &&
             await _repository.FindFirstAsync(x => x.Id == mapped.Id) != null)
         {
-            return Result.Fail(new BadRequestError($"Article with Id {mapped.Id} already exist in database"));
+            return Result.Fail(new BadRequestError($"Video with Id {mapped.Id} already exist in database"));
         }
 
         var validationResult = await _validator.ValidateAsync(mapped);
@@ -122,20 +124,20 @@ public class ArticleMaterialService : IArticleMaterialService
         return Result.Ok(mapped.Id);
     }
 
-    public async Task<Result> UpdateArticleAsync(ArticleMaterialDto dto)
+    public async Task<Result> UpdateVideoAsync(VideoMaterialDto dto)
     {
-        var article = await _repository.FindFirstAsync(x => x.Id == dto.Id);
+        var video = await _repository.FindFirstAsync(x => x.Id == dto.Id);
 
-        if (article == null)
+        if (video == null)
         {
             return Result.Fail(new NotFoundError(dto.Id));
         }
 
-        var mapped = _mapper.Map<ArticleMaterial>(dto);
+        var mapped = _mapper.Map<VideoMaterial>(dto);
 
         var validationResult = await _validator.ValidateAsync(mapped);
 
-        if (article.Name != mapped.Name &&
+        if (video.Name != mapped.Name &&
             await _repository.FindFirstAsync(x => x.Name == mapped.Name) != null)
         {
             validationResult.Errors.Add(
@@ -152,16 +154,16 @@ public class ArticleMaterialService : IArticleMaterialService
         return Result.Ok();
     }
 
-    public async Task<Result> DeleteArticleByIdAsync(Guid id)
+    public async Task<Result> DeleteVideoByIdAsync(Guid id)
     {
-        var article = await _repository.FindFirstAsync(x => x.Id == id);
+        var video = await _repository.FindFirstAsync(x => x.Id == id);
 
-        if (article == null)
+        if (video == null)
         {
             return Result.Fail(new NotFoundError(id));
         }
 
-        await _repository.RemoveAsync(article);
+        await _repository.RemoveAsync(video);
 
         return Result.Ok();
     }
