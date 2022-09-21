@@ -1,16 +1,17 @@
-﻿@model EducationPortal.BusinessLogic.DTO.VideoQualityDto
+﻿@model EducationPortal.BusinessLogic.DTO.BookAuthorDto
 @{
-    ViewData["Title"] = "Edit Video Quality";
+    ViewData["Title"] = "Create Book Author";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Edit" asp-controller="VideoQualities" method="post">
+<form asp-action="Add" asp-controller="BookAuthors" method="post">
     <div class="form-group">
         <label asp-for="Name">Name</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name"></span>
     </div>
+    <br>
     <input type="submit" class="btn btn-primary" value="Submit"/>
 </form>
 

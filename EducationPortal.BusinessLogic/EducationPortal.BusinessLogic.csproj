@@ -39,13 +39,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
-    <Compile Remove="Services\MaterialServices\BookMaterialService.cs" />
-    <Compile Remove="Services\MaterialServices\VideoMaterialService.cs" />
-    <Compile Remove="Services\BookAuthorService.cs" />
-    <Compile Remove="Services\CourseProgressService.cs" />
-    <Compile Remove="Services\CourseService.cs" />
-    <Compile Remove="Services\SkillService.cs" />
-    <Compile Remove="Services\UserService.cs" />
   </ItemGroup>
 
 </Project>

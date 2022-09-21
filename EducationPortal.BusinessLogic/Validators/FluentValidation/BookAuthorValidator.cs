@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace EducationPortal.BusinessLogic.Validators.FluentValidation;
 
-public class VideoQualityValidator : AbstractValidator<VideoQuality>
+public class BookAuthorValidator : AbstractValidator<BookAuthor>
 {
-    public VideoQualityValidator()
+    public BookAuthorValidator()
     {
         RuleFor(x => x.Name).NotEmpty();
     }

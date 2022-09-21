@@ -22,5 +22,8 @@ public class MappingProfile : Profile
         CreateMap<VideoMaterialDto, VideoMaterial>()
             .ForMember(dest => dest.QualityId, opt => opt.MapFrom(src => src.Quality.Id))
             .ForMember(dest => dest.Quality, opt => opt.Ignore());
+
+        CreateMap<BookAuthor, BookAuthorDto>();
+        CreateMap<BookAuthorDto, BookAuthor>();
     }
 }

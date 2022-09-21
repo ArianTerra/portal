@@ -1,5 +1,4 @@
-﻿using EducationPortal.BusinessLogic.DTO;
-using EducationPortal.DataAccess.DomainModels.Materials;
+﻿using EducationPortal.DataAccess.DomainModels.Materials;
 using FluentValidation;
 
 namespace EducationPortal.BusinessLogic.Validators.FluentValidation;
