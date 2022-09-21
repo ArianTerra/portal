@@ -24,6 +24,9 @@ public static class CustomServiceExtension
         services.AddScoped<IValidator<VideoMaterial>, VideoMaterialValidator>();
         services.AddScoped<IVideoMaterialService, VideoMaterialService>();
 
+        services.AddScoped<IValidator<BookMaterial>, BookMaterialValidator>();
+        services.AddScoped<IBookMaterialService, BookMaterialService>();
+
         //additional entities
         services.AddScoped<IValidator<VideoQuality>, VideoQualityValidator>();
         services.AddScoped<IVideoQualityService, VideoQualityService>();

@@ -9,6 +9,8 @@ public interface IBookAuthorService
 
     Task<Result<IEnumerable<BookAuthorDto>>> GetBookAuthorsPageAsync(int page, int pageSize);
 
+    Task<Result<IEnumerable<BookAuthorDto>>> GetAllBookAuthorsAsync();
+
     Task<Result<int>> GetBookAuthorCountAsync();
 
     Task<Result<Guid>> AddBookAuthorAsync(BookAuthorDto dto);

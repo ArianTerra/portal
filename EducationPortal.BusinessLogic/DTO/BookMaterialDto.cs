@@ -10,5 +10,5 @@ public class BookMaterialDto : AuditedDto
 
     public int Year { get; set; }
 
-    public BookFormatDto Format { get; set; }
+    public BookFormatDto BookFormat { get; set; }
 }

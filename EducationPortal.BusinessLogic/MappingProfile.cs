@@ -28,5 +28,10 @@ public class MappingProfile : Profile
 
         CreateMap<BookFormat, BookFormatDto>();
         CreateMap<BookFormatDto, BookFormat>();
+
+        CreateMap<BookMaterial, BookMaterialDto>();
+        CreateMap<BookMaterialDto, BookMaterial>()
+            .ForMember(dest => dest.BookFormatId, opt => opt.MapFrom(src => src.BookFormat.Id))
+            .ForMember(dest => dest.BookFormat, opt => opt.Ignore());
     }
 }

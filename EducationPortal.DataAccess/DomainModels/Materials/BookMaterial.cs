@@ -11,5 +11,7 @@ public class BookMaterial : Material
 
     public int Year { get; set; }
 
+    public Guid BookFormatId { get; set; }
+
     public BookFormat BookFormat { get; set; }
 }

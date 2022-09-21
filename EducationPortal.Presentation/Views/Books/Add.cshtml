@@ -1,0 +1,28 @@
+﻿@model EducationPortal.Presentation.ViewModels.BookViewModel
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Add" asp-controller="Books" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="Pages">Pages</label>
+        <input asp-for="Pages" type="number" class="form-control"/>
+        <span asp-validation-for="Pages"></span>
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="Format">Format</label>
+        @Html.DropDownListFor(m => m.Format, new SelectList(Model.AvailableFormats), new {@class = "form-select"})
+        <span asp-validation-for="Format"></span>
+    </div>
+    <br>
+    <input type="submit" class="btn btn-primary" value="Submit"/>
+</form>

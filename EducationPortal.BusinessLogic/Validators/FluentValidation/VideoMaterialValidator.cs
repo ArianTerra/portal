@@ -8,5 +8,6 @@ public class VideoMaterialValidator : AbstractValidator<VideoMaterial>
     public VideoMaterialValidator()
     {
         RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Duration).GreaterThan(TimeSpan.Zero);
     }
 }

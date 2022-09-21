@@ -84,6 +84,15 @@ public class BookAuthorService : IBookAuthorService
         return Result.Ok(mapped);
     }
 
+    public async Task<Result<IEnumerable<BookAuthorDto>>> GetAllBookAuthorsAsync()
+    {
+        var authorPage = await _repository.FindAll().ToListAsync();
+
+        var mapped = _mapper.Map<List<BookAuthor>, IEnumerable<BookAuthorDto>>(authorPage);
+
+        return Result.Ok(mapped);
+    }
+
     public async Task<Result<int>> GetBookAuthorCountAsync()
     {
         return await _repository.CountAsync();

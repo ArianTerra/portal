@@ -8,22 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationPortal.Presentation.Controllers;
 
-public class VideosController : Controller
+public class BooksController : Controller
 {
-    private readonly IVideoMaterialService _videoMaterialService;
+    private readonly IBookMaterialService _bookMaterialService;
 
-    private readonly IVideoQualityService _videoQualityService;
+    private readonly IBookFormatService _bookFormatService;
 
-    public VideosController(IVideoMaterialService videoMaterialService, IVideoQualityService videoQualityService)
+    public BooksController(IBookMaterialService bookMaterialService, IBookFormatService bookFormatService)
     {
-        _videoMaterialService = videoMaterialService;
-        _videoQualityService = videoQualityService;
+        _bookMaterialService = bookMaterialService;
+        _bookFormatService = bookFormatService;
     }
 
     public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
     {
-        var result = await _videoMaterialService.GetVideosPageAsync(page, pageSize);
-        var itemsCountResult = await _videoMaterialService.GetVideosCountAsync();
+        var result = await _bookMaterialService.GetBooksPageAsync(page, pageSize);
+        var itemsCountResult = await _bookMaterialService.GetBooksCountAsync();
 
         if (result.IsFailed)
         {
@@ -41,7 +41,7 @@ public class VideosController : Controller
             pageCount = 1;
         }
 
-        var viewModel = new PageViewModel<VideoMaterialDto>
+        var viewModel = new PageViewModel<BookMaterialDto>
         {
             Items = result.Value.ToList(),
             Page = page,
@@ -54,7 +54,7 @@ public class VideosController : Controller
 
     public async Task<IActionResult> Details(Guid id)
     {
-        var result = await _videoMaterialService.GetVideoByIdAsync(id);
+        var result = await _bookMaterialService.GetBookByIdAsync(id);
 
         if (result.IsFailed)
         {
@@ -66,53 +66,53 @@ public class VideosController : Controller
 
     public async Task<IActionResult> Add()
     {
-        var resultQualities = await _videoQualityService.GetAllVideoQualitiesAsync();
+        var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
 
-        if (resultQualities.IsFailed)
+        if (resultFormats.IsFailed)
         {
-            return StatusCode(resultQualities.GetErrorCode());
+            return StatusCode(resultFormats.GetErrorCode());
         }
 
-        var viewModel = new VideoViewModel
+        var viewModel = new BookViewModel
         {
-            AvailableQualities = resultQualities.Value
+            AvailableFormats = resultFormats.Value
         };
 
         return View(viewModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(VideoViewModel viewModel)
+    public async Task<IActionResult> Add(BookViewModel viewModel)
     {
-        var selectedQuality = await _videoQualityService.GetVideoQualityByNameAsync(viewModel.Quality);
-        if (selectedQuality.IsFailed)
+        var selectedFormat = await _bookFormatService.GetBookFormatByNameAsync(viewModel.Format);
+        if (selectedFormat.IsFailed)
         {
-            return StatusCode(selectedQuality.GetErrorCode());
+            return StatusCode(selectedFormat.GetErrorCode());
         }
 
-        var dto = new VideoMaterialDto
+        var dto = new BookMaterialDto()
         {
             Id = viewModel.Id,
             Name = viewModel.Name,
-            Duration = viewModel.Duration,
-            Quality = selectedQuality.Value
+            Pages = viewModel.Pages,
+            BookFormat = selectedFormat.Value
         };
 
-        var result = await _videoMaterialService.AddVideoAsync(dto);
+        var result = await _bookMaterialService.AddBookAsync(dto);
 
         if (result.IsFailed)
         {
             if (result.GetErrorCode() == (int)ErrorCode.ValidationError)
             {
                 result.GetValidationResult().AddToModelState(this.ModelState);
-                var resultQualities = await _videoQualityService.GetAllVideoQualitiesAsync();
+                var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
 
-                if (resultQualities.IsFailed)
+                if (resultFormats.IsFailed)
                 {
-                    return StatusCode(resultQualities.GetErrorCode());
+                    return StatusCode(resultFormats.GetErrorCode());
                 }
 
-                viewModel.AvailableQualities = resultQualities.Value;
+                viewModel.AvailableFormats = resultFormats.Value;
 
                 return View(viewModel);
             }
@@ -125,64 +125,64 @@ public class VideosController : Controller
 
     public async Task<IActionResult> Edit(Guid id)
     {
-        var result = await _videoMaterialService.GetVideoByIdAsync(id);
+        var result = await _bookMaterialService.GetBookByIdAsync(id);
 
         if (result.IsFailed)
         {
             return StatusCode(result.GetErrorCode());
         }
 
-        var resultQualities = await _videoQualityService.GetAllVideoQualitiesAsync();
+        var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
 
-        if (resultQualities.IsFailed)
+        if (resultFormats.IsFailed)
         {
-            return StatusCode(resultQualities.GetErrorCode());
+            return StatusCode(resultFormats.GetErrorCode());
         }
 
-        var viewModel = new VideoViewModel
+        var viewModel = new BookViewModel()
         {
             Id = result.Value.Id,
             Name = result.Value.Name,
-            Duration = result.Value.Duration,
-            Quality = result.Value.Quality.Name,
-            AvailableQualities = resultQualities.Value
+            Pages = result.Value.Pages,
+            Format = result.Value.BookFormat.Name,
+            AvailableFormats = resultFormats.Value
         };
 
         return View(viewModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(VideoViewModel viewModel)
+    public async Task<IActionResult> Edit(BookViewModel viewModel)
     {
-        var selectedQuality = await _videoQualityService.GetVideoQualityByNameAsync(viewModel.Quality);
+        var selectedQuality = await _bookFormatService.GetBookFormatByNameAsync(viewModel.Format);
         if (selectedQuality.IsFailed)
         {
             return StatusCode(selectedQuality.GetErrorCode());
         }
 
-        var dto = new VideoMaterialDto
+        var dto = new BookMaterialDto()
         {
             Id = viewModel.Id,
             Name = viewModel.Name,
-            Duration = viewModel.Duration,
-            Quality = selectedQuality.Value
+            Pages = viewModel.Pages,
+            BookFormat = selectedQuality.Value
         };
 
-        var result = await _videoMaterialService.UpdateVideoAsync(dto);
+        var result = await _bookMaterialService.UpdateBookAsync(dto);
 
         if (result.IsFailed)
         {
             if (result.GetErrorCode() == (int)ErrorCode.ValidationError)
             {
                 result.GetValidationResult().AddToModelState(this.ModelState);
-                var resultQualities = await _videoQualityService.GetAllVideoQualitiesAsync();
+                var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
 
-                if (resultQualities.IsFailed)
+                if (resultFormats.IsFailed)
                 {
-                    return StatusCode(resultQualities.GetErrorCode());
+                    return StatusCode(resultFormats.GetErrorCode());
                 }
 
-                viewModel.AvailableQualities = resultQualities.Value;
+                viewModel.AvailableFormats = resultFormats.Value;
 
                 return View(viewModel);
             }
@@ -195,7 +195,7 @@ public class VideosController : Controller
 
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _videoMaterialService.DeleteVideoByIdAsync(id);
+        var result = await _bookMaterialService.DeleteBookByIdAsync(id);
 
         if (result.IsFailed)
         {
