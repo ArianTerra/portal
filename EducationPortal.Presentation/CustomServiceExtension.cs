@@ -1,4 +1,5 @@
-﻿using EducationPortal.BusinessLogic.Services;
+﻿using EducationPortal.BusinessLogic.DTO;
+using EducationPortal.BusinessLogic.Services;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.BusinessLogic.Validators.FluentValidation;
 using EducationPortal.DataAccess.DomainModels.AdditionalModels;
@@ -29,5 +30,8 @@ public static class CustomServiceExtension
 
         services.AddScoped<IValidator<BookAuthor>, BookAuthorValidator>();
         services.AddScoped<IBookAuthorService, BookAuthorService>();
+
+        services.AddScoped<IValidator<BookFormatDto>, BookFormatDtoValidator>();
+        services.AddScoped<IBookFormatService, BookFormatService>();
     }
 }

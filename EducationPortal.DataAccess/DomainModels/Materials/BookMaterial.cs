@@ -1,4 +1,5 @@
-﻿using EducationPortal.DataAccess.DomainModels.JoinEntities;
+﻿using EducationPortal.DataAccess.DomainModels.AdditionalModels;
+using EducationPortal.DataAccess.DomainModels.JoinEntities;
 
 namespace EducationPortal.DataAccess.DomainModels.Materials;
 
@@ -8,7 +9,7 @@ public class BookMaterial : Material
 
     public int Pages { get; set; }
 
-    public int Year { get; set; } //TODO change it to DateTime
+    public int Year { get; set; }
 
-    public string Format { get; set; } //TODO change to enum or another table like BookAuthor
+    public BookFormat BookFormat { get; set; }
 }

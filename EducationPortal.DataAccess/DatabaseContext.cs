@@ -37,6 +37,8 @@ public class DatabaseContext : DbContext
 
     public DbSet<VideoQuality> VideoQualities { get; set; }
 
+    public DbSet<BookFormat> BookFormats { get; set; }
+
     public DatabaseContext(DbContextOptions options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
