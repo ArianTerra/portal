@@ -16,4 +16,6 @@ public interface IBookMaterialService
     Task<Result> UpdateBookAsync(BookMaterialDto dto);
 
     Task<Result> DeleteBookByIdAsync(Guid id);
+
+    Task<Result> AddAuthorsToBookAsync(Guid id, IEnumerable<BookAuthorDto> authors);
 }

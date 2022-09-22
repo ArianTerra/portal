@@ -13,4 +13,8 @@ public class BookViewModel
     public string Format { get; set; }
 
     public IEnumerable<BookFormatDto> AvailableFormats { get; set; }
+
+    public IEnumerable<BookAuthorDto> AvailableAuthors { get; set; }
+
+    public IEnumerable<string> SelectedAuthors {get; set; }
 }

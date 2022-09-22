@@ -11,4 +11,6 @@ public class BookMaterialDto : AuditedDto
     public int Year { get; set; }
 
     public BookFormatDto BookFormat { get; set; }
+
+    public IEnumerable<BookAuthorDto> Authors { get; set; }
 }

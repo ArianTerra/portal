@@ -12,7 +12,7 @@
 <p><b>ID</b>: @Model.Id</p>
 <p><b>Name</b>: @Model.Name</p>
 <p><b>Duration</b>: @Model.Duration</p>
-<p><b>Quality</b>: @Model.Quality.Name</p>
+<p><b>Quality</b>: @Html.ActionLink(Model.Quality.Name, "Details", "VideoQualities", new {id = Model.Quality.Id})</p>
 <p><b>Created</b>: @Model.CreatedOn</p>
 <p><b>Created by</b>: @Model.CreatedByName</p>
 <p><b>Updated</b>: @Model.UpdatedOn</p>

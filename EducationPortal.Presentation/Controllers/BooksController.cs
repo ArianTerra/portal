@@ -14,10 +14,13 @@ public class BooksController : Controller
 
     private readonly IBookFormatService _bookFormatService;
 
-    public BooksController(IBookMaterialService bookMaterialService, IBookFormatService bookFormatService)
+    private readonly IBookAuthorService _bookAuthorService;
+
+    public BooksController(IBookMaterialService bookMaterialService, IBookFormatService bookFormatService, IBookAuthorService bookAuthorService)
     {
         _bookMaterialService = bookMaterialService;
         _bookFormatService = bookFormatService;
+        _bookAuthorService = bookAuthorService;
     }
 
     public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
@@ -67,15 +70,22 @@ public class BooksController : Controller
     public async Task<IActionResult> Add()
     {
         var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
+        var resultAuthors = await _bookAuthorService.GetAllBookAuthorsAsync();
 
         if (resultFormats.IsFailed)
         {
             return StatusCode(resultFormats.GetErrorCode());
         }
 
+        if (resultAuthors.IsFailed)
+        {
+            return StatusCode(resultAuthors.GetErrorCode());
+        }
+
         var viewModel = new BookViewModel
         {
-            AvailableFormats = resultFormats.Value
+            AvailableFormats = resultFormats.Value,
+            AvailableAuthors = resultAuthors.Value
         };
 
         return View(viewModel);
@@ -98,6 +108,19 @@ public class BooksController : Controller
             BookFormat = selectedFormat.Value
         };
 
+        var selectedAuthors = new List<BookAuthorDto>();
+        foreach (var authorName in viewModel.SelectedAuthors)
+        {
+            var authorResult = await _bookAuthorService.GetBookAuthorByName(authorName);
+
+            if (authorResult.IsFailed)
+            {
+                return StatusCode(authorResult.GetErrorCode());
+            }
+
+            selectedAuthors.Add(authorResult.Value);
+        }
+
         var result = await _bookMaterialService.AddBookAsync(dto);
 
         if (result.IsFailed)
@@ -105,19 +128,33 @@ public class BooksController : Controller
             if (result.GetErrorCode() == (int)ErrorCode.ValidationError)
             {
                 result.GetValidationResult().AddToModelState(this.ModelState);
-                var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
 
+                var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
                 if (resultFormats.IsFailed)
                 {
                     return StatusCode(resultFormats.GetErrorCode());
                 }
 
+                var resultAuthors = await _bookAuthorService.GetAllBookAuthorsAsync();
+                if (resultAuthors.IsFailed)
+                {
+                    return StatusCode(resultAuthors.GetErrorCode());
+                }
+
                 viewModel.AvailableFormats = resultFormats.Value;
+                viewModel.AvailableAuthors = resultAuthors.Value;
 
                 return View(viewModel);
             }
 
             return StatusCode(result.GetErrorCode());
+        }
+
+        var resultAddingAuthors = await _bookMaterialService.AddAuthorsToBookAsync(result.Value, selectedAuthors);
+
+        if (resultAddingAuthors.IsFailed)
+        {
+            return StatusCode(resultAddingAuthors.GetErrorCode());
         }
 
         return RedirectToAction("Details", new {id = result.Value});
@@ -130,6 +167,13 @@ public class BooksController : Controller
         if (result.IsFailed)
         {
             return StatusCode(result.GetErrorCode());
+        }
+
+        var resultAuthors = await _bookAuthorService.GetAllBookAuthorsAsync();
+
+        if (resultAuthors.IsFailed)
+        {
+            return StatusCode(resultAuthors.GetErrorCode());
         }
 
         var resultFormats = await _bookFormatService.GetAllBookFormatesAsync();
@@ -145,7 +189,9 @@ public class BooksController : Controller
             Name = result.Value.Name,
             Pages = result.Value.Pages,
             Format = result.Value.BookFormat.Name,
-            AvailableFormats = resultFormats.Value
+            AvailableFormats = resultFormats.Value,
+            AvailableAuthors = resultAuthors.Value,
+            SelectedAuthors = result.Value.Authors.Select(x => x.ToString())
         };
 
         return View(viewModel);
@@ -154,10 +200,10 @@ public class BooksController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(BookViewModel viewModel)
     {
-        var selectedQuality = await _bookFormatService.GetBookFormatByNameAsync(viewModel.Format);
-        if (selectedQuality.IsFailed)
+        var selectedFormat = await _bookFormatService.GetBookFormatByNameAsync(viewModel.Format);
+        if (selectedFormat.IsFailed)
         {
-            return StatusCode(selectedQuality.GetErrorCode());
+            return StatusCode(selectedFormat.GetErrorCode());
         }
 
         var dto = new BookMaterialDto()
@@ -165,7 +211,7 @@ public class BooksController : Controller
             Id = viewModel.Id,
             Name = viewModel.Name,
             Pages = viewModel.Pages,
-            BookFormat = selectedQuality.Value
+            BookFormat = selectedFormat.Value
         };
 
         var result = await _bookMaterialService.UpdateBookAsync(dto);
@@ -188,6 +234,26 @@ public class BooksController : Controller
             }
 
             return StatusCode(result.GetErrorCode());
+        }
+
+        var selectedAuthors = new List<BookAuthorDto>();
+        foreach (var authorName in viewModel.SelectedAuthors)
+        {
+            var authorResult = await _bookAuthorService.GetBookAuthorByName(authorName);
+
+            if (authorResult.IsFailed)
+            {
+                return StatusCode(authorResult.GetErrorCode());
+            }
+
+            selectedAuthors.Add(authorResult.Value);
+        }
+
+        var resultAddingAuthors = await _bookMaterialService.AddAuthorsToBookAsync(viewModel.Id, selectedAuthors);
+
+        if (resultAddingAuthors.IsFailed)
+        {
+            return StatusCode(resultAddingAuthors.GetErrorCode());
         }
 
         return RedirectToAction("Details", new {id = dto.Id});

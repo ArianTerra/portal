@@ -49,6 +49,28 @@ public class BookAuthorService : IBookAuthorService
         return Result.Ok(authorDto);
     }
 
+    public async Task<Result<BookAuthorDto>> GetBookAuthorByName(string name)
+    {
+        var author = await _repository.FindFirstAsync(
+            filter: x => x.Name == name,
+            tracking: true,
+            includes: new Expression<Func<BookAuthor, object>>[]
+            {
+                x => x.CreatedBy,
+                x => x.UpdatedBy
+            }
+        );
+
+        if (author == null)
+        {
+            return Result.Fail(new BadRequestError($"Author with name {name} does not exist"));
+        }
+
+        var authorDto = _mapper.Map<BookAuthorDto>(author);
+
+        return Result.Ok(authorDto);
+    }
+
     public async Task<Result<IEnumerable<BookAuthorDto>>> GetBookAuthorsPageAsync(int page, int pageSize)
     {
         int itemsCount = await _repository.CountAsync();

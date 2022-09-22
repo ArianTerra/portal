@@ -3,6 +3,9 @@ using AutoMapper;
 using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Services.Interfaces;
+using EducationPortal.BusinessLogic.Utils.Comparers;
+using EducationPortal.DataAccess.DomainModels.AdditionalModels;
+using EducationPortal.DataAccess.DomainModels.JoinEntities;
 using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.Repositories;
 using FluentResults;
@@ -16,22 +19,28 @@ public class BookMaterialService : IBookMaterialService
 {
     private readonly IGenericRepository<BookMaterial> _repository;
 
+    private readonly IGenericRepository<BookAuthor> _repositoryAuthors;
+
+    private readonly IGenericRepository<BookAuthorBookMaterial> _repositoryLinks;
+
     private readonly IMapper _mapper;
 
     private readonly IValidator<BookMaterial> _validator;
 
-    public BookMaterialService(IGenericRepository<BookMaterial> repository, IMapper mapper, IValidator<BookMaterial> validator)
+    public BookMaterialService(IGenericRepository<BookMaterial> repository, IGenericRepository<BookAuthorBookMaterial> repositoryLinks, IMapper mapper, IValidator<BookMaterial> validator, IGenericRepository<BookAuthor> repositoryAuthors)
     {
         _repository = repository;
+        _repositoryLinks = repositoryLinks;
         _mapper = mapper;
         _validator = validator;
+        _repositoryAuthors = repositoryAuthors;
     }
 
     public async Task<Result<BookMaterialDto>> GetBookByIdAsync(Guid id)
     {
         var video = await _repository.FindFirstAsync(
             filter: x => x.Id == id,
-            tracking: true,
+            // tracking: true,
             includes: new Expression<Func<BookMaterial, object>>[]
             {
                 x => x.CreatedBy,
@@ -45,9 +54,10 @@ public class BookMaterialService : IBookMaterialService
             return Result.Fail(new NotFoundError(id));
         }
 
-        var videoDto = _mapper.Map<BookMaterialDto>(video);
+        var bookDto = _mapper.Map<BookMaterialDto>(video);
+        bookDto.Authors = await GetAuthorsAsync(id);
 
-        return Result.Ok(videoDto);
+        return Result.Ok(bookDto);
     }
 
     public async Task<Result<IEnumerable<BookMaterialDto>>> GetBooksPageAsync(int page, int pageSize)
@@ -126,9 +136,9 @@ public class BookMaterialService : IBookMaterialService
 
     public async Task<Result> UpdateBookAsync(BookMaterialDto dto)
     {
-        var video = await _repository.FindFirstAsync(x => x.Id == dto.Id);
+        var book = await _repository.FindFirstAsync(x => x.Id == dto.Id);
 
-        if (video == null)
+        if (book == null)
         {
             return Result.Fail(new NotFoundError(dto.Id));
         }
@@ -137,7 +147,7 @@ public class BookMaterialService : IBookMaterialService
 
         var validationResult = await _validator.ValidateAsync(mapped);
 
-        if (video.Name != mapped.Name &&
+        if (book.Name != mapped.Name &&
             await _repository.FindFirstAsync(x => x.Name == mapped.Name) != null)
         {
             validationResult.Errors.Add(
@@ -156,15 +166,59 @@ public class BookMaterialService : IBookMaterialService
 
     public async Task<Result> DeleteBookByIdAsync(Guid id)
     {
-        var video = await _repository.FindFirstAsync(x => x.Id == id);
+        var book = await _repository.FindFirstAsync(x => x.Id == id);
 
-        if (video == null)
+        if (book == null)
         {
             return Result.Fail(new NotFoundError(id));
         }
 
-        await _repository.RemoveAsync(video);
+        await _repository.RemoveAsync(book);
 
         return Result.Ok();
+    }
+
+    public async Task<Result> AddAuthorsToBookAsync(Guid id, IEnumerable<BookAuthorDto> authors)
+    {
+        var book = await _repository.FindFirstAsync(
+            filter: x => x.Id == id,
+            includes: new Expression<Func<BookMaterial, object>>[]
+            {
+                x => x.BookAuthorBookMaterial
+            });
+
+        if (book == null)
+        {
+            return Result.Fail(new NotFoundError(id));
+        }
+
+        var oldLinks = book.BookAuthorBookMaterial.Where(x => x.BookMaterialId == book.Id);
+        var newLinks = authors.Select(author => new BookAuthorBookMaterial { BookMaterialId = book.Id, BookAuthorId = author.Id }).ToList();
+
+        var comparer = new BookAuthorBookMaterialComparer();
+        var linksToDelete = oldLinks.Except(newLinks, comparer).ToList();
+        var linksToAdd = newLinks.Except(oldLinks, comparer).ToList();
+
+        await _repositoryLinks.RemoveRangeAsync(linksToDelete);
+        await _repositoryLinks.AddRangeAsync(linksToAdd);
+
+        return Result.Ok();
+    }
+
+    public async Task<IEnumerable<BookAuthorDto>> GetAuthorsAsync(Guid id)
+    {
+        var authorsIds = await _repositoryLinks.FindAll(x => x.BookMaterialId == id).Select(x => x.BookAuthorId)
+            .ToListAsync();
+
+        var authors = new List<BookAuthor>();
+        foreach (var authorId in authorsIds)
+        {
+            var author = await _repositoryAuthors.FindFirstAsync(x => x.Id == authorId);
+            authors.Add(author);
+        }
+
+        var mapped = _mapper.Map<IEnumerable<BookAuthor>, IEnumerable<BookAuthorDto>>(authors);
+
+        return mapped;
     }
 }

@@ -12,7 +12,14 @@
 <p><b>ID</b>: @Model.Id</p>
 <p><b>Name</b>: @Model.Name</p>
 <p><b>Pages</b>: @Model.Pages</p>
-<p><b>Format</b>: @Model.BookFormat.Name</p>
+<p><b>Format</b>: @Html.ActionLink(Model.BookFormat.Name, "Details", "BookFormats", new {id = Model.BookFormat.Id})</p>
+<p><b>Authors</b>:</p>
+<ul>
+    @foreach (var author in Model.Authors)
+    {
+        <li>@Html.ActionLink(author.Name, "Details", "BookAuthors", new {id = author.Id})</li>
+    }
+</ul>
 <p><b>Created</b>: @Model.CreatedOn</p>
 <p><b>Created by</b>: @Model.CreatedByName</p>
 <p><b>Updated</b>: @Model.UpdatedOn</p>
