@@ -5,26 +5,33 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Edit" asp-controller="Videos" method="post">
-    <div class="form-group">
-        <label asp-for="Name">Name</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="Duration">Duration</label>
-        <input asp-for="Duration" type="time" class="form-control"/>
-        <span asp-validation-for="Duration"></span>
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="Quality">Quality</label>
-        @Html.DropDownListFor(m => m.Quality, new SelectList(Model.AvailableQualities), new {@class = "form-select"})
-        <span asp-validation-for="Quality"></span>
-    </div>
-    <br>
-    <input type="submit" class="btn btn-primary" value="Submit"/>
-</form>
+@if (!Model.AvailableQualities.Any())
+{
+    <p>No Video Qualities found. Please @Html.ActionLink("Create", "Add", "VideoQualities") new Video Quality.</p>
+}
+else
+{
+    <form asp-action="Edit" asp-controller="Videos" method="post">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="Duration">Duration</label>
+            <input asp-for="Duration" type="time" class="form-control"/>
+            <span asp-validation-for="Duration"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="Quality">Quality</label>
+            @Html.DropDownListFor(m => m.Quality, new SelectList(Model.AvailableQualities), new {@class = "form-select"})
+            <span asp-validation-for="Quality"></span>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+    </form>
+}
 
 

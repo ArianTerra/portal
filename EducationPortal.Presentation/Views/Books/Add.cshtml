@@ -20,30 +20,41 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Add" asp-controller="Books" method="post">
-    <div class="form-group">
-        <label asp-for="Name">Name</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="Pages">Pages</label>
-        <input asp-for="Pages" type="number" class="form-control"/>
-        <span asp-validation-for="Pages"></span>
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="Format">Format</label>
-        @Html.DropDownListFor(m => m.Format, new SelectList(Model.AvailableFormats), new {@class = "form-select"})
-        <span asp-validation-for="Format"></span>
-    </div>
-    <br>
-    <div class="form-group">
-        <label asp-for="SelectedAuthors">Authors</label>
-        @Html.DropDownListFor(m => m.SelectedAuthors, new SelectList(Model.AvailableAuthors), new {@class = "form-select js-example-basic-multiple", @multiple="multiple"})
-        <span asp-validation-for="SelectedAuthors"></span>
-    </div>
-    <br>
-    <input type="submit" class="btn btn-primary" value="Submit"/>
-</form>
+@if (!Model.AvailableFormats.Any())
+{
+    <p>No Book Formats found. Please @Html.ActionLink("Create", "Add", "BookFormats") new Book Format.</p>
+}
+else if (!Model.AvailableAuthors.Any())
+{
+    <p>No Book Authors found. Please @Html.ActionLink("Create", "Add", "BookAuthors") new Book Author.</p>
+}
+else
+{
+    <form asp-action="Add" asp-controller="Books" method="post">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="Pages">Pages</label>
+            <input asp-for="Pages" type="number" class="form-control"/>
+            <span asp-validation-for="Pages"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="Format">Format</label>
+            @Html.DropDownListFor(m => m.Format, new SelectList(Model.AvailableFormats), new {@class = "form-select"})
+            <span asp-validation-for="Format"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="SelectedAuthors">Authors</label>
+            @Html.DropDownListFor(m => m.SelectedAuthors, new SelectList(Model.AvailableAuthors), new {@class = "form-select js-example-basic-multiple", @multiple="multiple"})
+            <span asp-validation-for="SelectedAuthors"></span>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+    </form>
+}
