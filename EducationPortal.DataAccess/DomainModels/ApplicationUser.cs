@@ -1,17 +1,10 @@
 ﻿using EducationPortal.DataAccess.DomainModels.Progress;
+using Microsoft.AspNetCore.Identity;
 
 namespace EducationPortal.DataAccess.DomainModels;
 
-public class User : BaseEntity
+public class ApplicationUser : IdentityUser<Guid>
 {
-    public string Name { get; set; }
-
-    public string Email { get; set; }
-
-    public string PasswordHash { get; set; }
-
-    public string PasswordHashSalt { get; set; }
-
     public ICollection<CourseProgress> CourseProgresses { get; set; }
 
     public ICollection<MaterialProgress> MaterialProgresses { get; set; }

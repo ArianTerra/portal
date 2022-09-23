@@ -13,7 +13,7 @@ builder.Services.AddDbContext<DatabaseContext>(
     ),
     ServiceLifetime.Transient);
 
-builder.Services.AddCustomServices();
+builder.Services.AddCustomServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -30,6 +30,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

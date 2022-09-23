@@ -8,7 +8,7 @@ public class SkillProgress
 
     public Guid UserId { get; set; }
 
-    public User User { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
 
     public int Level { get; set; }
 }

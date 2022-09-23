@@ -3,13 +3,14 @@ using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.JoinEntities;
 using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.DomainModels.Progress;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationPortal.DataAccess;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
-    public DbSet<User> Users { get; set; }
+    //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
     public DbSet<Course> Courses { get; set; }
 
@@ -43,6 +44,8 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Material>()
             .HasOne(x => x.CreatedBy)
             .WithMany(u => u.CreatedMaterials)
@@ -70,7 +73,7 @@ public class DatabaseContext : DbContext
             .WithMany(c => c.CourseProgresses)
             .HasForeignKey(cp => cp.CourseId);
         modelBuilder.Entity<CourseProgress>()
-            .HasOne(cp => cp.User)
+            .HasOne(cp => cp.ApplicationUser)
             .WithMany(u => u.CourseProgresses)
             .HasForeignKey(cp => cp.UserId);
 
@@ -81,7 +84,7 @@ public class DatabaseContext : DbContext
             .WithMany(c => c.MaterialProgresses)
             .HasForeignKey(cp => cp.MaterialId);
         modelBuilder.Entity<MaterialProgress>()
-            .HasOne(cp => cp.User)
+            .HasOne(cp => cp.ApplicationUser)
             .WithMany(u => u.MaterialProgresses)
             .HasForeignKey(cp => cp.UserId);
 
@@ -92,7 +95,7 @@ public class DatabaseContext : DbContext
             .WithMany(c => c.SkillProgresses)
             .HasForeignKey(cp => cp.SkillId);
         modelBuilder.Entity<SkillProgress>()
-            .HasOne(cp => cp.User)
+            .HasOne(cp => cp.ApplicationUser)
             .WithMany(u => u.SkillProgresses)
             .HasForeignKey(cp => cp.UserId);
 

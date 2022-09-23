@@ -2,20 +2,54 @@
 using EducationPortal.BusinessLogic.Services;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.BusinessLogic.Validators.FluentValidation;
+using EducationPortal.DataAccess;
+using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.Repositories;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using ConfigurationManager = Microsoft.Extensions.Configuration.ConfigurationManager;
 
 namespace EducationPortal.Presentation;
 
 public static class CustomServiceExtension
 {
-    public static void AddCustomServices(this IServiceCollection services)
+    public static void AddCustomServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddAutoMapper(typeof(BusinessLogic.MappingProfile));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        services.AddIdentity<ApplicationUser, ApplicationRole>()
+            .AddEntityFrameworkStores<DatabaseContext>()
+            .AddDefaultTokenProviders();
+
+        services.Configure<IdentityOptions>(options =>
+        {
+            // Password settings.
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequiredLength = int.Parse(configuration["User:Password:MinSize"]);
+        });
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            // Cookie settings
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+            options.LoginPath = "/Account/Login";
+            //options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            options.SlidingExpiration = true;
+        });
+
+        //user
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IValidator<UserRegisterDto>, UserRegisterDtoValidator>();
+        services.AddScoped<IValidator<UserLoginDto>, UserLoginDtoValidator>();
 
         //materials
         services.AddScoped<IValidator<ArticleMaterial>, ArticleMaterialValidator>();

@@ -4,5 +4,6 @@ public enum ErrorCode
 {
     BadRequest = 400,
     NotFound = 404,
-    ValidationError = 422
+    ValidationError = 422,
+    InternalServerError = 500
 }

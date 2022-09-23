@@ -8,12 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EducationPortalConsole.BusinessLogic\EducationPortalConsole.BusinessLogic.csproj" />
-      <ProjectReference Include="..\EducationPortalConsole.Core\EducationPortalConsole.Core.csproj" />
-      <ProjectReference Include="..\EducationPortalConsole.DataAccess\EducationPortalConsole.DataAccess.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="FluentResults" Version="3.11.0" />
       <PackageReference Include="Nix.StyleCop.Analyzers" Version="2.0.4">
         <PrivateAssets>all</PrivateAssets>
