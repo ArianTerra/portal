@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EducationPortal.BusinessLogic.DTO;
+using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.Materials;
 
@@ -35,5 +36,8 @@ public class MappingProfile : Profile
         CreateMap<BookMaterialDto, BookMaterial>()
             .ForMember(dest => dest.BookFormatId, opt => opt.MapFrom(src => src.BookFormat.Id))
             .ForMember(dest => dest.BookFormat, opt => opt.Ignore());
+
+        CreateMap<Skill, SkillDto>();
+        CreateMap<SkillDto, Skill>();
     }
 }
