@@ -2,10 +2,8 @@
 
 namespace EducationPortal.BusinessLogic.DTO;
 
-public class VideoMaterialDto : AuditedDto
+public class VideoMaterialDto : MaterialDto
 {
-    public string Name { get; set; }
-
     public TimeSpan Duration { get; set; }
 
     public VideoQualityDto Quality { get; set; }

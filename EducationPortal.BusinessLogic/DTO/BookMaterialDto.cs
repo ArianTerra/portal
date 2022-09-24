@@ -2,10 +2,8 @@
 
 namespace EducationPortal.BusinessLogic.DTO;
 
-public class BookMaterialDto : AuditedDto
+public class BookMaterialDto : MaterialDto
 {
-    public string Name { get; set; }
-
     public int Pages { get; set; }
 
     public int Year { get; set; }

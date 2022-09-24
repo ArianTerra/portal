@@ -1,0 +1,58 @@
+﻿@using EducationPortal.BusinessLogic.DTO
+@model EducationPortal.Presentation.ViewModels.PageViewModel<EducationPortal.BusinessLogic.DTO.MaterialDto>
+@{
+    ViewData["Title"] = "Materials";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@Html.ActionLink("Add Article", "Add", "Articles")
+@Html.ActionLink("Add Book", "Add", "Books")
+@Html.ActionLink("Add Video", "Add", "Videos")
+
+<table class="table">
+    <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Actions</th>
+    </tr>
+    @for(int i = 0; i < Model.Items.Count; i++)
+    {
+        <tr>
+            @{
+                int no = i + 1 + (Model.Page - 1) * Model.PageSize;
+            }
+            <td>@no</td>
+            <td>@Model.Items[i].Name</td>
+            <td>
+                @if (@Model.Items[i].Discriminator == "ArticleMaterial")
+                {
+                    @Html.ActionLink("Article", "Index", "Articles")
+                }
+                else if (@Model.Items[i].Discriminator == "BookMaterial")
+                {
+                    @Html.ActionLink("Book", "Index", "Books")
+                }
+                else if (@Model.Items[i].Discriminator == "VideoMaterial")
+                {
+                    @Html.ActionLink("Video", "Index", "Videos")
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = @Model.Items[i].Id }) |
+                @Html.ActionLink("Edit", "Edit", new { id = @Model.Items[i].Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = @Model.Items[i].Id })
+            </td>
+        </tr>
+    }
+</table>
+
+<ul class="pagination">
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <li class="@(i == Model.Page ? "page-item active" : "page-item")">
+            <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize })">@i</a>
+        </li>
+    }
+</ul>

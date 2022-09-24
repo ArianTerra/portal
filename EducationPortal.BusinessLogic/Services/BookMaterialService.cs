@@ -4,6 +4,7 @@ using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.BusinessLogic.Utils.Comparers;
+using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.JoinEntities;
 using EducationPortal.DataAccess.DomainModels.Materials;
@@ -23,18 +24,22 @@ public class BookMaterialService : IBookMaterialService
 
     private readonly IGenericRepository<BookAuthorBookMaterial> _repositoryLinks;
 
+    private readonly IGenericRepository<Material> _repositoryMaterials;
+
     private readonly IMapper _mapper;
 
     private readonly IValidator<BookMaterial> _validator;
 
     public BookMaterialService(IGenericRepository<BookMaterial> repository,
         IGenericRepository<BookAuthorBookMaterial> repositoryLinks,
+        IGenericRepository<Material> repositoryMaterials,
         IMapper mapper,
         IValidator<BookMaterial> validator,
         IGenericRepository<BookAuthor> repositoryAuthors)
     {
         _repository = repository;
         _repositoryLinks = repositoryLinks;
+        _repositoryMaterials = repositoryMaterials;
         _mapper = mapper;
         _validator = validator;
         _repositoryAuthors = repositoryAuthors;
@@ -123,10 +128,10 @@ public class BookMaterialService : IBookMaterialService
 
         var validationResult = await _validator.ValidateAsync(mapped);
 
-        if (await _repository.FindFirstAsync(x => x.Name == mapped.Name) != null)
+        if (await _repositoryMaterials.FindFirstAsync(x => x.Name == mapped.Name) != null)
         {
             validationResult.Errors.Add(
-                new ValidationFailure(nameof(mapped.Name), "Name must be unique"));
+                new ValidationFailure(nameof(mapped.Name), "Material name must be unique"));
         }
 
         if (!validationResult.IsValid)
@@ -157,10 +162,10 @@ public class BookMaterialService : IBookMaterialService
         var validationResult = await _validator.ValidateAsync(mapped);
 
         if (book.Name != mapped.Name &&
-            await _repository.FindFirstAsync(x => x.Name == mapped.Name) != null)
+            await _repositoryMaterials.FindFirstAsync(x => x.Name == mapped.Name) != null)
         {
             validationResult.Errors.Add(
-                new ValidationFailure(nameof(mapped.Name), "Name must be unique"));
+                new ValidationFailure(nameof(mapped.Name), "Material name must be unique"));
         }
 
         if (!validationResult.IsValid)
@@ -214,7 +219,7 @@ public class BookMaterialService : IBookMaterialService
         return Result.Ok();
     }
 
-    public async Task<IEnumerable<BookAuthorDto>> GetAuthorsAsync(Guid id)
+    private async Task<IEnumerable<BookAuthorDto>> GetAuthorsAsync(Guid id)
     {
         var authorsIds = await _repositoryLinks.FindAll(x => x.BookMaterialId == id).Select(x => x.BookAuthorId)
             .ToListAsync();

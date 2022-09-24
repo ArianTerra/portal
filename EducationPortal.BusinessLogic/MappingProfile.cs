@@ -39,5 +39,10 @@ public class MappingProfile : Profile
 
         CreateMap<Skill, SkillDto>();
         CreateMap<SkillDto, Skill>();
+
+        CreateMap<Material, MaterialDto>();
+
+        CreateMap<Course, CourseDto>();
+        CreateMap<CourseDto, Course>();
     }
 }

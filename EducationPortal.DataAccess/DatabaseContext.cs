@@ -47,6 +47,9 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRol
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Material>()
+            .HasDiscriminator<string>(x => x.Discriminator);
+
+        modelBuilder.Entity<Material>()
             .HasOne(x => x.CreatedBy)
             .WithMany(u => u.CreatedMaterials)
             .HasForeignKey(x => x.CreatedById);

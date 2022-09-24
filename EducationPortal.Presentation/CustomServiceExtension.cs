@@ -53,6 +53,8 @@ public static class CustomServiceExtension
         services.AddScoped<IValidator<UserLoginDto>, UserLoginDtoValidator>();
 
         //materials
+        services.AddScoped<IMaterialService, MaterialService>();
+
         services.AddScoped<IValidator<ArticleMaterial>, ArticleMaterialValidator>();
         services.AddScoped<IArticleMaterialService, ArticleMaterialService>();
 
@@ -65,6 +67,10 @@ public static class CustomServiceExtension
         //skill
         services.AddScoped<IValidator<Skill>, SkillValidator>();
         services.AddScoped<ISkillService, SkillService>();
+
+        //course
+        services.AddScoped<IValidator<Course>, CourseValidator>();
+        services.AddScoped<ICourseService, CourseService>();
 
         //additional entities
         services.AddScoped<IValidator<VideoQuality>, VideoQualityValidator>();

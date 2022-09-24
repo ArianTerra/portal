@@ -7,6 +7,8 @@ public class Material : AuditedEntity
 {
     public string Name { get; set; }
 
+    public string Discriminator { get; set; }
+
     public ICollection<CourseMaterial> CourseMaterials { get; set; }
 
     public ICollection<MaterialProgress> MaterialProgresses { get; set; }

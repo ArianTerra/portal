@@ -3,6 +3,7 @@ using AutoMapper;
 using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Services.Interfaces;
+using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.Repositories;
 using FluentResults;
@@ -16,13 +17,19 @@ public class ArticleMaterialService : IArticleMaterialService
 {
     private readonly IGenericRepository<ArticleMaterial> _repository;
 
+    private readonly IGenericRepository<Material> _repositoryMaterials;
+
     private readonly IMapper _mapper;
 
     private readonly IValidator<ArticleMaterial> _validator;
 
-    public ArticleMaterialService(IGenericRepository<ArticleMaterial> repository, IMapper mapper, IValidator<ArticleMaterial> validator)
+    public ArticleMaterialService(IGenericRepository<ArticleMaterial> repository,
+        IGenericRepository<Material> repositoryMaterials,
+        IMapper mapper,
+        IValidator<ArticleMaterial> validator)
     {
         _repository = repository;
+        _repositoryMaterials = repositoryMaterials;
         _mapper = mapper;
         _validator = validator;
     }
@@ -108,10 +115,10 @@ public class ArticleMaterialService : IArticleMaterialService
 
         var validationResult = await _validator.ValidateAsync(mapped);
 
-        if (await _repository.FindFirstAsync(x => x.Name == mapped.Name) != null)
+        if (await _repositoryMaterials.FindFirstAsync(x => x.Name == mapped.Name) != null)
         {
             validationResult.Errors.Add(
-                new ValidationFailure(nameof(mapped.Name), "Name must be unique"));
+                new ValidationFailure(nameof(mapped.Name), "Material name must be unique"));
         }
 
         if (!validationResult.IsValid)
@@ -142,10 +149,10 @@ public class ArticleMaterialService : IArticleMaterialService
         var validationResult = await _validator.ValidateAsync(mapped);
 
         if (article.Name != mapped.Name &&
-            await _repository.FindFirstAsync(x => x.Name == mapped.Name) != null)
+            await _repositoryMaterials.FindFirstAsync(x => x.Name == mapped.Name) != null)
         {
             validationResult.Errors.Add(
-                new ValidationFailure(nameof(mapped.Name), "Name must be unique"));
+                new ValidationFailure(nameof(mapped.Name), "Material name must be unique"));
         }
 
         if (!validationResult.IsValid)
