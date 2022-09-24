@@ -91,7 +91,7 @@ public class VideoMaterialService : IVideoMaterialService
         return await _repository.CountAsync();
     }
 
-    public async Task<Result<Guid>> AddVideoAsync(VideoMaterialDto dto)
+    public async Task<Result<Guid>> AddVideoAsync(VideoMaterialDto dto, Guid createdById)
     {
         if (dto == null)
         {
@@ -99,6 +99,8 @@ public class VideoMaterialService : IVideoMaterialService
         }
 
         var mapped = _mapper.Map<VideoMaterial>(dto);
+        mapped.CreatedById = createdById;
+        mapped.CreatedOn = DateTime.Now;
 
         if (mapped.Id != Guid.Empty &&
             await _repository.FindFirstAsync(x => x.Id == mapped.Id) != null)
@@ -124,7 +126,7 @@ public class VideoMaterialService : IVideoMaterialService
         return Result.Ok(mapped.Id);
     }
 
-    public async Task<Result> UpdateVideoAsync(VideoMaterialDto dto)
+    public async Task<Result> UpdateVideoAsync(VideoMaterialDto dto, Guid updatedById)
     {
         var video = await _repository.FindFirstAsync(x => x.Id == dto.Id);
 
@@ -134,6 +136,10 @@ public class VideoMaterialService : IVideoMaterialService
         }
 
         var mapped = _mapper.Map<VideoMaterial>(dto);
+        mapped.CreatedById = video.CreatedById;
+        mapped.CreatedOn = video.CreatedOn;
+        mapped.UpdatedById = updatedById;
+        mapped.UpdatedOn = DateTime.Now;
 
         var validationResult = await _validator.ValidateAsync(mapped);
 

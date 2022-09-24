@@ -1,13 +1,16 @@
-﻿using EducationPortal.BusinessLogic.DTO;
+﻿using System.Security.Claims;
+using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.Presentation.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EducationPortal.Presentation.Controllers;
 
+[Authorize]
 public class ArticlesController : Controller
 {
     private readonly IArticleMaterialService _articleMaterialService;
@@ -69,7 +72,9 @@ public class ArticlesController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(ArticleMaterialDto dto)
     {
-        var result = await _articleMaterialService.AddArticleAsync(dto);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        var result = await _articleMaterialService.AddArticleAsync(dto, userId);
 
         if (result.IsFailed)
         {
@@ -101,7 +106,9 @@ public class ArticlesController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(ArticleMaterialDto dto)
     {
-        var result = await _articleMaterialService.UpdateArticleAsync(dto);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        var result = await _articleMaterialService.UpdateArticleAsync(dto, userId);
 
         if (result.IsFailed)
         {

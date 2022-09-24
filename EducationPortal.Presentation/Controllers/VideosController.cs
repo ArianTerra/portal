@@ -1,23 +1,30 @@
-﻿using EducationPortal.BusinessLogic.DTO;
+﻿using System.Security.Claims;
+using AutoMapper;
+using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.Presentation.ViewModels;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationPortal.Presentation.Controllers;
 
+[Authorize]
 public class VideosController : Controller
 {
     private readonly IVideoMaterialService _videoMaterialService;
 
     private readonly IVideoQualityService _videoQualityService;
 
-    public VideosController(IVideoMaterialService videoMaterialService, IVideoQualityService videoQualityService)
+    private readonly IMapper _mapper;
+
+    public VideosController(IVideoMaterialService videoMaterialService, IVideoQualityService videoQualityService, IMapper mapper)
     {
         _videoMaterialService = videoMaterialService;
         _videoQualityService = videoQualityService;
+        _mapper = mapper;
     }
 
     public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
@@ -90,15 +97,11 @@ public class VideosController : Controller
             return StatusCode(selectedQuality.GetErrorCode());
         }
 
-        var dto = new VideoMaterialDto
-        {
-            Id = viewModel.Id,
-            Name = viewModel.Name,
-            Duration = viewModel.Duration,
-            Quality = selectedQuality.Value
-        };
+        var dto = _mapper.Map<VideoMaterialDto>(viewModel);
+        dto.Quality = selectedQuality.Value;
 
-        var result = await _videoMaterialService.AddVideoAsync(dto);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await _videoMaterialService.AddVideoAsync(dto, userId);
 
         if (result.IsFailed)
         {
@@ -139,14 +142,9 @@ public class VideosController : Controller
             return StatusCode(resultQualities.GetErrorCode());
         }
 
-        var viewModel = new VideoViewModel
-        {
-            Id = result.Value.Id,
-            Name = result.Value.Name,
-            Duration = result.Value.Duration,
-            Quality = result.Value.Quality.Name,
-            AvailableQualities = resultQualities.Value
-        };
+        var viewModel = _mapper.Map<VideoViewModel>(result.Value);
+        viewModel.AvailableQualities = resultQualities.Value;
+        viewModel.Quality = result.Value.Quality.Name;
 
         return View(viewModel);
     }
@@ -160,15 +158,11 @@ public class VideosController : Controller
             return StatusCode(selectedQuality.GetErrorCode());
         }
 
-        var dto = new VideoMaterialDto
-        {
-            Id = viewModel.Id,
-            Name = viewModel.Name,
-            Duration = viewModel.Duration,
-            Quality = selectedQuality.Value
-        };
+        var dto = _mapper.Map<VideoMaterialDto>(viewModel);
+        dto.Quality = selectedQuality.Value;
 
-        var result = await _videoMaterialService.UpdateVideoAsync(dto);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await _videoMaterialService.UpdateVideoAsync(dto, userId);
 
         if (result.IsFailed)
         {

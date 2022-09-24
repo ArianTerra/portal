@@ -6,11 +6,11 @@ public abstract class AuditedDto : BaseDto
 
     public Guid? CreatedById { get; set; }
 
-    public string? CreatedByName { get; set; }
+    public string? CreatedByUserName { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedById { get; set; }
 
-    public string? UpdatedByName { get; set; }
+    public string? UpdatedByUserName { get; set; }
 }

@@ -18,6 +18,7 @@ public static class CustomServiceExtension
     public static void AddCustomServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddAutoMapper(typeof(BusinessLogic.MappingProfile));
+        services.AddAutoMapper(typeof(Presentation.MappingProfile));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 

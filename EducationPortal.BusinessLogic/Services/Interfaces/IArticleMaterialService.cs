@@ -11,9 +11,9 @@ public interface IArticleMaterialService
 
     Task<Result<int>> GetArticlesCountAsync();
 
-    Task<Result<Guid>> AddArticleAsync(ArticleMaterialDto dto);
+    Task<Result<Guid>> AddArticleAsync(ArticleMaterialDto dto, Guid createdById);
 
-    Task<Result> UpdateArticleAsync(ArticleMaterialDto dto);
+    Task<Result> UpdateArticleAsync(ArticleMaterialDto dto, Guid updatedById);
 
     Task<Result> DeleteArticleByIdAsync(Guid id);
 }

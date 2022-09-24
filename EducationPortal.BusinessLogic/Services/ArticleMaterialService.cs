@@ -89,7 +89,7 @@ public class ArticleMaterialService : IArticleMaterialService
         return await _repository.CountAsync();
     }
 
-    public async Task<Result<Guid>> AddArticleAsync(ArticleMaterialDto dto)
+    public async Task<Result<Guid>> AddArticleAsync(ArticleMaterialDto dto, Guid createdById)
     {
         if (dto == null)
         {
@@ -97,6 +97,8 @@ public class ArticleMaterialService : IArticleMaterialService
         }
 
         var mapped = _mapper.Map<ArticleMaterial>(dto);
+        mapped.CreatedById = createdById;
+        mapped.CreatedOn = DateTime.Now;
 
         if (mapped.Id != Guid.Empty &&
             await _repository.FindFirstAsync(x => x.Id == mapped.Id) != null)
@@ -122,7 +124,7 @@ public class ArticleMaterialService : IArticleMaterialService
         return Result.Ok(mapped.Id);
     }
 
-    public async Task<Result> UpdateArticleAsync(ArticleMaterialDto dto)
+    public async Task<Result> UpdateArticleAsync(ArticleMaterialDto dto, Guid updatedById)
     {
         var article = await _repository.FindFirstAsync(x => x.Id == dto.Id);
 
@@ -132,6 +134,10 @@ public class ArticleMaterialService : IArticleMaterialService
         }
 
         var mapped = _mapper.Map<ArticleMaterial>(dto);
+        mapped.CreatedById = article.CreatedById;
+        mapped.CreatedOn = article.CreatedOn;
+        mapped.UpdatedById = updatedById;
+        mapped.UpdatedOn = DateTime.Now;
 
         var validationResult = await _validator.ValidateAsync(mapped);
 

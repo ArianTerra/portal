@@ -38,7 +38,7 @@ public class AccountController : Controller
             return StatusCode(result.GetErrorCode());
         }
 
-        return Ok();
+        return RedirectToAction("Login");
     }
 
     public async Task<IActionResult> Login()

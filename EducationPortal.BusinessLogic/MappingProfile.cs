@@ -13,7 +13,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<ArticleMaterial, ArticleMaterialDto>();
-        CreateMap<ArticleMaterialDto, ArticleMaterial>();
+        CreateMap<ArticleMaterialDto, ArticleMaterial>()
+            .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedOn, opt => opt.Ignore());
 
         CreateMap<VideoQuality, VideoQualityDto>();
         CreateMap<VideoQualityDto, VideoQuality>();

@@ -11,9 +11,9 @@ public interface IBookMaterialService
 
     Task<Result<int>> GetBooksCountAsync();
 
-    Task<Result<Guid>> AddBookAsync(BookMaterialDto dto);
+    Task<Result<Guid>> AddBookAsync(BookMaterialDto dto, Guid createdById);
 
-    Task<Result> UpdateBookAsync(BookMaterialDto dto);
+    Task<Result> UpdateBookAsync(BookMaterialDto dto, Guid updatedById);
 
     Task<Result> DeleteBookByIdAsync(Guid id);
 

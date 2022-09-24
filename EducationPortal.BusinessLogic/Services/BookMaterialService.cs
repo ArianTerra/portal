@@ -27,7 +27,11 @@ public class BookMaterialService : IBookMaterialService
 
     private readonly IValidator<BookMaterial> _validator;
 
-    public BookMaterialService(IGenericRepository<BookMaterial> repository, IGenericRepository<BookAuthorBookMaterial> repositoryLinks, IMapper mapper, IValidator<BookMaterial> validator, IGenericRepository<BookAuthor> repositoryAuthors)
+    public BookMaterialService(IGenericRepository<BookMaterial> repository,
+        IGenericRepository<BookAuthorBookMaterial> repositoryLinks,
+        IMapper mapper,
+        IValidator<BookMaterial> validator,
+        IGenericRepository<BookAuthor> repositoryAuthors)
     {
         _repository = repository;
         _repositoryLinks = repositoryLinks;
@@ -40,7 +44,6 @@ public class BookMaterialService : IBookMaterialService
     {
         var video = await _repository.FindFirstAsync(
             filter: x => x.Id == id,
-            // tracking: true,
             includes: new Expression<Func<BookMaterial, object>>[]
             {
                 x => x.CreatedBy,
@@ -101,7 +104,7 @@ public class BookMaterialService : IBookMaterialService
         return await _repository.CountAsync();
     }
 
-    public async Task<Result<Guid>> AddBookAsync(BookMaterialDto dto)
+    public async Task<Result<Guid>> AddBookAsync(BookMaterialDto dto, Guid createdById)
     {
         if (dto == null)
         {
@@ -109,6 +112,8 @@ public class BookMaterialService : IBookMaterialService
         }
 
         var mapped = _mapper.Map<BookMaterial>(dto);
+        mapped.CreatedById = createdById;
+        mapped.CreatedOn = DateTime.Now;
 
         if (mapped.Id != Guid.Empty &&
             await _repository.FindFirstAsync(x => x.Id == mapped.Id) != null)
@@ -134,7 +139,7 @@ public class BookMaterialService : IBookMaterialService
         return Result.Ok(mapped.Id);
     }
 
-    public async Task<Result> UpdateBookAsync(BookMaterialDto dto)
+    public async Task<Result> UpdateBookAsync(BookMaterialDto dto, Guid updatedById)
     {
         var book = await _repository.FindFirstAsync(x => x.Id == dto.Id);
 
@@ -144,6 +149,10 @@ public class BookMaterialService : IBookMaterialService
         }
 
         var mapped = _mapper.Map<BookMaterial>(dto);
+        mapped.CreatedById = book.CreatedById;
+        mapped.CreatedOn = book.CreatedOn;
+        mapped.UpdatedById = updatedById;
+        mapped.UpdatedOn = DateTime.Now;
 
         var validationResult = await _validator.ValidateAsync(mapped);
 

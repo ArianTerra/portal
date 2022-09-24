@@ -1,13 +1,16 @@
-﻿using EducationPortal.BusinessLogic.DTO;
+﻿using System.Security.Claims;
+using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.Presentation.ViewModels;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationPortal.Presentation.Controllers;
 
+[Authorize]
 public class BooksController : Controller
 {
     private readonly IBookMaterialService _bookMaterialService;
@@ -121,7 +124,8 @@ public class BooksController : Controller
             selectedAuthors.Add(authorResult.Value);
         }
 
-        var result = await _bookMaterialService.AddBookAsync(dto);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await _bookMaterialService.AddBookAsync(dto, userId);
 
         if (result.IsFailed)
         {
@@ -214,7 +218,8 @@ public class BooksController : Controller
             BookFormat = selectedFormat.Value
         };
 
-        var result = await _bookMaterialService.UpdateBookAsync(dto);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await _bookMaterialService.UpdateBookAsync(dto, userId);
 
         if (result.IsFailed)
         {

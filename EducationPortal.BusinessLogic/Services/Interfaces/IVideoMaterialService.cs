@@ -11,9 +11,9 @@ public interface IVideoMaterialService
 
     Task<Result<int>> GetVideosCountAsync();
 
-    Task<Result<Guid>> AddVideoAsync(VideoMaterialDto dto);
+    Task<Result<Guid>> AddVideoAsync(VideoMaterialDto dto, Guid createdById);
 
-    Task<Result> UpdateVideoAsync(VideoMaterialDto dto);
+    Task<Result> UpdateVideoAsync(VideoMaterialDto dto, Guid updatedById);
 
     Task<Result> DeleteVideoByIdAsync(Guid id);
 }

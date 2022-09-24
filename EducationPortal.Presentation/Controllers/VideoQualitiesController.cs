@@ -4,10 +4,12 @@ using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.Presentation.ViewModels;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationPortal.Presentation.Controllers;
 
+[Authorize]
 public class VideoQualitiesController : Controller
 {
     private readonly IVideoQualityService _videoQualityService;
