@@ -51,7 +51,9 @@ else
         <br>
         <div class="form-group">
             <label asp-for="SelectedAuthors">Authors</label>
-            @Html.DropDownListFor(m => m.SelectedAuthors, new SelectList(Model.AvailableAuthors), new {@class = "form-select js-example-basic-multiple", @multiple="multiple"})
+            <select asp-for="@Model.SelectedAuthors" asp-items="new SelectList(Model.AvailableAuthors)" class="form-select js-example-basic-multiple" multiple="multiple">
+            </select>
+            @* @Html.DropDownListFor(m => m.SelectedAuthors, new SelectList(Model.AvailableAuthors), new {@class = "form-select js-example-basic-multiple", @multiple="multiple"}) *@
             <span asp-validation-for="SelectedAuthors"></span>
         </div>
         <br>

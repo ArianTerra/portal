@@ -3,6 +3,7 @@ using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
+using EducationPortal.BusinessLogic.Utils.Comparers;
 using EducationPortal.Presentation.ViewModels;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -194,8 +195,8 @@ public class BooksController : Controller
             Pages = result.Value.Pages,
             Format = result.Value.BookFormat.Name,
             AvailableFormats = resultFormats.Value,
-            AvailableAuthors = resultAuthors.Value,
-            SelectedAuthors = result.Value.Authors.Select(x => x.ToString())
+            AvailableAuthors = resultAuthors.Value.Except(result.Value.Authors, new BookAuthorDtoComparer()),
+            SelectedAuthors = result.Value.Authors.Select(x => x.Name)
         };
 
         return View(viewModel);
