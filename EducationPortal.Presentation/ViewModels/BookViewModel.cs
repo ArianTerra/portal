@@ -16,5 +16,5 @@ public class BookViewModel
 
     public IEnumerable<BookAuthorDto> AvailableAuthors { get; set; }
 
-    public IEnumerable<string> SelectedAuthors {get; set; }
+    public IEnumerable<string> SelectedAuthors { get; set; } = new List<string>();
 }
