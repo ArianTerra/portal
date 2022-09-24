@@ -12,5 +12,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Quality, opt => opt.MapFrom(x => x.Quality.Name));
         CreateMap<VideoViewModel, VideoMaterialDto>()
             .ForMember(dest => dest.Quality, opt => opt.Ignore());
+
+        CreateMap<CourseViewModel, CourseDto>();
     }
 }

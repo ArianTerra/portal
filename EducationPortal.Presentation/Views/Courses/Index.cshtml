@@ -1,18 +1,16 @@
-﻿@model EducationPortal.Presentation.ViewModels.PageViewModel<EducationPortal.BusinessLogic.DTO.BookMaterialDto>
+﻿@model EducationPortal.Presentation.ViewModels.PageViewModel<EducationPortal.BusinessLogic.DTO.CourseDto>
 @{
-    ViewData["Title"] = "Books";
+    ViewData["Title"] = "Courses";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-@Html.ActionLink("Add Book", "Add")
+@Html.ActionLink("Add Courses", "Add")
 
 <table class="table">
     <tr>
         <th>No.</th>
         <th>Name</th>
-        <th>Pages</th>
-        <th>Format</th>
         <th>Actions</th>
     </tr>
     @for(int i = 0; i < Model.Items.Count; i++)
@@ -23,8 +21,6 @@
             }
             <td>@no</td>
             <td>@Model.Items[i].Name</td>
-            <td>@Model.Items[i].Pages</td>
-            <td>@Model.Items[i].BookFormat.Name</td>
             <td>
                 @Html.ActionLink("Details", "Details", new { id = @Model.Items[i].Id }) |
                 @Html.ActionLink("Edit", "Edit", new { id = @Model.Items[i].Id }) |

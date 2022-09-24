@@ -14,10 +14,9 @@
 <p><b>Description</b>: @Model.Description</p>
 <p><b>Materials</b>:</p>
 <ul>
-    @foreach (var author in Model.Materials) //TODO add links
+    @foreach (var material in Model.Materials) //TODO add links
     {
-        //<li>@Html.ActionLink(author.Name, "Details", "BookAuthors", new {id = author.Id})</li>
-        <li>@author</li>
+        <li>@Html.ActionLink(material.Name, "Details", "Materials", new {id = material.Id})</li>
     }
 </ul>
 <p><b>Skills</b>:</p>

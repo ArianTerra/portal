@@ -71,6 +71,29 @@ public class CourseService : ICourseService
         return Result.Ok(courseDto);
     }
 
+    public async Task<Result<CourseDto>> GetCourseByNameAsync(string name)
+    {
+        var course = await _repositoryCourses.FindFirstAsync(
+            filter: x => x.Name == name,
+            includes: new Expression<Func<Course, object>>[]
+            {
+                x => x.CreatedBy,
+                x => x.UpdatedBy
+            }
+        );
+
+        if (course == null)
+        {
+            return Result.Fail(new BadRequestError("Name not found"));
+        }
+
+        var courseDto = _mapper.Map<CourseDto>(course);
+        courseDto.Materials = await GetMaterialsAsync(course.Id);
+        courseDto.Skills = await GetSkillsAsync(course.Id);
+
+        return Result.Ok(courseDto);
+    }
+
     public async Task<Result<IEnumerable<CourseDto>>> GetCoursePageAsync(int page, int pageSize)
     {
         int itemsCount = await _repositoryCourses.CountAsync();

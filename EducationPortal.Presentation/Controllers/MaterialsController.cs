@@ -91,17 +91,15 @@ public class MaterialsController : Controller
         {
             return RedirectToAction(action, "Articles", new { id });
         }
-        else if (discriminator == "BookMaterial")
+        if (discriminator == "BookMaterial")
         {
             return RedirectToAction(action, "Books", new { id });
         }
-        else if (discriminator == "VideoMaterial")
+        if (discriminator == "VideoMaterial")
         {
             return RedirectToAction(action, "Videos", new { id });
         }
-        else
-        {
-            throw new ArgumentException("Unknown type of DTO");
-        }
+
+        throw new ArgumentException("Unknown type of Material");
     }
 }

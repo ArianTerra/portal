@@ -40,7 +40,7 @@ public static class CustomServiceExtension
         {
             // Cookie settings
             options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
 
             options.LoginPath = "/Account/Login";
             //options.AccessDeniedPath = "/Identity/Account/AccessDenied";

@@ -44,7 +44,7 @@ public class MaterialService : IMaterialService
         return Result.Ok(materialDto);
     }
 
-    public async Task<Result<IEnumerable<MaterialDto>>> GetMaterialsPageAsync(int page, int pageSize)
+    public async Task<Result<IEnumerable<MaterialDto>>> GetMaterialsPageAsync(int page, int pageSize, string? nameStartsWith = null)
     {
         int itemsCount = await _repository.CountAsync();
         int pagesCount = (int)Math.Ceiling((double)itemsCount / pageSize);
@@ -65,6 +65,7 @@ public class MaterialService : IMaterialService
         }
 
         var materialPage = await _repository.FindAll(
+            filter: string.IsNullOrWhiteSpace(nameStartsWith) ? _ => true : x => x.Name.StartsWith(nameStartsWith),
             page: page,
             pageSize: pageSize,
             includes: new Expression<Func<Material, object>>[]
@@ -79,8 +80,10 @@ public class MaterialService : IMaterialService
         return Result.Ok(mapped);
     }
 
-    public async Task<Result<int>> GetMaterialsCountAsync()
+    public async Task<Result<int>> GetMaterialsCountAsync(string? nameStartsWith = null)
     {
-        return await _repository.CountAsync();
+        return string.IsNullOrWhiteSpace(nameStartsWith)
+            ? await _repository.CountAsync()
+            : await _repository.CountAsync(x => x.Name.StartsWith(nameStartsWith));
     }
 }

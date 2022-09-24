@@ -7,6 +7,8 @@ public interface ICourseService
 {
     Task<Result<CourseDto>> GetCourseByIdAsync(Guid id);
 
+    Task<Result<CourseDto>> GetCourseByNameAsync(string name);
+
     Task<Result<IEnumerable<CourseDto>>> GetCoursePageAsync(int page, int pageSize);
 
     Task<Result<int>> GetCoursesCountAsync();

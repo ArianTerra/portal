@@ -7,7 +7,7 @@ public interface IMaterialService
 {
     Task<Result<MaterialDto>> GetMaterialByIdAsync(Guid id);
 
-    Task<Result<IEnumerable<MaterialDto>>> GetMaterialsPageAsync(int page, int pageSize);
+    Task<Result<IEnumerable<MaterialDto>>> GetMaterialsPageAsync(int page, int pageSize, string? nameStartsWith = null);
 
-    Task<Result<int>> GetMaterialsCountAsync();
+    Task<Result<int>> GetMaterialsCountAsync(string? nameStartsWith = null);
 }

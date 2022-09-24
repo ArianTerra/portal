@@ -13,23 +13,53 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
+            $('#materials').select2({
+              ajax: {
+                url: '/api/materials',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                  return {
+                     nameStartsWith: params.term,
+                     page: params.page || 1
+                  };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    console.log(data.items)
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 10) < data.items_count
+                        }
+                    };
+                }
+              },
+              minimumInputLength: 1,
+              placeholder: 'Search for materials',
+              templateResult: function(data) {
+                  return data.name;
+              },
+              templateSelection: function(data) {
+                  return data.name;
+              }
+            });
         });
     </script>
 }
 
 <h2>@ViewData["Title"]</h2>
 
-@if (!Model.AvailableMaterials.Any())
-{
-    <p>No Materials found. Please Create new Material.</p> //TODO material link
-}
-else if (!Model.AvailableSkills.Any())
-{
-    <p>No Skills found. Please @Html.ActionLink("Create", "Add", "Skills") new Skill.</p>
-}
-else
-{
+@* @if (!Model.AvailableMaterials.Any()) *@
+@* { *@
+@*     <p>No Materials found. Please Create new Material.</p> //TODO material link *@
+@* } *@
+@* else if (!Model.AvailableSkills.Any()) *@
+@* { *@
+@*     <p>No Skills found. Please @Html.ActionLink("Create", "Add", "Skills") new Skill.</p> *@
+@* } *@
+@* else *@
+@* { *@
     <form asp-action="Add" asp-controller="Courses" method="post">
         <div class="form-group">
             <label asp-for="Name">Name</label>
@@ -45,18 +75,18 @@ else
         <br>
         <div class="form-group">
             <label asp-for="SelectedMaterials">Materials</label>
-            <select asp-for="@Model.SelectedMaterials" asp-items="new SelectList(Model.AvailableMaterials)" class="form-select js-example-basic-multiple" multiple="multiple">
+            <select id="materials" asp-for="@Model.SelectedMaterials" class="form-select" multiple="multiple">
             </select>
             <span asp-validation-for="SelectedMaterials"></span>
         </div>
         <br>
-        <div class="form-group">
-            <label asp-for="SelectedSkills">Skills</label>
-            <select asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select js-example-basic-multiple" multiple="multiple">
-            </select>
-            <span asp-validation-for="SelectedSkills"></span>
-        </div>
-        <br>
+        @* <div class="form-group"> *@
+        @*     <label asp-for="SelectedSkills">Skills</label> *@
+        @*     <select id="skills" asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select" multiple="multiple"> *@
+        @*     </select> *@
+        @*     <span asp-validation-for="SelectedSkills"></span> *@
+        @* </div> *@
+        @* <br> *@
         <input type="submit" class="btn btn-primary" value="Submit"/>
     </form>
-}
+@* } *@
