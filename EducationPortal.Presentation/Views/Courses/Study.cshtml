@@ -1,0 +1,23 @@
+﻿@model EducationPortal.BusinessLogic.DTO.CourseProgressDto
+@{
+    ViewData["Title"] = "Study Course";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@* @Html.ActionLink("← Back to Courses", "Index") *@
+
+<h3>Info</h3>
+
+<p><b>Name</b>: @Model.CourseName</p>
+
+<p><b>Materials</b>:</p>
+<ul>
+    @foreach (var material in Model.Materials)
+    {
+        <li>
+            @Html.ActionLink(material.Name, "Details", "Materials", new { id = material.MaterialId })
+            <button class="btn">Complete</button>
+        </li>
+    }
+</ul>

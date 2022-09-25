@@ -81,5 +81,7 @@ public static class CustomServiceExtension
 
         services.AddScoped<IValidator<BookFormatDto>, BookFormatDtoValidator>();
         services.AddScoped<IBookFormatService, BookFormatService>();
+
+        services.AddScoped<ICourseProgressService, CourseProgressService>();
     }
 }
