@@ -49,6 +49,28 @@ public class SkillService : ISkillService
         return Result.Ok(skillDto);
     }
 
+    public async Task<Result<SkillDto>> GetSkillByNameAsync(string name)
+    {
+        var skill = await _repository.FindFirstAsync(
+            filter: x => x.Name == name,
+            tracking: true,
+            includes: new Expression<Func<Skill, object>>[]
+            {
+                x => x.CreatedBy,
+                x => x.UpdatedBy,
+            }
+        );
+
+        if (skill == null)
+        {
+            return Result.Fail(new BadRequestError("Name not found"));
+        }
+
+        var skillDto = _mapper.Map<SkillDto>(skill);
+
+        return Result.Ok(skillDto);
+    }
+
     public async Task<Result<IEnumerable<SkillDto>>> GetSkillsPageAsync(int page, int pageSize)
     {
         int itemsCount = await _repository.CountAsync();
@@ -80,6 +102,15 @@ public class SkillService : ISkillService
         ).ToListAsync();
 
         var mapped = _mapper.Map<List<Skill>, IEnumerable<SkillDto>>(skillPage);
+
+        return Result.Ok(mapped);
+    }
+
+    public async Task<Result<IEnumerable<SkillDto>>> GetAllSkillsAsync()
+    {
+        var skills = await _repository.FindAll().ToListAsync();
+
+        var mapped = _mapper.Map<List<Skill>, IEnumerable<SkillDto>>(skills);
 
         return Result.Ok(mapped);
     }

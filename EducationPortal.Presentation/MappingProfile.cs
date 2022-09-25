@@ -14,5 +14,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Quality, opt => opt.Ignore());
 
         CreateMap<CourseViewModel, CourseDto>();
+        CreateMap<CourseDto, CourseViewModel>()
+            .ForMember(dest => dest.Materials, opt => opt.MapFrom(x => x.Materials));
     }
 }

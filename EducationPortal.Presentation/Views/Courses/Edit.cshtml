@@ -1,4 +1,5 @@
-﻿@model EducationPortal.Presentation.ViewModels.CourseViewModel
+﻿@using EducationPortal.BusinessLogic.Services.Interfaces
+@model EducationPortal.Presentation.ViewModels.CourseViewModel
 @{
     ViewData["Title"] = "Edit Course";
 }
@@ -13,16 +14,48 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
+            $('#skills').select2();
+            $('#materials').select2({
+              ajax: {
+                url: '/api/materials',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                  return {
+                     nameStartsWith: params.term,
+                     page: params.page || 1
+                  };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    console.log(data.items)
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: (params.page * 10) < data.items_count
+                        }
+                    };
+                }
+              },
+              placeholder: 'Search for materials',
+              templateResult: function(data) {
+                  return data.name;
+              },
+              templateSelection: function(data) {
+                  return data.name;
+              }
+            });
         });
     </script>
 }
 
 <h2>@ViewData["Title"]</h2>
 
-@if (!Model.AvailableMaterials.Any())
+@inject IMaterialService _materialService;
+
+@if ((await _materialService.GetMaterialsCountAsync()).Value <= 0)
 {
-    <p>No Materials found. Please Create new Material.</p> //TODO material link
+    <p>No Materials found. Please Create new Material.</p>
 }
 else if (!Model.AvailableSkills.Any())
 {
@@ -33,7 +66,7 @@ else
     <form asp-action="Edit" asp-controller="Courses" method="post">
         <div class="form-group">
             <label asp-for="Name">Name</label>
-            <input asp-for="Name" class="form-control" />
+            <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name"></span>
         </div>
         <br>
@@ -44,13 +77,16 @@ else
         </div>
         <br>
         <div class="form-group">
-            <label asp-for="SelectedMaterials">Materials</label>
-            <select asp-for="@Model.SelectedMaterials" asp-items="new SelectList(Model.AvailableMaterials)" class="form-select js-example-basic-multiple" multiple="multiple">
-                @if (Model.SelectedMaterials != null)
+            <label asp-for="Materials">Materials</label>
+            <select id="materials" asp-for="@Model.SelectedMaterials" class="form-select" multiple="multiple">
+                @if (Model.Materials != null)
                 {
-                    @foreach (var selected in Model.SelectedMaterials)
+                    @foreach (var material in Model.Materials)
                     {
-                        <option selected="selected">@selected</option>
+                        //BUG: it shows name only on hover when preselected, idk how to fix this
+                        <option value="@material.Id" selected="selected">
+                            @material.Name
+                        </option>
                     }
                 }
             </select>
@@ -59,13 +95,10 @@ else
         <br>
         <div class="form-group">
             <label asp-for="SelectedSkills">Skills</label>
-            <select asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select js-example-basic-multiple" multiple="multiple">
-                @if (Model.SelectedSkills != null)
+            <select id="skills" asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select" multiple="multiple">
+                @foreach (var material in Model.SelectedSkills)
                 {
-                    @foreach (var selected in Model.SelectedSkills)
-                    {
-                        <option selected="selected">@selected</option>
-                    }
+                    <option selected="selected">@material</option>
                 }
             </select>
             <span asp-validation-for="SelectedSkills"></span>
@@ -74,5 +107,3 @@ else
         <input type="submit" class="btn btn-primary" value="Submit"/>
     </form>
 }
-
-

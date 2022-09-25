@@ -1,4 +1,7 @@
-﻿@model EducationPortal.Presentation.ViewModels.CourseViewModel
+﻿@using EducationPortal.BusinessLogic.Services
+@using EducationPortal.BusinessLogic.Services.Interfaces
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model EducationPortal.Presentation.ViewModels.CourseViewModel
 @{
     ViewData["Title"] = "Create Course";
 }
@@ -13,6 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#skills').select2();
             $('#materials').select2({
               ajax: {
                 url: '/api/materials',
@@ -35,7 +39,6 @@
                     };
                 }
               },
-              minimumInputLength: 1,
               placeholder: 'Search for materials',
               templateResult: function(data) {
                   return data.name;
@@ -49,17 +52,18 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+@inject IMaterialService _materialService
 
-@* @if (!Model.AvailableMaterials.Any()) *@
-@* { *@
-@*     <p>No Materials found. Please Create new Material.</p> //TODO material link *@
-@* } *@
-@* else if (!Model.AvailableSkills.Any()) *@
-@* { *@
-@*     <p>No Skills found. Please @Html.ActionLink("Create", "Add", "Skills") new Skill.</p> *@
-@* } *@
-@* else *@
-@* { *@
+@if ((await _materialService.GetMaterialsCountAsync()).Value <= 0)
+{
+    <p>No Materials found. Please Create new Material.</p>
+}
+else if (!Model.AvailableSkills.Any())
+{
+    <p>No Skills found. Please @Html.ActionLink("Create", "Add", "Skills") new Skill.</p>
+}
+else
+{
     <form asp-action="Add" asp-controller="Courses" method="post">
         <div class="form-group">
             <label asp-for="Name">Name</label>
@@ -80,13 +84,13 @@
             <span asp-validation-for="SelectedMaterials"></span>
         </div>
         <br>
-        @* <div class="form-group"> *@
-        @*     <label asp-for="SelectedSkills">Skills</label> *@
-        @*     <select id="skills" asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select" multiple="multiple"> *@
-        @*     </select> *@
-        @*     <span asp-validation-for="SelectedSkills"></span> *@
-        @* </div> *@
-        @* <br> *@
+        <div class="form-group">
+            <label asp-for="SelectedSkills">Skills</label>
+            <select id="skills" asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select" multiple="multiple">
+            </select>
+            <span asp-validation-for="SelectedSkills"></span>
+        </div>
+        <br>
         <input type="submit" class="btn btn-primary" value="Submit"/>
     </form>
-@* } *@
+}

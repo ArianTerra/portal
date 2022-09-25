@@ -3,6 +3,7 @@ using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.AdditionalModels;
 using EducationPortal.DataAccess.DomainModels.Materials;
+using EducationPortal.DataAccess.DomainModels.Progress;
 
 namespace EducationPortal.BusinessLogic;
 
@@ -44,5 +45,7 @@ public class MappingProfile : Profile
 
         CreateMap<Course, CourseDto>();
         CreateMap<CourseDto, Course>();
+
+        CreateMap<MaterialProgress, MaterialProgressDto>();
     }
 }
