@@ -9,4 +9,6 @@ public class CourseProgressDto
     public int Progress { get; set; }
 
     public IEnumerable<MaterialProgressDto> Materials { get; set; }
+
+    public IEnumerable<SkillProgressDto> Skills { get; set; }
 }
