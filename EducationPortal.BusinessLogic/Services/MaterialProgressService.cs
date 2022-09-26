@@ -29,7 +29,7 @@ public class MaterialProgressService : IMaterialProgressService
         }
 
         var progress = await _progressRepository.FindFirstAsync(
-            x => x.MaterialId == materialId || x.UserId == userId
+            x => x.MaterialId == materialId && x.UserId == userId
         );
 
         if (progress == null)
@@ -42,6 +42,9 @@ public class MaterialProgressService : IMaterialProgressService
 
             await _progressRepository.AddAsync(progress);
         }
+
+        progress.Progress = percent;
+        await _progressRepository.UpdateAsync(progress);
 
         return Result.Ok();
     }

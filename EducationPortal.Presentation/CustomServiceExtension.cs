@@ -83,5 +83,6 @@ public static class CustomServiceExtension
         services.AddScoped<IBookFormatService, BookFormatService>();
 
         services.AddScoped<ICourseProgressService, CourseProgressService>();
+        services.AddScoped<IMaterialProgressService, MaterialProgressService>();
     }
 }

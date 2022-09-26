@@ -125,7 +125,7 @@ public class CourseProgressService : ICourseProgressService
 
         if (link == null)
         {
-            return Result.Fail(new BadRequestError("User is not subscribed to the course"));
+            return Result.Fail(new NotFoundError(courseId));
         }
 
         var materialProgressesIds = course.CourseMaterials.Select(x => x.MaterialId);
@@ -142,11 +142,13 @@ public class CourseProgressService : ICourseProgressService
             });
         }
 
+        var percent = materialProgressDtos.Select(x => x.Progress).Sum() / materialProgressDtos.Count;
+
         var courseProgressDto = new CourseProgressDto()
         {
             CourseId = courseId,
             CourseName = course.Name,
-            Progress = 0, //todo
+            Progress = percent,
             Materials = materialProgressDtos
         };
 

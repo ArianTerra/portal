@@ -42,7 +42,8 @@
     var subscribed = (await _courseProgressService.CheckSubscriptionExistAsync(userId, Model.Id)).Value;
     if(subscribed)
     {
-        <a class="btn btn-primary">Unsubscribe</a>
+        <a class="btn btn-primary">Unsubscribe</a> //todo
+        <a asp-action="Study" asp-controller="CourseProgress" asp-route-id="@Model.Id" class="btn btn-primary">Study</a>
     }
     else
     {

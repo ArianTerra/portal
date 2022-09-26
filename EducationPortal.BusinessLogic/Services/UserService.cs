@@ -86,6 +86,10 @@ public class UserService : IUserService
         }
 
         var validationResult = _loginDtoValidator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return Result.Fail(new ValidationError(validationResult));
+        }
 
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == dto.UserName);
 
