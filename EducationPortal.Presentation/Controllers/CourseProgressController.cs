@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using EducationPortal.BusinessLogic.Extensions;
-using EducationPortal.BusinessLogic.Services;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;

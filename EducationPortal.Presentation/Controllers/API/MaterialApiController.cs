@@ -1,5 +1,4 @@
-﻿using EducationPortal.BusinessLogic.DTO;
-using EducationPortal.BusinessLogic.Extensions;
+﻿using EducationPortal.BusinessLogic.Extensions;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

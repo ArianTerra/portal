@@ -1,5 +1,4 @@
 ﻿using EducationPortal.BusinessLogic.DTO;
-using EducationPortal.DataAccess.DomainModels;
 
 namespace EducationPortal.BusinessLogic.Utils.Comparers;
 

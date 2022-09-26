@@ -1,6 +1,4 @@
-﻿using EducationPortal.BusinessLogic.DTO.Abstract;
-
-namespace EducationPortal.BusinessLogic.DTO;
+﻿namespace EducationPortal.BusinessLogic.DTO;
 
 public class VideoMaterialDto : MaterialDto
 {

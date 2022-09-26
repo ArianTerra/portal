@@ -1,7 +1,4 @@
-﻿using EducationPortal.BusinessLogic.DTO.Abstract;
-using EducationPortal.DataAccess.DomainModels.Materials;
-
-namespace EducationPortal.BusinessLogic.DTO;
+﻿namespace EducationPortal.BusinessLogic.DTO;
 
 public class ArticleMaterialDto : MaterialDto
 {

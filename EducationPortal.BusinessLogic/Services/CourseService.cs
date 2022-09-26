@@ -6,7 +6,6 @@ using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.BusinessLogic.Utils.Comparers;
 using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.JoinEntities;
-using EducationPortal.DataAccess.DomainModels.Materials;
 using EducationPortal.DataAccess.Repositories;
 using FluentResults;
 using FluentValidation;

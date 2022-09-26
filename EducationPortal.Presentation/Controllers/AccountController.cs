@@ -2,7 +2,6 @@
 using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
-using EducationPortal.BusinessLogic.Services;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.Presentation.ViewModels;
 using FluentValidation.AspNetCore;

@@ -206,7 +206,11 @@ public class CourseProgressService : ICourseProgressService
             });
         }
 
-        var percent = materialProgressDtos.Select(x => x.Progress).Sum() / materialProgressDtos.Count;
+        int percent = 0;
+        if (materialProgressDtos.Count != 0)
+        {
+            percent = materialProgressDtos.Select(x => x.Progress).Sum() / materialProgressDtos.Count;
+        }
 
         var courseProgressDto = new CourseProgressDto
         {
