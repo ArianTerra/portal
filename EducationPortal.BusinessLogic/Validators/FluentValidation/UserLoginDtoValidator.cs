@@ -12,7 +12,10 @@ public class UserLoginDtoValidator : AbstractValidator<UserLoginDto>
     {
         _configuration = configuration;
 
-        RuleFor(x => x.UserName).NotEmpty();
+        RuleFor(x => x.UserName)
+            .NotEmpty()
+            .MaximumLength(int.Parse(_configuration["User:Username:MaxSize"]));
+
         RuleFor(x => x.Password)
             .NotEmpty()
             .MinimumLength(int.Parse(_configuration["User:Password:MinSize"]))

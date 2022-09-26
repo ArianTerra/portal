@@ -35,6 +35,20 @@ public class CourseProgressController : Controller
         return Redirect(Request.Headers["Referer"].ToString());
     }
 
+    public async Task<IActionResult> Unsubscribe(Guid id)
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        var result = await _courseProgressService.UnsubscribeFromCourseAsync(userId, id);
+
+        if (result.IsFailed)
+        {
+            return StatusCode(result.GetErrorCode());
+        }
+
+        return Redirect(Request.Headers["Referer"].ToString());
+    }
+
     public async Task<IActionResult> Study(Guid id)
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));

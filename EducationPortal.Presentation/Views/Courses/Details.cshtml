@@ -1,6 +1,7 @@
 ﻿@using EducationPortal.BusinessLogic.Services
 @using Microsoft.CodeAnalysis.Differencing
 @using System.Security.Claims
+@using EducationPortal.BusinessLogic.Services.Interfaces
 @model EducationPortal.BusinessLogic.DTO.CourseDto
 @{
     ViewData["Title"] = "Course Details";
@@ -19,7 +20,7 @@
 <p><b>Description</b>: @Model.Description</p>
 <p><b>Materials</b>:</p>
 <ul>
-    @foreach (var material in Model.Materials) //TODO add links
+    @foreach (var material in Model.Materials)
     {
         <li>@Html.ActionLink(material.Name, "Details", "Materials", new {id = material.Id})</li>
     }
@@ -42,12 +43,13 @@
     var subscribed = (await _courseProgressService.CheckSubscriptionExistAsync(userId, Model.Id)).Value;
     if(subscribed)
     {
-        <a class="btn btn-primary">Unsubscribe</a> //todo
+        <a class="btn btn-primary" asp-controller="CourseProgress" asp-action="Unsubscribe" asp-route-id="@Model.Id">Unsubscribe</a>
         <a asp-action="Study" asp-controller="CourseProgress" asp-route-id="@Model.Id" class="btn btn-primary">Study</a>
     }
     else
     {
         <a asp-action="Subscribe" asp-controller="CourseProgress" asp-route-id="@Model.Id" class="btn btn-primary">Subscribe</a>
+        <a class="btn btn-primary disabled">Study</a>
     }
 }
 

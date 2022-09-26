@@ -9,7 +9,5 @@ public class BookMaterialValidator : AbstractValidator<BookMaterial>
     {
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.Pages).GreaterThan(0);
-        //TODO rule for year
-        //TODO rule for format
     }
 }

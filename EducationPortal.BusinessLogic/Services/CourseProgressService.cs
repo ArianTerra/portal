@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
+using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.DataAccess.DomainModels;
 using EducationPortal.DataAccess.DomainModels.Progress;
 using EducationPortal.DataAccess.Repositories;
@@ -68,8 +69,7 @@ public class CourseProgressService : ICourseProgressService
         var subscription = new CourseProgress()
         {
             CourseId = courseId,
-            UserId = userId,
-            Progress = 0
+            UserId = userId
         };
 
         await _courseProgressRepository.AddAsync(subscription);
@@ -101,6 +101,34 @@ public class CourseProgressService : ICourseProgressService
                 });
             }
         }
+
+        return Result.Ok();
+    }
+
+    public async Task<Result> UnsubscribeFromCourseAsync(Guid userId, Guid courseId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null)
+        {
+            return Result.Fail(new InternalServerError("User not found in database"));
+        }
+
+        var course = await _courseRepository.FindFirstAsync(x => x.Id == courseId);
+        if (course == null)
+        {
+            return Result.Fail(new InternalServerError("Course not found in database"));
+        }
+
+        var link = await _courseProgressRepository.FindFirstAsync(
+            x => x.UserId == userId && x.CourseId == courseId
+        );
+
+        if (link == null)
+        {
+            return Result.Fail(new BadRequestError("User is not subscribed to the course"));
+        }
+
+        await _courseProgressRepository.RemoveAsync(link);
 
         return Result.Ok();
     }

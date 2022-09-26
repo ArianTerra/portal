@@ -10,8 +10,6 @@ namespace EducationPortal.DataAccess;
 
 public class DatabaseContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
-    //public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
     public DbSet<Course> Courses { get; set; }
 
     public DbSet<Material> Materials { get; set; }

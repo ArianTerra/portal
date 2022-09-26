@@ -59,7 +59,7 @@ public class VideoQualityService : IVideoQualityService
         int itemsCount = await _repository.CountAsync();
         int pagesCount = (int)Math.Ceiling((double)itemsCount / pageSize);
 
-        if (pagesCount == 0) //TODO is this right?
+        if (pagesCount == 0)
         {
             pagesCount = 1;
         }

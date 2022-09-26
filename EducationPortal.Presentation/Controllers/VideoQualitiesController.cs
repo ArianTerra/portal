@@ -129,6 +129,6 @@ public class VideoQualitiesController : Controller
             return StatusCode(result.GetErrorCode());
         }
 
-        return Redirect(Request.Headers["Referer"].ToString());
+        return RedirectToAction("Index");
     }
 }
