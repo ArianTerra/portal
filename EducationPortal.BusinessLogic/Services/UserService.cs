@@ -1,7 +1,10 @@
-﻿using EducationPortal.BusinessLogic.DTO;
+﻿using System.Linq.Expressions;
+using AutoMapper;
+using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Services.Interfaces;
 using EducationPortal.DataAccess.DomainModels;
+using EducationPortal.DataAccess.Repositories;
 using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
@@ -20,15 +23,31 @@ public class UserService : IUserService
 
     private readonly IValidator<UserLoginDto> _loginDtoValidator;
 
+    private readonly IGenericRepository<ApplicationUser> _userRepository;
+
+    private readonly IGenericRepository<Course> _courseRepository;
+
+    private readonly IGenericRepository<Skill> _skillRepository;
+
+    private readonly IMapper _mapper;
+
     public UserService(UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IValidator<UserRegisterDto> registerDtoValidator,
-        IValidator<UserLoginDto> loginDtoValidator)
+        IValidator<UserLoginDto> loginDtoValidator,
+        IGenericRepository<ApplicationUser> userRepository,
+        IGenericRepository<Course> courseRepository,
+        IMapper mapper,
+        IGenericRepository<Skill> skillRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _registerDtoValidator = registerDtoValidator;
         _loginDtoValidator = loginDtoValidator;
+        _userRepository = userRepository;
+        _courseRepository = courseRepository;
+        _mapper = mapper;
+        _skillRepository = skillRepository;
     }
 
     public async Task<Result> RegisterUserAsync(UserRegisterDto dto)
@@ -45,6 +64,10 @@ public class UserService : IUserService
         };
 
         var validationResult = _registerDtoValidator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return Result.Fail(new ValidationError(validationResult));
+        }
 
         if (await _userManager.FindByNameAsync(dto.UserName) != null)
         {
@@ -121,5 +144,70 @@ public class UserService : IUserService
         await _signInManager.SignOutAsync();
 
         return Result.Ok();
+    }
+
+    public async Task<Result<UserAccountDto>> GetUserInfo(Guid userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+        {
+            return Result.Fail(new NotFoundError(userId));
+        }
+
+        var info = new UserAccountDto()
+        {
+            UserId = user.Id,
+            UserName = user.UserName,
+            Email = user.Email
+        };
+
+        return Result.Ok(info);
+    }
+
+    public async Task<Result<IEnumerable<CourseDto>>> GetUserCourses(Guid userId)
+    {
+        var user = await _userRepository.FindFirstAsync(
+            x => x.Id == userId,
+            includes: new Expression<Func<ApplicationUser, object>>[]
+            {
+                x => x.CourseProgresses
+            });
+
+        var coursesDtos = new List<CourseDto>();
+
+        foreach (var progress in user.CourseProgresses)
+        {
+            var course = await _courseRepository.FindFirstAsync(x => x.Id == progress.CourseId);
+            coursesDtos.Add(_mapper.Map<CourseDto>(course));
+        }
+
+        return coursesDtos;
+    }
+
+    public async Task<Result<IEnumerable<SkillProgressDto>>> GetUserSkills(Guid userId)
+    {
+        var user = await _userRepository.FindFirstAsync(
+            x => x.Id == userId,
+            includes: new Expression<Func<ApplicationUser, object>>[]
+            {
+                x => x.SkillProgresses
+            });
+
+        var skillProgressDtos = new List<SkillProgressDto>();
+
+        foreach (var progress in user.SkillProgresses)
+        {
+            var skill = await _skillRepository.FindFirstAsync(x => x.Id == progress.SkillId);
+
+            skillProgressDtos.Add(new SkillProgressDto
+            {
+                SkillId = skill.Id,
+                Name = skill.Name,
+                Level = progress.Level
+            });
+        }
+
+        return skillProgressDtos;
     }
 }

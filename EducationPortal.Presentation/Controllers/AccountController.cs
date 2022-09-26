@@ -1,8 +1,12 @@
-﻿using EducationPortal.BusinessLogic.DTO;
+﻿using System.Security.Claims;
+using EducationPortal.BusinessLogic.DTO;
 using EducationPortal.BusinessLogic.Errors;
 using EducationPortal.BusinessLogic.Extensions;
+using EducationPortal.BusinessLogic.Services;
 using EducationPortal.BusinessLogic.Services.Interfaces;
+using EducationPortal.Presentation.ViewModels;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationPortal.Presentation.Controllers;
@@ -11,9 +15,38 @@ public class AccountController : Controller
 {
     private readonly IUserService _userService;
 
-    public AccountController(IUserService userService)
+    private readonly ICourseProgressService _courseProgressService;
+
+    public AccountController(IUserService userService, ICourseProgressService courseProgressService)
     {
         _userService = userService;
+        _courseProgressService = courseProgressService;
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Index()
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var userInfo = await _userService.GetUserInfo(userId);
+
+        var userCourses = await _userService.GetUserCourses(userId);
+        var userCourseProgress = new List<CourseProgressDto>();
+        foreach (var course in userCourses.Value)
+        {
+            var progress = await _courseProgressService.GetCourseProgress(userId, course.Id);
+            userCourseProgress.Add(progress.Value);
+        }
+
+        var userSkills = await _userService.GetUserSkills(userId);
+
+        var viewModel = new AccountViewModel()
+        {
+            UserAccountDto = userInfo.Value,
+            CoursesProgress = userCourseProgress,
+            SkillProgress = userSkills.Value
+        };
+
+        return View(viewModel);
     }
 
     public async Task<IActionResult> Register()
