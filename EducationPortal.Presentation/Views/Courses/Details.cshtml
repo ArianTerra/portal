@@ -1,0 +1,55 @@
+﻿@using System.Security.Claims
+@using EducationPortal.BusinessLogic.Services.Interfaces
+@model EducationPortal.BusinessLogic.DTO.CourseDto
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+@inject ICourseProgressService _courseProgressService
+
+<h2>@ViewData["Title"]</h2>
+
+@Html.ActionLink("← Back to Courses", "Index")
+
+<h3>Info</h3>
+
+<p><b>ID</b>: @Model.Id</p>
+<p><b>Name</b>: @Model.Name</p>
+<p><b>Description</b>: @Model.Description</p>
+<p><b>Materials</b>:</p>
+<ul>
+    @foreach (var material in Model.Materials)
+    {
+        <li>@Html.ActionLink(material.Name, "Details", "Materials", new {id = material.Id})</li>
+    }
+</ul>
+<p><b>Skills</b>:</p>
+<ul>
+    @foreach (var skill in Model.Skills)
+    {
+        <li>@Html.ActionLink(skill.Name, "Details", "Skills", new {id = skill.Id})</li>
+    }
+</ul>
+<p><b>Created</b>: @Model.CreatedOn</p>
+<p><b>Created by</b>: @Model.CreatedByUserName</p>
+<p><b>Updated</b>: @Model.UpdatedOn</p>
+<p><b>Updated by</b>: @Model.UpdatedByUserName</p>
+
+<h3>Actions</h3>
+@{
+    var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+    var subscribed = (await _courseProgressService.CheckSubscriptionExistAsync(userId, Model.Id)).Value;
+    if(subscribed)
+    {
+        <a class="btn btn-primary" asp-controller="CourseProgress" asp-action="Unsubscribe" asp-route-id="@Model.Id">Unsubscribe</a>
+        <a asp-action="Study" asp-controller="CourseProgress" asp-route-id="@Model.Id" class="btn btn-primary">Study</a>
+    }
+    else
+    {
+        <a asp-action="Subscribe" asp-controller="CourseProgress" asp-route-id="@Model.Id" class="btn btn-primary">Subscribe</a>
+        <a class="btn btn-primary disabled">Study</a>
+    }
+}
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>

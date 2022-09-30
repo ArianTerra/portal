@@ -1,0 +1,23 @@
+﻿@model EducationPortal.BusinessLogic.DTO.VideoMaterialDto
+@{
+    ViewData["Title"] = "Video Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@Html.ActionLink("← Back to Videos", "Index")
+
+<h3>Info</h3>
+
+<p><b>ID</b>: @Model.Id</p>
+<p><b>Name</b>: @Model.Name</p>
+<p><b>Duration</b>: @Model.Duration</p>
+<p><b>Quality</b>: @Html.ActionLink(Model.Quality.Name, "Details", "VideoQualities", new {id = Model.Quality.Id})</p>
+<p><b>Created</b>: @Model.CreatedOn</p>
+<p><b>Created by</b>: @Model.CreatedByUserName</p>
+<p><b>Updated</b>: @Model.UpdatedOn</p>
+<p><b>Updated by</b>: @Model.UpdatedByUserName</p>
+
+<h3>Actions</h3>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>

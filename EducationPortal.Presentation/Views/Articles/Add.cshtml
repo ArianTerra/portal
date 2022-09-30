@@ -1,0 +1,30 @@
+﻿@model EducationPortal.BusinessLogic.DTO.ArticleMaterialDto
+@{
+    ViewData["Title"] = "Create Article";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Add" asp-controller="Articles" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="PublishDate">Publish Date</label>
+        <input asp-for="PublishDate" type="date" class="form-control"/>
+        <span asp-validation-for="PublishDate"></span>
+    </div>
+    <br>
+    <div class="form-group">
+            <label asp-for="Source">Source</label>
+            <input asp-for="Source" class="form-control"/>
+            <span asp-validation-for="Source"></span>
+        </div>
+    <br>
+    <input type="submit" class="btn btn-primary" value="Submit"/>
+</form>
+
+

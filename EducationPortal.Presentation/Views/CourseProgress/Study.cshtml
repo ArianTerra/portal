@@ -1,0 +1,35 @@
+﻿@model EducationPortal.BusinessLogic.DTO.CourseProgressDto
+@{
+    ViewData["Title"] = "Study Course";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p><b>Name</b>: @Model.CourseName</p>
+<p><b>Course completion percent</b>: @Model.Progress %</p>
+<p><b>Materials</b>:</p>
+<ul>
+    @foreach (var material in Model.Materials)
+    {
+        <li>
+            @Html.ActionLink(material.Name, "Details", "Materials", new { id = material.MaterialId})
+            @if (material.Progress < 100)
+            {
+                <a class="btn btn-primary" asp-action="StudyMaterial" asp-route-courseId="@Model.CourseId" asp-route-id="@material.MaterialId">Complete</a>
+            }
+            else
+            {
+                <a class="btn btn-primary disabled">Complete</a>
+            }
+        </li>
+    }
+</ul>
+<p><b>Skills</b>:</p>
+<ul>
+    @foreach (var skill in Model.Skills)
+    {
+        <li>
+            @skill.ToString()
+        </li>
+    }
+</ul>

@@ -1,0 +1,23 @@
+﻿@model EducationPortal.BusinessLogic.DTO.UserLoginDto
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Login" asp-controller="Account" method="post">
+    <div class="form-group">
+        <label asp-for="UserName">Username</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <br>
+    <div class="form-group">
+        <label asp-for="Password">Password</label>
+        <input asp-for="Password" type="password" class="form-control"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+    <br>
+
+    <input type="submit" class="btn btn-primary" value="Login"/>
+</form>

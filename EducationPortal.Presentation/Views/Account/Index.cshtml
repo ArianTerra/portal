@@ -1,0 +1,44 @@
+﻿@model EducationPortal.Presentation.ViewModels.AccountViewModel
+@{
+    ViewData["Title"] = "Account";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<h3>Info</h3>
+<p><b>ID</b>: @Model.UserAccountDto.UserId</p>
+<p><b>Username</b>: @Model.UserAccountDto.UserName</p>
+<p><b>Email</b>: @Model.UserAccountDto.Email</p>
+
+<h3>Courses progress</h3>
+@if (Model.CoursesProgress.Any())
+{
+    @foreach (var course in @Model.CoursesProgress)
+    {
+        <p><a asp-action="Details" asp-controller="Courses" asp-route-id="@course.CourseId">@course.CourseName</a> - @course.Progress %</p>
+    }
+}
+else
+{
+    <p>You haven't started any courses yet.</p>
+}
+
+
+<h3>Skills progress</h3>
+@if(Model.SkillProgress.Any())
+{
+    @foreach (var skill in @Model.SkillProgress)
+    {
+        // When user starts a course they are 'subscribed' to all course's skills. Skill is initialized in DB with level 0
+        if (skill.Level > 0)
+        {
+            <p><a asp-action="Details" asp-controller="Skills" asp-route-id="@skill.SkillId">@skill.Name</a> - @skill.Level lvl</p>
+        }
+    }
+}
+else
+{
+    <p>You haven't got any skills yet.</p>
+}
+
