@@ -16,7 +16,7 @@ public class CourseViewModel
 
     public IEnumerable<string> SelectedMaterials { get; set; } = new List<string>();
 
-    public IEnumerable<SkillDto> AvailableSkills { get; set; }
+    public IEnumerable<SkillDto> AvailableSkills { get; set; } = new List<SkillDto>();
 
     public IEnumerable<string> SelectedSkills { get; set; } = new List<string>();
 }

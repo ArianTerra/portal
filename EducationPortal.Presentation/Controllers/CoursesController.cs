@@ -129,6 +129,14 @@ public class CoursesController : Controller
             if (result.GetErrorCode() == (int)ErrorCode.ValidationError)
             {
                 result.GetValidationResult().AddToModelState(this.ModelState);
+                var availableSkills = await _skillService.GetAllSkillsAsync();
+
+                if (availableSkills.IsFailed)
+                {
+                    return StatusCode(availableSkills.GetErrorCode());
+                }
+
+                viewModel.AvailableSkills = availableSkills.Value;
 
                 return View(viewModel);
             }
