@@ -1,0 +1,30 @@
+﻿@model EducationPortal.BusinessLogic.DTO.BookMaterialDto
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@Html.ActionLink("← Back to Books", "Index")
+
+<h3>Info</h3>
+
+<p><b>ID</b>: @Model.Id</p>
+<p><b>Name</b>: @Model.Name</p>
+<p><b>Pages</b>: @Model.Pages</p>
+<p><b>Format</b>: @Html.ActionLink(Model.BookFormat.Name, "Details", "BookFormats", new {id = Model.BookFormat.Id})</p>
+<p><b>Authors</b>:</p>
+<ul>
+    @foreach (var author in Model.Authors)
+    {
+        <li>@Html.ActionLink(author.Name, "Details", "BookAuthors", new {id = author.Id})</li>
+    }
+</ul>
+<p><b>Created</b>: @Model.CreatedOn</p>
+<p><b>Created by</b>: @Model.CreatedByUserName</p>
+<p><b>Updated</b>: @Model.UpdatedOn</p>
+<p><b>Updated by</b>: @Model.UpdatedByUserName</p>
+
+<h3>Actions</h3>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>

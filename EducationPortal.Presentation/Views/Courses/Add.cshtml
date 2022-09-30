@@ -1,0 +1,61 @@
+﻿@using EducationPortal.BusinessLogic.Services.Interfaces
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model EducationPortal.Presentation.ViewModels.CourseViewModel
+@{
+    ViewData["Title"] = "Create Course";
+}
+
+@section CSS
+{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/js/MaterialSelection.js"></script>
+}
+
+<h2>@ViewData["Title"]</h2>
+@inject IMaterialService _materialService
+
+@if ((await _materialService.GetMaterialsCountAsync()).Value <= 0)
+{
+    <p>No Materials found. Please Create new Material.</p>
+}
+else if (!Model.AvailableSkills.Any())
+{
+    <p>No Skills found. Please @Html.ActionLink("Create", "Add", "Skills") new Skill.</p>
+}
+else
+{
+    <form asp-action="Add" asp-controller="Courses" method="post">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <input asp-for="Description" class="form-control"/>
+            <span asp-validation-for="Description"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="SelectedMaterials">Materials</label>
+            <select id="materials" asp-for="@Model.SelectedMaterials" class="form-select" multiple="multiple">
+            </select>
+            <span asp-validation-for="SelectedMaterials"></span>
+        </div>
+        <br>
+        <div class="form-group">
+            <label asp-for="SelectedSkills">Skills</label>
+            <select id="skills" asp-for="@Model.SelectedSkills" asp-items="new SelectList(Model.AvailableSkills)" class="form-select" multiple="multiple">
+            </select>
+            <span asp-validation-for="SelectedSkills"></span>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+    </form>
+}
