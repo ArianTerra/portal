@@ -1,0 +1,105 @@
+variables: 
+- group: AzureResourcesVariableGroup
+
+trigger: none
+
+stages:
+- stage: Build
+  jobs: 
+  - job: Build
+
+    pool:
+      name: Default
+      demands:
+      - agent.name -equals DESKTOP-N0DK5SR
+
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+
+    steps:
+    - task: NuGetToolInstaller@1
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: DeployAzureResources
+  jobs: 
+  - job: DeployAzureResources
+    pool:
+      name: Default
+      demands:
+      - agent.name -equals DESKTOP-N0DK5SR
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Azure subscription 1(fcc733b8-717c-4636-aa20-a935f3cf93ec)'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          # create a resource group
+          az group create -l $(LOCATION) -n $(RESOURCEGROUPNAME)
+          
+          # create and configure Azure SQL logical server and Azure SQL database
+          az sql server create -l $(LOCATION) -g $(RESOURCEGROUPNAME) -n $(SQLSRVNAME) -u $(USERNAME) -p $(PASSWORD)
+          az sql db create -g $(RESOURCEGROUPNAME) -s $(SQLSRVNAME) -n $(DBNAME) --service-objective Basic
+          az sql server firewall-rule create -g $(RESOURCEGROUPNAME) -s $(SQLSRVNAME) -n allowazure --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+          
+          # create and configure an Azure App Service plan and an Azure web app
+          az appservice plan create -g $(RESOURCEGROUPNAME) -n $(SVCPLANNAME) --sku FREE
+          az webapp create -g $(RESOURCEGROUPNAME) -p $(SVCPLANNAME) -n $(WEBAPPNAME)
+
+- stage: DeployASPNETApp
+  jobs: 
+  - job: DeployASPNETApp
+    pool:
+      name: Default
+      demands:
+      - agent.name -equals DESKTOP-N0DK5SR
+    steps:
+
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.DefaultWorkingDirectory)'
+
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure subscription 1(fcc733b8-717c-4636-aa20-a935f3cf93ec)'
+        appType: 'webApp'
+        WebAppName: '$(WEBAPPNAME)'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+    - task: AzureAppServiceSettings@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(fcc733b8-717c-4636-aa20-a935f3cf93ec)'
+        appName: '$(WEBAPPNAME)'
+        resourceGroupName: '$(RESOURCEGROUPNAME)'
+        connectionStrings: |
+            [
+                {
+                "name": "Default",
+                "value": "Server=tcp:$(SQLSRVNAME).database.windows.net,1433;Initial Catalog=tododb;Persist Security Info=False;User ID=$(USERNAME);Password=$(PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+                "type": "SqlAzure",
+                "slotSetting": false
+                }
+            ]
